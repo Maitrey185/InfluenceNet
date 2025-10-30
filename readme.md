@@ -6,7 +6,7 @@
 * **Brands** — to find influencers, run influencer campaigns, and track campaign ROI
 * **Admins** — to monitor platform activity and manage users
 
-It works like a **“performance & campaign hub” for influencers** combined with a **brand marketing engine** — similar to **HypeAuditor + Meta Creator Studio + Upfluence**.
+It works like a **“performance & campaign hub” for influencers** combined with a **brand marketing engine**.
 
 ---
 

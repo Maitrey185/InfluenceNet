@@ -1,4 +1,4 @@
-InfluenceNet:
+# InfluenceNet:
 
 * a brand/agency-focused **InfluenceNet** (campaigns, payments, ROI, search/graph, enterprise features), and
 * a creator-facing **Influencer Growth Engine (IGE)** (analytics, scheduling, collaboration, rule-based recommendations)
@@ -7,13 +7,13 @@ The result is a single platform that can be used by **brands** to discover & run
 
 Below is a concise, implementable blueprint: high-level vision, unified service catalog, data-store mapping, event topics, key APIs, core flows, prioritized phased roadmap (v1 non-AI + enterprise features), and next steps you can pick.
 
-# Vision (one-liner)
+## Vision (one-liner)
 
 A unified ecosystem where brands discover & run campaigns and creators get actionable, data-driven growth tools — built as microservices, event-driven, polyglot persistence — **AI deferred to v2** (plug-and-play).
 
 ---
 
-# Product value props (merged)
+## Product value props (merged)
 
 * Brands: discover influencers, run & track campaigns, payment & escrow, campaign ROI dashboards.
 * Influencers: unified analytics across platforms, scheduling & reminders, collaboration discovery, campaign management, weekly reports and growth goals.
@@ -21,7 +21,7 @@ A unified ecosystem where brands discover & run campaigns and creators get actio
 
 ---
 
-# Unified microservice catalog (single list — services are reused by both personas)
+## Unified microservice catalog (single list — services are reused by both personas)
 
 1. **API Gateway / Edge** — routing, rate-limits, auth.
 2. **Auth & Identity** (Keycloak + mapping) — users, roles (brand / influencer / admin).
@@ -48,7 +48,7 @@ A unified ecosystem where brands discover & run campaigns and creators get actio
 
 ---
 
-# Polyglot datastore mapping (why & which service uses it)
+## Polyglot datastore mapping (why & which service uses it)
 
 * **Postgres** — transactional (users, campaigns, deals, contracts, billing metadata).
 * **MongoDB** — raw social provider payloads & enriched JSON.
@@ -77,7 +77,7 @@ A unified ecosystem where brands discover & run campaigns and creators get actio
 
 ---
 
-# Key API endpoints (core combined set)
+## Key API endpoints (core combined set)
 
 **Auth**
 
@@ -121,7 +121,7 @@ A unified ecosystem where brands discover & run campaigns and creators get actio
 
 ---
 
-# Core flows (merged, textual)
+## Core flows (merged, textual)
 
 ## 1) Daily ingestion → analytics → dashboard (influencer growth path)
 

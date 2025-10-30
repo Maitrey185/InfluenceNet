@@ -27,6 +27,9 @@ if (-Not (Test-Path ".env")) {
 Write-Host ""
 Write-Host "Starting infrastructure services..." -ForegroundColor Yellow
 docker-compose up -d
+# After docker-compose up -d, add:
+Write-Host "Ensuring Kafka services are started..." -ForegroundColor Yellow
+docker-compose up -d kafka schema-registry kafka-ui
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""

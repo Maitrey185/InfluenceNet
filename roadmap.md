@@ -1,8 +1,32 @@
+# InfluenceNet Backend Implementation Roadmap
 
-# InfluenceNet Implementation Roadmap
+**Note**: This roadmap focuses on **backend microservices and APIs**. See `FRONTEND_ROADMAP.md` for parallel frontend development.
 
+## **Development Strategy**
+
+- **Backend-First Approach**: APIs developed first, then consumed by frontend
+- **Parallel Development**: Frontend team can start with mock APIs (MSW) while backend is in progress
+- **API-First Design**: OpenAPI/Swagger specs created before implementation
+- **Continuous Integration**: Each sprint delivers working, testable APIs
+
+### **API Documentation Standards**
+
+Every sprint must deliver:
+1. **OpenAPI 3.0 Specification** (Swagger) for all endpoints
+2. **Postman Collection** with example requests/responses
+3. **API Documentation** (auto-generated from Swagger)
+4. **Integration Tests** for all endpoints
+
+**Tools**:
+- SpringDoc OpenAPI (automatic Swagger generation)
+- Swagger UI available at `/swagger-ui.html`
+- API docs available at `/api-docs`
+
+---
 
 ## **PHASE 0: FOUNDATION & INFRASTRUCTURE** (Sprints 1-3, ~6 weeks)
+
+**Frontend Parallel Work**: Sprint 1-2 (Project setup, Design system, Auth UI)
 
 ### **Sprint 1: Core Infrastructure Setup** (Week 1-2)
 
@@ -97,11 +121,16 @@ CREATE TABLE users (
 - Keycloak configured and running
 - API Gateway routing requests
 - Auth service with JWT validation
+- **OpenAPI/Swagger documentation for auth endpoints**
 - Postman collection for auth flows
+
+**Frontend Integration**: Auth APIs ready for Frontend Sprint 2 (Auth UI)
 
 ---
 
 ### **Sprint 3: Shared Services & DevOps** (Week 5-6)
+
+**Frontend Parallel Work**: Sprint 2 (Auth UI integration)
 
 **Goal**: Common services and CI/CD pipeline
 

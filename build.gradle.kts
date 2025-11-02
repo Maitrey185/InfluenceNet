@@ -1,12 +1,12 @@
 plugins {
 	java
-	id("org.springframework.boot") version "3.5.7"
+	id("org.springframework.boot") version "3.4.4"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.project"
 version = "0.0.1-SNAPSHOT"
-description = "Aunified platform for influencer growth + brand campaign management"
+description = "A unified platform for influencer growth + brand campaign management"
 
 java {
 	toolchain {
@@ -20,7 +20,7 @@ repositories {
 
 dependencies {
 	// Spring Boot Starters
-	implementation("org.springframework.boot:spring-boot-starter-web")
+//	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 	implementation("org.springframework.boot:spring-boot-starter-data-redis")
@@ -29,8 +29,17 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
-	
-	// Kafka
+//    implementation("org.springframework.boot:spring-boot-starter-security")
+//    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+//    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    // Spring Cloud Gateway
+//    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+
+    // WebFlux
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    // Kafka
 //	implementation("org.springframework.kafka:spring-kafka")
 	
 	// PostgreSQL Driver
@@ -62,7 +71,13 @@ dependencies {
 	implementation("software.amazon.awssdk:s3:2.20.26")
 	
 	// Apache Commons
-	implementation("org.apache.commons:commons-lang3")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
+
+    // Keycloak Admin Client
+//    implementation("org.keycloak:keycloak-admin-client:23.0.0")
+
+    // OpenAPI/Swagger Documentation
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 	
 	// Testing
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -76,4 +91,26 @@ dependencies {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+// Fix for Windows long classpath issue
+tasks.withType<JavaExec> {
+	// Use manifest classpath to avoid long command line
+	classpath = files()
+	doFirst {
+		val manifestClasspath = project.configurations.runtimeClasspath.get().files.joinToString(" ") { it.name }
+		jvmArgs("-Dloader.path=${project.configurations.runtimeClasspath.get().asPath}")
+	}
+}
+
+// Alternative: Use ProGuard JAR for shorter classpath
+tasks.named<org.springframework.boot.gradle.tasks.run.BootRun>("bootRun") {
+	// Shorten classpath by using manifest
+	systemProperty("spring.output.ansi.enabled", "always")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2024.0.0")
+    }
 }

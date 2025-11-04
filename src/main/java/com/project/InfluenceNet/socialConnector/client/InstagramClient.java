@@ -13,7 +13,7 @@ public class InstagramClient {
     @Autowired
     private WebClient webClient;
 
-    public Map<String, Object> getInstagramData() {
+    public Map<String, Object> getInstagramUserData() {
         String fields = String.join(",",
                 "biography",
                 "followers_count",
@@ -39,6 +39,63 @@ public class InstagramClient {
                 .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                 .block();
 
+    }
+
+    public Map<String, Object> getInstagramMediaData() {
+        String fields = String.join(",",
+
+                "id",
+                "media_type",
+                "media_url",
+                "thumbnail_url",
+                "caption",
+                "permalink",
+                "username",
+                "timestamp",
+                "like_count",
+                "comments_count"
+        );
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .host("graph.instagram.com")
+                        .path("/v24.0/{userId}/media")
+                        .queryParam("fields", fields)
+                        .queryParam("access_token", "dummy")
+                        .build("dummy")
+                )
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .block();
+    }
+
+    public Map<String, Object> getInstagramInsightsData() {
+        String fields = String.join(",",
+                "likes",
+                "comments",
+                "shares",
+                "saves",
+                "reach",
+                "impressions",
+                "ig_reels_video_view_total_time",
+                "ig_reels_avg_watch_time",
+                "total_interactions",
+                "views"
+        );
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .host("graph.instagram.com")
+                        .path("/v24.0/{userId}/insights")
+                        .queryParam("fields", fields)
+                        .queryParam("access_token", "dummy")
+                        .build("dummy")
+                )
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                .block();
     }
 
 

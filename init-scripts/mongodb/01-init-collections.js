@@ -46,7 +46,7 @@ db.createCollection('raw_insights', {
         },
         platform: {
           bsonType: 'string',
-          enum: ['instagram', 'youtube', 'tiktok', 'twitter']
+          enum: ['instagram', 'youtube', 'twitter']
         },
         fetched_at: {
           bsonType: 'date'

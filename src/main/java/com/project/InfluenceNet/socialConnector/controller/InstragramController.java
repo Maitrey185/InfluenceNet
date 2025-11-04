@@ -16,7 +16,7 @@ public class InstragramController {
     private InstagramClient instagramClient;
 
     @GetMapping("/data")
-    public Map<String, Object> getInstagramData() {
-        return instagramClient.getInstagramData();
+    public Map<String, Object> getInstagramUserData() {
+        return instagramClient.getInstagramUserData();
     }
 }

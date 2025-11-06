@@ -9,33 +9,33 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.servers.Server;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
-@OpenAPIDefinition(
-    info = @Info(
-        title = "InfluenceNet API",
-        version = "1.0.0",
-        description = "A unified platform for influencer growth and brand campaign management",
-        contact = @Contact(
-            name = "InfluenceNet Team",
-            email = "support@influencenet.com"
-        ),
-        license = @License(
-            name = "MIT License",
-            url = "https://opensource.org/licenses/MIT"
-        )
-    ),
-    servers = {
-        @Server(
-            url = "http://localhost:8080",
-            description = "Local Development Server"
-        )
-    }
-)
-@SecurityScheme(
-    name = "Bearer Authentication",
-    type = SecuritySchemeType.HTTP,
-    bearerFormat = "JWT",
-    scheme = "bearer"
-)
+//@Configuration
+//@OpenAPIDefinition(
+//    info = @Info(
+//        title = "InfluenceNet API",
+//        version = "1.0.0",
+//        description = "A unified platform for influencer growth and brand campaign management",
+//        contact = @Contact(
+//            name = "InfluenceNet Team",
+//            email = "support@influencenet.com"
+//        ),
+//        license = @License(
+//            name = "MIT License",
+//            url = "https://opensource.org/licenses/MIT"
+//        )
+//    ),
+//    servers = {
+//        @Server(
+//            url = "http://localhost:8080",
+//            description = "Local Development Server"
+//        )
+//    }
+//)
+//@SecurityScheme(
+//    name = "Bearer Authentication",
+//    type = SecuritySchemeType.HTTP,
+//    bearerFormat = "JWT",
+//    scheme = "bearer"
+//)
 public class OpenApiConfig {
 }

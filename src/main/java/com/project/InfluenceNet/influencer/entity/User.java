@@ -21,8 +21,15 @@ public class User {
     private UUID id;
     private String username;
     private String email;
-    private String password;
+    private String password_hash;
     private String role;
+
+    @Column(name="is_active")
+    private boolean isActive;
+
+    @Column(name="created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name="updated_at")
     private LocalDateTime updatedAt = LocalDateTime.now();
 }

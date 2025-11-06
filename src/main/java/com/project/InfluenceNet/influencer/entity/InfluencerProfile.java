@@ -22,6 +22,11 @@ public class InfluencerProfile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private User user;
+
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 

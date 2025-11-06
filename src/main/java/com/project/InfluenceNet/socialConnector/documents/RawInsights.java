@@ -13,7 +13,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Document(collection = "raw_insights")
-public class Raw_Insights {
+public class RawInsights {
 
     @Id
     private ObjectId id;

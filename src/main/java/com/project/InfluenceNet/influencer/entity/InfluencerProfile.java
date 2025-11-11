@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.influencer.entity;
 
+import com.project.InfluenceNet.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

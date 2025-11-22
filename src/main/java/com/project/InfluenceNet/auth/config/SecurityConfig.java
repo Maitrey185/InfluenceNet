@@ -37,7 +37,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(
-                                "/auth/register", "/auth/login", "/v3/api-docs/**", "/swagger-ui/**"
+                                "/auth/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -50,16 +55,21 @@ public class SecurityConfig {
 
 
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider(PasswordEncoder passwordEncoder) {
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder);
+        provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
 
     @Bean
-    public AuthenticationManager getAuthenticationManager(DaoAuthenticationProvider provider) {
-        return new ProviderManager(List.of(provider));
+    public JwtAuthProvider jwtAuthProvider() {
+        return new JwtAuthProvider(jwtUtil, userDetailsService);
+    }
+
+    @Bean
+    public AuthenticationManager getAuthenticationManager() {
+        return new ProviderManager(Arrays.asList(daoAuthenticationProvider(), jwtAuthProvider()));
     }
 
     @Bean

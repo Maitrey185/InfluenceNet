@@ -63,4 +63,9 @@ public class AuthController {
         }
 //        return ResponseEntity.ok(authService.login(loginRequest.getUsername(), loginRequest.getPassword()));
     }
+
+    @PostMapping("/check")
+    public ResponseEntity<String> check() {
+        return ResponseEntity.ok("Check successful");
+    }
 }

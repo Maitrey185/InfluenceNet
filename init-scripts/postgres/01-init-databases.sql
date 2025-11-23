@@ -1,9 +1,9 @@
--- Create additional databases if needed
-CREATE DATABASE keycloak;
-
+---- Create additional databases if needed
+--CREATE DATABASE keycloak;
+--
 -- Grant privileges
 GRANT ALL PRIVILEGES ON DATABASE influencenet TO influencenet_user;
-GRANT ALL PRIVILEGES ON DATABASE keycloak TO influencenet_user;
+--GRANT ALL PRIVILEGES ON DATABASE keycloak TO influencenet_user;
 
 -- Connect to influencenet database
 \c influencenet;

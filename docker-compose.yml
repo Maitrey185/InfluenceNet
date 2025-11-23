@@ -12,7 +12,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
+#      - ./init-scripts/postgres:/docker-entrypoint-initdb.d
     networks:
       - influencenet-network
     healthcheck:
@@ -140,7 +140,7 @@ services:
       - kafka
       - schema-registry
     ports:
-      - "8080:8080"
+      - "8090:8080"  # Changed to avoid conflict with Spring Boot app
     environment:
       KAFKA_CLUSTERS_0_NAME: influencenet-local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
@@ -280,7 +280,7 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:23.0
     container_name: influencenet-keycloak
-    command: start-dev
+    command: start-dev --import-realm
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
@@ -290,8 +290,12 @@ services:
       KC_DB_PASSWORD: influencenet_pass
       KC_HEALTH_ENABLED: 'true'
       KC_METRICS_ENABLED: 'true'
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HTTP_ENABLED: 'true'
     ports:
       - "8180:8080"
+    volumes:
+      - ./config/keycloak:/opt/keycloak/data/import
     depends_on:
       postgres:
         condition: service_healthy

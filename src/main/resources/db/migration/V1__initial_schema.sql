@@ -35,14 +35,11 @@ CREATE INDEX idx_users_role ON users(role);
 
 CREATE TABLE influencer_profiles (
     id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
-    bio TEXT,
-    profile_pic_url VARCHAR(500),
-    niche VARCHAR(100),
-    location VARCHAR(200),
-    timezone VARCHAR(50) DEFAULT 'UTC',
-    follower_count_total INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        email VARCHAR(200),
+    	avg_engagement_rate DOUBLE PRECISION DEFAULT 0.0,
+        total_follower_count INT DEFAULT 0,
+    	is_active BOOLEAN DEFAULT true,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE INDEX idx_influencer_profiles_niche ON influencer_profiles(niche);
@@ -56,13 +53,11 @@ CREATE TABLE social_accounts (
     influencer_id UUID NOT NULL REFERENCES influencer_profiles(id) ON DELETE CASCADE,
     platform VARCHAR(50) NOT NULL CHECK (platform IN ('instagram', 'youtube', 'tiktok', 'twitter')),
     platform_user_id VARCHAR(255),
-    username VARCHAR(255),
-    access_token_ref VARCHAR(500),
-    refresh_token_ref VARCHAR(500),
+    access_token VARCHAR(500),
+    refresh_token VARCHAR(500),
     token_expires_at TIMESTAMP,
-    is_active BOOLEAN DEFAULT true,
-    connected_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_synced_at TIMESTAMP,
+    follower_count INT DEFAULT 0,
+    engagement_rate DOUBLE PRECISION DEFAULT 0.0,
     UNIQUE(influencer_id, platform)
 );
 

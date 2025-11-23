@@ -1,0 +1,29 @@
+---- ============================================
+---- Update Influencer Profile Schema
+---- Version: 2.0
+---- Description: Add missing columns to influencer_profiles and social_accounts tables
+---- ============================================
+--
+---- Add missing columns to influencer_profiles table
+--ALTER TABLE influencer_profiles
+--ADD COLUMN IF NOT EXISTS email VARCHAR(255) UNIQUE,
+--ADD COLUMN IF NOT EXISTS username VARCHAR(100) UNIQUE,
+--ADD COLUMN IF NOT EXISTS avg_engagement_rate DECIMAL(5,2) DEFAULT 0.0,
+--ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+--
+---- Create indexes for new columns
+--CREATE INDEX IF NOT EXISTS idx_influencer_profiles_email ON influencer_profiles(email);
+--CREATE INDEX IF NOT EXISTS idx_influencer_profiles_username ON influencer_profiles(username);
+--
+---- Add missing columns to social_accounts table
+--ALTER TABLE social_accounts
+--ADD COLUMN IF NOT EXISTS follower_count INT DEFAULT 0,
+--ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+--
+---- Add trigger for social_accounts updated_at
+--CREATE TRIGGER IF NOT EXISTS update_social_accounts_updated_at BEFORE UPDATE ON social_accounts
+--    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+--
+---- Add comment to tables
+--COMMENT ON TABLE influencer_profiles IS 'Stores influencer profile information including bio, niche, and engagement metrics';
+--COMMENT ON TABLE social_accounts IS 'Stores linked social media accounts for influencers with OAuth tokens and sync information';

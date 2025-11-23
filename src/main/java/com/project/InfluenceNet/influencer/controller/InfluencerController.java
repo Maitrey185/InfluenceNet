@@ -1,0 +1,31 @@
+package com.project.InfluenceNet.influencer.controller;
+
+
+import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
+import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
+import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/influencer")
+@RequiredArgsConstructor
+public class InfluencerController {
+
+    private InfluencerProfileService influencerProfileService;
+
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<InfluencerProfileResponse> getProfile(@PathVariable UUID id) throws Throwable {
+        return ResponseEntity.ok(influencerProfileService.getProfile(id));
+    }
+
+    @PostMapping("/profile")
+    public ResponseEntity<InfluencerProfileResponse> createProfile(@RequestBody InfluencerProfileRequest request) throws Throwable {
+        return ResponseEntity.ok(influencerProfileService.createProfile(request));
+    }
+
+
+}

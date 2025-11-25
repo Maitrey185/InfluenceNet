@@ -65,8 +65,8 @@ dependencies {
 //	// AWS SDK for S3 (MinIO compatible)
 //	implementation("software.amazon.awssdk:s3:2.20.26")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-//    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Apache Commons
     implementation("org.apache.commons:commons-lang3")

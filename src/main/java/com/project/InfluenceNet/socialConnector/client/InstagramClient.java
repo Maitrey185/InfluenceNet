@@ -29,7 +29,8 @@ public class InstagramClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
-                        .host("graph.instagram.com")
+//                        .host("graph.instagram.com")
+                        .host("localhost:8081")
                         .path("/v24.0/{userId}")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")
@@ -59,7 +60,8 @@ public class InstagramClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
-                        .host("graph.instagram.com")
+//                        .host("graph.instagram.com")
+                        .host("localhost:8081")
                         .path("/v24.0/{userId}/media")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")
@@ -87,7 +89,8 @@ public class InstagramClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
-                        .host("graph.instagram.com")
+//                        .host("graph.instagram.com")
+                        .host("localhost:8081")
                         .path("/v24.0/{userId}/insights")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")

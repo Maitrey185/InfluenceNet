@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -18,5 +19,15 @@ public class InstragramController {
     @GetMapping("/data")
     public Map<String, Object> getInstagramUserData() {
         return instagramClient.getInstagramUserData();
+    }
+
+    @GetMapping("/media")
+    public Map<String, Object> getInstagramMediaData() {
+        return instagramClient.getInstagramMediaData();
+    }
+
+    @GetMapping("/insights")
+    public Map<String, Object> getInstagramInsightsData() {
+        return instagramClient.getInstagramInsightsData();
     }
 }

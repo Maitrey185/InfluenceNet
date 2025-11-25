@@ -91,7 +91,7 @@ public class InstagramClient {
                         .scheme("https")
 //                        .host("graph.instagram.com")
                         .host("localhost:8081")
-                        .path("/v24.0/{userId}/insights")
+                        .path("/v24.0/{mediaId}/insights")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")
                         .build("dummy")

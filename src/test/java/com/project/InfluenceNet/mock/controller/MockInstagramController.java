@@ -80,10 +80,10 @@ public class MockInstagramController {
         return response;
     }
 
-    @GetMapping("/{userId}/insights")
+    @GetMapping("/{mediaId}/insights")
     @ResponseBody
     public Map<String, List<Map<String, Object>>> getInsights(
-            @PathVariable String userId,
+            @PathVariable String mediaId,
             @RequestParam String fields,
             @RequestParam String access_token) {
 

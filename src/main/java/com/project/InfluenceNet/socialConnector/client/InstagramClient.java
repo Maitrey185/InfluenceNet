@@ -1,6 +1,9 @@
 package com.project.InfluenceNet.socialConnector.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,8 +13,13 @@ import java.util.Map;
 @Component
 public class InstagramClient {
 
-    @Autowired
-    private WebClient webClient;
+    private final WebClient webClient;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    public InstagramClient(@Value("${instagram.api.base-url}") String baseUrl) {
+        System.out.println("Instagram base URL = {}"+baseUrl);
+        this.webClient = WebClient.builder().baseUrl(baseUrl).build();
+    }
 
     public Map<String, Object> getInstagramUserData() {
         String fields = String.join(",",
@@ -28,9 +36,6 @@ public class InstagramClient {
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-//                        .host("graph.instagram.com")
-                        .host("localhost:8081")
                         .path("/v24.0/{userId}")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")
@@ -59,9 +64,6 @@ public class InstagramClient {
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-//                        .host("graph.instagram.com")
-                        .host("localhost:8081")
                         .path("/v24.0/{userId}/media")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")
@@ -88,9 +90,6 @@ public class InstagramClient {
 
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .scheme("https")
-//                        .host("graph.instagram.com")
-                        .host("localhost:8081")
                         .path("/v24.0/{userId}/insights")
                         .queryParam("fields", fields)
                         .queryParam("access_token", "dummy")

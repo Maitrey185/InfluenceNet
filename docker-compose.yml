@@ -21,6 +21,19 @@ services:
       timeout: 5s
       retries: 5
 
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: influencenet-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@influencenet.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - influencenet-network
+
   # MongoDB Database
   mongodb:
     image: mongo:6

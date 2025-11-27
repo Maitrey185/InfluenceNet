@@ -16,4 +16,6 @@ public interface SocialAccountsRepository extends JpaRepository<SocialAccount, U
     List<SocialAccount> findByInfluencerId(UUID influencerId);
 
     boolean existsByInfluencerIdAndPlatform(UUID influencerId, String platform);
+
+    List<SocialAccount> findByPlatformAndInfluencerIsActive(String platform, boolean isActive);
 }

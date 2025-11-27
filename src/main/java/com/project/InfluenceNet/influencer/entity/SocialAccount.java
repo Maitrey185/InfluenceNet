@@ -1,10 +1,8 @@
 package com.project.InfluenceNet.influencer.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,6 +12,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SocialAccount {
 
     @Id
@@ -22,6 +21,7 @@ public class SocialAccount {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "influencer_id", nullable = false)
+    @JsonBackReference
     private InfluencerProfile influencer;
 
     @Column(nullable = false, length = 50)

@@ -25,4 +25,5 @@ public class SocialAccountRequest {
     private String refreshToken;
     private LocalDateTime tokenExpiresAt;
     private Integer followerCount;
+    private Double engagementRate;
 }

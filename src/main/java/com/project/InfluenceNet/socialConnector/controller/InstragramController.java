@@ -3,6 +3,8 @@ package com.project.InfluenceNet.socialConnector.controller;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
+import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
+import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import com.project.InfluenceNet.socialConnector.service.SocialPollingService;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +28,13 @@ public class InstragramController {
     private final SocialPollingService socialPollingService;
 
 
-    @GetMapping("/data")
-    public Map<String, Object> getInstagramUserData() {
+    @GetMapping("/userProfile")
+    public InstagramProfileDTO getInstagramUserData() {
         return instagramClient.getInstagramUserData();
     }
 
     @GetMapping("/media")
-    public Map<String, Object> getInstagramMediaData() {
+    public List<InstagramRecentPostsDTO> getInstagramMediaData() {
         return instagramClient.getInstagramMediaData();
     }
 

@@ -1,5 +1,8 @@
 package com.project.InfluenceNet.socialConnector.client;
 
+import com.project.InfluenceNet.socialConnector.dto.InsightValue;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsights;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -74,30 +80,67 @@ public class InstagramClient {
                 .block();
     }
 
-    public Map<String, Object> getInstagramInsightsData() {
-        String fields = String.join(",",
-                "likes",
-                "comments",
-                "shares",
-                "saves",
-                "reach",
-                "impressions",
-                "ig_reels_video_view_total_time",
-                "ig_reels_avg_watch_time",
-                "total_interactions",
-                "views"
-        );
+    public MediaInsightsResponse getInstagramInsightsData(String mediaId, String accessToken) {
+        try {
+            String fields = String.join(",",
+                    "likes", "comments", "shares", "saves", "reach",
+                    "impressions", "ig_reels_video_view_total_time",
+                    "ig_reels_avg_watch_time", "total_interactions", "views"
+            );
 
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v24.0/{userId}/insights")
-                        .queryParam("fields", fields)
-                        .queryParam("access_token", "dummy")
-                        .build("dummy")
-                )
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-                .block();
+            Map<String, Object> response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v24.0/{mediaId}/insights")
+                            .queryParam("fields", fields)
+                            .queryParam("access_token", accessToken)
+                            .build(mediaId)
+                    )
+                    .retrieve()
+                    .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(String.class)
+                                    .flatMap(errorBody -> {
+                                        log.error("Error fetching Instagram insights: {}", errorBody);
+                                        return Mono.error(new RuntimeException("Failed to fetch Instagram insights: " + errorBody));
+                                    }))
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
+                    .block();
+
+            log.info("Instagram insights API response: {}", response);
+            return mapToMediaInsightsResponse(response);
+        } catch (Exception e) {
+            log.error("Exception while fetching Instagram insights", e);
+            throw new RuntimeException("Failed to fetch Instagram insights", e);
+        }
+    }
+
+    private MediaInsightsResponse mapToMediaInsightsResponse(Map<String, Object> response) {
+        if (response == null || !response.containsKey("data")) {
+            log.warn("No data found in Instagram insights response");
+            return MediaInsightsResponse.builder().build();
+        }
+
+        List<Map<String, Object>> insightsData = (List<Map<String, Object>>) response.get("data");
+        List<MediaInsights> mediaInsightsList = new ArrayList<>();
+
+        for (Map<String, Object> insight : insightsData) {
+            MediaInsights mediaInsight = MediaInsights.builder()
+                    .name((String) insight.get("name"))
+                    .period((String) insight.get("period"))
+                    .title((String) insight.get("title"))
+                    .description((String) insight.get("description"))
+                    .values(extractValues(insight.get("values")))
+                    .build();
+            mediaInsightsList.add(mediaInsight);
+        }
+
+        return MediaInsightsResponse.builder()
+                .mediaInsights(mediaInsightsList)
+                .build();
+    }
+
+    @SuppressWarnings("unchecked")
+    private List<InsightValue> extractValues(Object values) {
+        return (List<InsightValue>) values;
     }
 
 

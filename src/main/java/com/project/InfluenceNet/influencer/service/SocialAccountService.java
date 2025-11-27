@@ -25,8 +25,12 @@ public class SocialAccountService {
     private final SocialAccountsRepository socialAccountsRepository;
     private final InfluencerProfileRepository influencerProfileRepository;
 
-    public List<SocialAccount> getActiveSocialAccountsForPlatform(String platform){
-        return socialAccountsRepository.findByPlatformAndInfluencerIsActive(platform, true);
+    public List<SocialAccountResponse> getActiveSocialAccountsForPlatform(String platform){
+        List<SocialAccount> socialAccounts = socialAccountsRepository.findByPlatformAndInfluencerIsActive(platform, true);
+        return socialAccounts.stream()
+                .map(this::mapToSocialAccountResponse)
+                .collect(Collectors.toList());
+
     }
 
 

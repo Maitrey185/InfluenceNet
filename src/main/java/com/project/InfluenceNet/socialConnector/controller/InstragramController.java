@@ -1,7 +1,9 @@
 package com.project.InfluenceNet.socialConnector.controller;
 
+import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import com.project.InfluenceNet.socialConnector.service.SocialPollingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +37,12 @@ public class InstragramController {
     }
 
     @GetMapping("/insights")
-    public Map<String, Object> getInstagramInsightsData() {
-        return instagramClient.getInstagramInsightsData();
+    public MediaInsightsResponse getInstagramInsightsData() {
+        return instagramClient.getInstagramInsightsData("dummy", "dummy");
     }
 
     @GetMapping("/instaAccounts")
-    public List<SocialAccount> getInstaAccounts(){
+    public List<SocialAccountResponse> getInstaAccounts(){
         return socialPollingService.getAllInstagramAccounts();
     }
 }

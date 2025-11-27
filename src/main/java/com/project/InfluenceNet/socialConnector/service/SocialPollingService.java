@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.mongodb.annotations.Sealed;
+import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,9 @@ import java.util.List;
 public class SocialPollingService {
 
     private final SocialAccountService socialAccountService;
-    public List<SocialAccount> getAllInstagramAccounts(){
+    public List<SocialAccountResponse> getAllInstagramAccounts(){
         return socialAccountService.getActiveSocialAccountsForPlatform("Instagram");
     }
+
+
 }

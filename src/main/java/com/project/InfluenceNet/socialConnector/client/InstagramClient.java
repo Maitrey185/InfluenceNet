@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ public class InstagramClient {
         this.webClient = WebClient.builder().baseUrl(baseUrl).build();
     }
 
-    public InstagramProfileDTO getInstagramUserData() {
+    public InstagramProfileDTO getInstagramUserData(String platformUserId) {
         String fields = String.join(",",
                 "biography",
                 "followers_count",
@@ -52,7 +54,7 @@ public class InstagramClient {
 
     }
 
-    public List<InstagramRecentPostsDTO> getInstagramMediaData() {
+    public List<InstagramRecentPostsDTO> getInstagramMediaData(String platformUserId, LocalDateTime since) {
         String fields = String.join(",",
 
                 "id",

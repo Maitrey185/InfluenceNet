@@ -18,7 +18,6 @@ public class RawInsights {
     @Id
     private ObjectId id;
 
-    private ObjectId rawPostsId;
     private Enum<Platforms> platform;
 
     private int likes;

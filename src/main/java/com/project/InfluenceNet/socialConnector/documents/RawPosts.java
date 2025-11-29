@@ -25,7 +25,7 @@ public class RawPosts {
     private String id;
 
     private UUID influencer_id;
-    private Enum<Platforms> platform;
+    private Platforms platform;
     private Object raw_payload;
     private LocalDate fetched_at;
     private Enum<PostType> post_type;

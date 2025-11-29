@@ -35,7 +35,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5") // for JSON parser
     // Kafka
-//	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.kafka:spring-kafka")
 
     // PostgreSQL Driver
     runtimeOnly("org.postgresql:postgresql")

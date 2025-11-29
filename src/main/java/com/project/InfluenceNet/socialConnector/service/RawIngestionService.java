@@ -7,6 +7,7 @@ import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
+import com.project.InfluenceNet.socialConnector.events.PostFetchedEventPublisher;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class RawIngestionService {
 
     private final RawPostsRepository rawPostsRepository;
     private final RawInsightsRepository rawInsightsRepository;
+    private final PostFetchedEventPublisher postFetchedEventPublisher;
 
 
     public void ingestRawPosts(List<InstagramRecentPostsDTO> posts, UUID influencerId){
@@ -41,6 +43,7 @@ public class RawIngestionService {
                         .raw_payload(post)
                         .build();
                 rawPostsRepository.save(rawPosts);
+                postFetchedEventPublisher.publishPostFetchedEvent(rawPosts);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

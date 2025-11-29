@@ -5,6 +5,7 @@ import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import com.project.InfluenceNet.socialConnector.service.InstagramConnector;
 import com.project.InfluenceNet.socialConnector.service.InstagramConnectorOrchestrator;
@@ -43,8 +44,9 @@ public class InstragramController {
     }
 
     @GetMapping("/insights")
-    public MediaInsightsResponse getInstagramInsightsData() {
-        return instagramClient.getInstagramInsightsData("dummy", "dummy");
+    public void getInstagramInsightsData() {
+//        return instagramClient.getInstagramInsightsData("dummy", "dummy");
+        instagramConnectorOrchestrator.syncInstagramInsights();
     }
 
     @GetMapping("/instaAccounts")

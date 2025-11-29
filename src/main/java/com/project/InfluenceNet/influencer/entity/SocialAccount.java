@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.influencer.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,8 +25,8 @@ public class SocialAccount {
     @JsonBackReference
     private InfluencerProfile influencer;
 
-    @Column(nullable = false, length = 50)
-    private String platform; // 'instagram', 'youtube', 'tiktok', 'twitter'
+    @Enumerated(EnumType.STRING)
+    private Platforms platform; // 'instagram', 'youtube', 'twitter'
 
     @Column(name = "platform_user_id")
     private String platformUserId;

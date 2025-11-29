@@ -8,6 +8,7 @@ import com.project.InfluenceNet.influencer.exception.InfluencerNotFoundException
 import com.project.InfluenceNet.influencer.exception.SocialAccountNotFoundException;
 import com.project.InfluenceNet.influencer.repository.InfluencerProfileRepository;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class SocialAccountService {
     private final SocialAccountsRepository socialAccountsRepository;
     private final InfluencerProfileRepository influencerProfileRepository;
 
-    public List<SocialAccountResponse> getActiveSocialAccountsForPlatform(String platform){
+    public List<SocialAccountResponse> getActiveSocialAccountsForPlatform(Enum<Platforms> platform){
         List<SocialAccount> socialAccounts = socialAccountsRepository.findByPlatformAndInfluencerIsActive(platform, true);
         return socialAccounts.stream()
                 .map(this::mapToSocialAccountResponse)
@@ -60,7 +61,7 @@ public class SocialAccountService {
     }
 
     @Transactional
-    public void removeSocialAccount(UUID influencerId, String platform) {
+    public void removeSocialAccount(UUID influencerId, Enum<Platforms> platform) {
         log.info("Removing social account for influencer: {}, platform: {}", influencerId, platform);
         SocialAccount account = socialAccountsRepository.findByInfluencerIdAndPlatform(influencerId, platform)
                 .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));
@@ -80,7 +81,7 @@ public class SocialAccountService {
     }
 
     @Transactional(readOnly = true)
-    public SocialAccountResponse getSocialAccount(UUID influencerId, String platform) {
+    public SocialAccountResponse getSocialAccount(UUID influencerId, Enum<Platforms> platform) {
         log.info("Fetching social account for influencer: {}, platform: {}", influencerId, platform);
         SocialAccount account = socialAccountsRepository.findByInfluencerIdAndPlatform(influencerId, platform)
                 .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));
@@ -90,7 +91,7 @@ public class SocialAccountService {
 
 
     @Transactional
-    public SocialAccountResponse updateSocialAccountSync(UUID influencerId, String platform, Integer followerCount) {
+    public SocialAccountResponse updateSocialAccountSync(UUID influencerId, Enum<Platforms> platform, Integer followerCount) {
         log.info("Updating social account sync for influencer: {}, platform: {}", influencerId, platform);
         SocialAccount account = socialAccountsRepository.findByInfluencerIdAndPlatform(influencerId, platform)
                 .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));

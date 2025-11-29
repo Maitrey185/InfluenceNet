@@ -2,8 +2,11 @@ package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import com.project.InfluenceNet.socialConnector.documents.PostType;
+import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +46,26 @@ public class RawIngestionService {
             }
 
         });
+    }
+
+    public void ingestRawInsights(String postId, MediaInsightsDTO mediaInsightsDTO, UUID influenceId){
+        try {
+            RawInsights rawInsights = RawInsights.builder()
+                    .id(postId)
+                    .platform(Platforms.INSTAGRAM)
+                    .likes(mediaInsightsDTO.getLikes())
+                    .shares(mediaInsightsDTO.getShares())
+                    .comments(mediaInsightsDTO.getComments())
+                    .saves(mediaInsightsDTO.getSaved())
+                    .ig_reels_video_view_total_time(mediaInsightsDTO.getIg_reels_video_view_total_time())
+                    .ig_reels_avg_watch_time(mediaInsightsDTO.getIg_reels_avg_watch_time())
+                    .total_interactions(mediaInsightsDTO.getTotal_interactions())
+                    .views(mediaInsightsDTO.getViews())
+                    .fetched_at(LocalDate.now())
+                    .build();
+            rawInsightsRepository.save(rawInsights);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

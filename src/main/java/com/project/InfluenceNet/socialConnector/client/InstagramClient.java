@@ -104,7 +104,7 @@ public class InstagramClient {
 
     }
 
-    public MediaInsightsResponse getInstagramInsightsData(String mediaId, String accessToken) {
+    public MediaInsightsDTO getInstagramInsightsData(String mediaId, String accessToken) {
         try {
             String fields = String.join(",",
                     "likes", "comments", "shares", "saves", "reach",
@@ -130,7 +130,8 @@ public class InstagramClient {
                     .block();
 
             log.info("Instagram insights API response: {}", response);
-            return mapToMediaInsightsResponse(response);
+            return mapToMediaInsightsDTO(mediaId, response);
+//            return mapToMediaInsightsResponse(response);
         } catch (Exception e) {
             log.error("Exception while fetching Instagram insights", e);
             throw new RuntimeException("Failed to fetch Instagram insights", e);
@@ -165,6 +166,23 @@ public class InstagramClient {
     @SuppressWarnings("unchecked")
     private List<InsightValue> extractValues(Object values) {
         return (List<InsightValue>) values;
+    }
+
+    private MediaInsightsDTO mapToMediaInsightsDTO(String mediaId, Map<String, Object> response) {
+        List<Map<String, Object>> insightsData = (List<Map<String, Object>>) response.get("data");
+
+        return MediaInsightsDTO.builder()
+                .id(mediaId)
+                .shares((Integer) ((List<Map<String, Object>>) insightsData.get(0).get("values")).get(0).get("value"))
+                .comments((Integer) ((List<Map<String, Object>>) insightsData.get(1).get("values")).get(0).get("value"))
+                .likes((Integer) ((List<Map<String, Object>>) insightsData.get(2).get("values")).get(0).get("value"))
+                .saved((Integer) ((List<Map<String, Object>>) insightsData.get(3).get("values")).get(0).get("value"))
+                .ig_reels_video_view_total_time((Integer) ((List<Map<String, Object>>) insightsData.get(4).get("values")).get(0).get("value"))
+                .ig_reels_avg_watch_time((Double) ((List<Map<String, Object>>) insightsData.get(5).get("values")).get(0).get("value"))
+                .total_interactions((Integer) ((List<Map<String, Object>>) insightsData.get(6).get("values")).get(0).get("value"))
+                .reach((Integer) ((List<Map<String, Object>>) insightsData.get(7).get("values")).get(0).get("value"))
+                .views((Integer) ((List<Map<String, Object>>) insightsData.get(8).get("values")).get(0).get("value"))
+                .build();
     }
 
 

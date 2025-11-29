@@ -2,8 +2,11 @@ package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +23,7 @@ public class InstagramConnectorOrchestrator {
     private final RawIngestionService rawIngestionService;
 
     public void syncInstagramProfile(){
-        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive("Instagram", true);
+        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive(Platforms.INSTAGRAM, true);
 
         accounts.forEach(account -> {
             InstagramProfileDTO instagramProfileDTO = instagramConnector.fetchProfile(account.getPlatformUserId());
@@ -29,7 +32,7 @@ public class InstagramConnectorOrchestrator {
     }
 
     public void syncInstagramMedia(){
-        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive("Instagram", true);
+        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive(Platforms.INSTAGRAM, true);
 
         accounts.forEach(acc -> {
 //            LocalDate since = calculateSinceForPosts(acc); // e.g. last sync or last 7 days
@@ -39,12 +42,13 @@ public class InstagramConnectorOrchestrator {
     }
 
     public void syncInstagramInsights(){
-        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive("Instagram", true);
+        List<SocialAccount> accounts = socialAccountRepository.findByPlatformAndInfluencerIsActive(Platforms.INSTAGRAM, true);
 
         accounts.forEach(acc -> {
             List<InstagramRecentPostsDTO> posts = instagramConnector.fetchRecentPosts(acc.getPlatformUserId(), LocalDateTime.now().minusWeeks(2));
             posts.forEach(post -> {
-                instagramConnector.fetchPostInsights(post.getId());
+                MediaInsightsDTO mediaInsightsResponse = instagramConnector.fetchPostInsights(post.getId());
+                rawIngestionService.ingestRawInsights(post.getId(), mediaInsightsResponse, acc.getInfluencer().getId());
             });
         });
     }

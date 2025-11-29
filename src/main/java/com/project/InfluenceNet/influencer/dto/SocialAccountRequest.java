@@ -1,5 +1,8 @@
 package com.project.InfluenceNet.influencer.dto;
 
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -14,8 +17,8 @@ import java.time.LocalDateTime;
 public class SocialAccountRequest {
 
     @NotBlank(message = "Platform is required")
-    @Pattern(regexp = "instagram|youtube|twitter", message = "Platform must be one of: instagram, youtube, twitter")
-    private String platform;
+    @Enumerated(EnumType.STRING)
+    private Platforms platform;
 
     @NotBlank(message = "UserId is required")
     private String platformUserId;

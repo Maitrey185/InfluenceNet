@@ -4,6 +4,7 @@ import com.mongodb.annotations.Sealed;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class SocialPollingService {
 
     private final SocialAccountService socialAccountService;
     public List<SocialAccountResponse> getAllInstagramAccounts(){
-        return socialAccountService.getActiveSocialAccountsForPlatform("Instagram");
+        return socialAccountService.getActiveSocialAccountsForPlatform(Platforms.INSTAGRAM);
     }
 
 

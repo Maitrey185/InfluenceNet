@@ -2,6 +2,7 @@ package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 
 import java.time.LocalDate;
@@ -17,7 +18,7 @@ public interface SocialConnector {
     List<InstagramRecentPostsDTO> fetchRecentPosts(String platformUserId, LocalDateTime since);
 
     // 3. Insights for specific posts
-    MediaInsightsResponse fetchPostInsights(String postId);
+    MediaInsightsDTO fetchPostInsights(String postId);
 
     // Token management
 //    void refreshToken(String influencerId);

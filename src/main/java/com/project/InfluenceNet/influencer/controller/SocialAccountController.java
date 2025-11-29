@@ -4,6 +4,7 @@ import com.project.InfluenceNet.influencer.dto.SocialAccountRequest;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
+import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class SocialAccountController {
     }
 
     @DeleteMapping("/{influencerId}/{platform}")
-    public ResponseEntity<Void> removeSocialAccount(@PathVariable UUID influencerId, @PathVariable String platform) {
+    public ResponseEntity<Void> removeSocialAccount(@PathVariable UUID influencerId, @PathVariable Enum<Platforms> platform) {
         socialAccountService.removeSocialAccount(influencerId, platform);
         return ResponseEntity.ok().build();
     }
@@ -40,7 +41,7 @@ public class SocialAccountController {
     }
 
     @GetMapping("/{influencerId}/{platform}")
-    public ResponseEntity<SocialAccountResponse> getSocialAccount(@PathVariable UUID influencerId, @PathVariable String platform) {
+    public ResponseEntity<SocialAccountResponse> getSocialAccount(@PathVariable UUID influencerId, @PathVariable Enum<Platforms> platform) {
         return ResponseEntity.ok(socialAccountService.getSocialAccount(influencerId, platform));
     }
 

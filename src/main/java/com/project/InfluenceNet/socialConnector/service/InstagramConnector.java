@@ -3,6 +3,7 @@ package com.project.InfluenceNet.socialConnector.service;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
+import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class InstagramConnector implements SocialConnector {
     }
 
     @Override
-    public MediaInsightsResponse fetchPostInsights(String postId) {
+    public MediaInsightsDTO fetchPostInsights(String postId) {
         return apiClient.getInstagramInsightsData(postId, "dummy");
     }
 

@@ -123,6 +123,7 @@ public class SocialAccountService {
     private SocialAccountResponse mapToSocialAccountResponse(SocialAccount account) {
         return SocialAccountResponse.builder()
                 .id(account.getId())
+                .influencerId(account.getInfluencer().getId())
                 .platform(account.getPlatform())
                 .platformUserId(account.getPlatformUserId())
                 .followerCount(account.getFollowerCount())

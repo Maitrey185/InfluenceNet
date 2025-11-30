@@ -19,6 +19,7 @@ public class SocialAccountResponse {
 
     private UUID id;
     @Enumerated(EnumType.STRING)
+    private UUID influencerId;
     private Platforms platform;
     private String platformUserId;
     private Integer followerCount;

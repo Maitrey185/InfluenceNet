@@ -35,7 +35,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5") // for JSON parser
     // Kafka
-//	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.kafka:spring-kafka")
 
     // PostgreSQL Driver
     runtimeOnly("org.postgresql:postgresql")
@@ -65,8 +65,8 @@ dependencies {
 //	// AWS SDK for S3 (MinIO compatible)
 //	implementation("software.amazon.awssdk:s3:2.20.26")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-//    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Apache Commons
     implementation("org.apache.commons:commons-lang3")

@@ -244,7 +244,7 @@ CREATE TABLE social_accounts (
     - Fetch user media (posts, reels)
     - Fetch media insights (likes, comments, shares, saves)
     - Fetch follower count
-    - Webhook setup for real-time updates
+    - Webhook setup for real-time updates - _To be implemented later_
 
 2. **Social Connector Service**
     - Polling scheduler (Spring @Scheduled, every 6 hours)

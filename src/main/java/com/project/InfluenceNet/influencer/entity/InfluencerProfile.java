@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.influencer.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.InfluenceNet.auth.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class InfluencerProfile {
 
     @OneToOne
     @MapsId
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id", nullable = false, unique = true)
     private User user;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -44,6 +45,7 @@ public class InfluencerProfile {
     private Boolean isActive = true;
 
     @OneToMany(mappedBy = "influencer", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<SocialAccount> socialAccounts = new ArrayList<>();
 
     @Column(name = "created_at")

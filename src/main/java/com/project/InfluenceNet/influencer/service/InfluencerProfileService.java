@@ -1,5 +1,7 @@
 package com.project.InfluenceNet.influencer.service;
 
+import com.project.InfluenceNet.auth.entity.User;
+import com.project.InfluenceNet.auth.repository.UserRepository;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
 import com.project.InfluenceNet.influencer.dto.SocialAccountRequest;
@@ -30,6 +32,7 @@ public class InfluencerProfileService {
 
     private final InfluencerProfileRepository influencerProfileRepository;
     private final SocialAccountsRepository socialAccountRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public InfluencerProfileResponse createProfile(InfluencerProfileRequest request) {
@@ -44,6 +47,10 @@ public class InfluencerProfileService {
         }
 
         InfluencerProfile profile = new InfluencerProfile();
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new InfluencerNotFoundException("User not found with id: " + request.getUserId()));
+        profile.setUser(user);
         profile.setEmail(request.getEmail());
         profile.setUsername(request.getUsername());
         profile.setCreatedAt(LocalDateTime.now());
@@ -110,95 +117,8 @@ public class InfluencerProfileService {
         log.info("Successfully deleted influencer profile with id: {}", id);
     }
 
-    @Transactional
-    public SocialAccountResponse addSocialAccount(UUID influencerId, SocialAccountRequest request) {
-        log.info("Adding social account for influencer: {}, platform: {}", influencerId, request.getPlatform());
 
-        InfluencerProfile profile = influencerProfileRepository.findById(influencerId)
-                .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + influencerId));
 
-        // Check if social account already exists for this platform
-        if (socialAccountRepository.existsByInfluencerIdAndPlatform(influencerId, request.getPlatform())) {
-            throw new DuplicateResourceException("Social account already exists for platform: " + request.getPlatform());
-        }
-
-        SocialAccount socialAccount = new SocialAccount();
-        socialAccount.setInfluencer(profile);
-        socialAccount.setPlatform(request.getPlatform());
-        socialAccount.setPlatformUserId(request.getPlatformUserId());
-        socialAccount.setAccessToken(request.getAccessToken());
-        socialAccount.setRefreshToken(request.getRefreshToken());
-        socialAccount.setTokenExpiresAt(request.getTokenExpiresAt());
-        socialAccount.setFollowerCount(request.getFollowerCount() != null ? request.getFollowerCount() : 0);
-
-        SocialAccount savedAccount = socialAccountRepository.save(socialAccount);
-        log.info("Successfully added social account with id: {}", savedAccount.getId());
-
-        // Update total follower count
-        updateTotalFollowerCount(influencerId);
-
-        return mapToSocialAccountResponse(savedAccount);
-    }
-
-    @Transactional(readOnly = true)
-    public List<SocialAccountResponse> getSocialAccounts(UUID influencerId) {
-        log.info("Fetching social accounts for influencer: {}", influencerId);
-        List<SocialAccount> accounts = socialAccountRepository.findByInfluencerId(influencerId);
-        return accounts.stream()
-                .map(this::mapToSocialAccountResponse)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public SocialAccountResponse getSocialAccount(UUID influencerId, String platform) {
-        log.info("Fetching social account for influencer: {}, platform: {}", influencerId, platform);
-        SocialAccount account = socialAccountRepository.findByInfluencerIdAndPlatform(influencerId, platform)
-                .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));
-        return mapToSocialAccountResponse(account);
-    }
-
-    @Transactional
-    public void removeSocialAccount(UUID influencerId, String platform) {
-        log.info("Removing social account for influencer: {}, platform: {}", influencerId, platform);
-        SocialAccount account = socialAccountRepository.findByInfluencerIdAndPlatform(influencerId, platform)
-                .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));
-
-        socialAccountRepository.delete(account);
-        log.info("Successfully removed social account for platform: {}", platform);
-
-        // Update total follower count
-        updateTotalFollowerCount(influencerId);
-    }
-
-    @Transactional
-    public SocialAccountResponse updateSocialAccountSync(UUID influencerId, String platform, Integer followerCount) {
-        log.info("Updating social account sync for influencer: {}, platform: {}", influencerId, platform);
-        SocialAccount account = socialAccountRepository.findByInfluencerIdAndPlatform(influencerId, platform)
-                .orElseThrow(() -> new SocialAccountNotFoundException("Social account not found for platform: " + platform));
-
-        account.setFollowerCount(followerCount);
-
-        SocialAccount updatedAccount = socialAccountRepository.save(account);
-        log.info("Successfully updated social account sync");
-
-        // Update total follower count
-        updateTotalFollowerCount(influencerId);
-
-        return mapToSocialAccountResponse(updatedAccount);
-    }
-
-    private void updateTotalFollowerCount(UUID influencerId) {
-        List<SocialAccount> accounts = socialAccountRepository.findByInfluencerId(influencerId);
-        int totalFollowers = accounts.stream()
-                .mapToInt(account -> account.getFollowerCount() != null ? account.getFollowerCount() : 0)
-                .sum();
-
-        InfluencerProfile profile = influencerProfileRepository.findById(influencerId)
-                .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + influencerId));
-        profile.setTotalFollowerCount(totalFollowers);
-        influencerProfileRepository.save(profile);
-        log.info("Updated total follower count for influencer: {} to {}", influencerId, totalFollowers);
-    }
 
     private InfluencerProfileResponse mapToResponse(InfluencerProfile profile) {
         List<SocialAccountResponse> socialAccountResponses = profile.getSocialAccounts() != null ?

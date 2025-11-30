@@ -1,0 +1,94 @@
+{
+  "data": [
+    {
+      "id": "18364894759086057/shares",
+      "name": "shares",
+      "title": "Shares",
+      "description": "Total number of times the reel was shared",
+      "period": "lifetime",
+      "values": [
+        { "value": 320 }
+      ]
+    },
+    {
+      "id": "18364894759086057/comments",
+      "name": "comments",
+      "title": "Comments",
+      "description": "Total number of comments on the reel",
+      "period": "lifetime",
+      "values": [
+        { "value": 145 }
+      ]
+    },
+    {
+      "id": "18364894759086057/likes",
+      "name": "likes",
+      "title": "Likes",
+      "description": "Total number of likes on the reel",
+      "period": "lifetime",
+      "values": [
+        { "value": 8421 }
+      ]
+    },
+    {
+      "id": "18364894759086057/saved",
+      "name": "saved",
+      "title": "Saves",
+      "description": "Total number of saves/bookmarks on the reel",
+      "period": "lifetime",
+      "values": [
+        { "value": 279 }
+      ]
+    },
+    {
+      "id": "18364894759086057/ig_reels_video_view_total_time",
+      "name": "ig_reels_video_view_total_time",
+      "title": "Total Watch Time",
+      "description": "Total time viewers spent watching the reel (in seconds)",
+      "period": "lifetime",
+      "values": [
+        { "value": 358920 }
+      ]
+    },
+    {
+      "id": "18364894759086057/ig_reels_avg_watch_time",
+      "name": "ig_reels_avg_watch_time",
+      "title": "Average Watch Time",
+      "description": "Average watch time per viewer (in seconds)",
+      "period": "lifetime",
+      "values": [
+        { "value": 12.8 }
+      ]
+    },
+    {
+      "id": "18364894759086057/total_interactions",
+      "name": "total_interactions",
+      "title": "Total Interactions",
+      "description": "Combined total of likes, comments, saves, and shares",
+      "period": "lifetime",
+      "values": [
+        { "value": 9165 }
+      ]
+    },
+    {
+      "id": "18364894759086057/reach",
+      "name": "reach",
+      "title": "Reach",
+      "description": "Unique accounts that saw the reel",
+      "period": "lifetime",
+      "values": [
+        { "value": 502340 }
+      ]
+    },
+    {
+      "id": "18364894759086057/views",
+      "name": "views",
+      "title": "Views",
+      "description": "Total number of times the reel was played",
+      "period": "lifetime",
+      "values": [
+        { "value": 675420 }
+      ]
+    }
+  ]
+}

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -15,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class InfluencerController {
 
-    private InfluencerProfileService influencerProfileService;
+    private final InfluencerProfileService influencerProfileService;
 
     @GetMapping("/profile/{id}")
     public ResponseEntity<InfluencerProfileResponse> getProfile(@PathVariable UUID id) throws Throwable {
@@ -25,6 +26,11 @@ public class InfluencerController {
     @PostMapping("/profile")
     public ResponseEntity<InfluencerProfileResponse> createProfile(@RequestBody InfluencerProfileRequest request) throws Throwable {
         return ResponseEntity.ok(influencerProfileService.createProfile(request));
+    }
+
+    @GetMapping("/getAllprofiles")
+    public ResponseEntity<List<InfluencerProfileResponse>> getAllProfiles() throws Throwable {
+        return ResponseEntity.ok(influencerProfileService.getAllProfiles());
     }
 
 

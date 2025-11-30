@@ -1,0 +1,65 @@
+{
+  "data": [
+    {
+      "name": "impressions",
+      "period": "day",
+      "values": [
+        { "value": 12000, "end_time": "2025-02-10T07:00:00+0000" },
+        { "value": 11500, "end_time": "2025-02-09T07:00:00+0000" },
+        { "value": 13000, "end_time": "2025-02-08T07:00:00+0000" }
+      ],
+      "title": "Impressions",
+      "description": "Total number of times your posts were seen"
+    },
+    {
+      "name": "reach",
+      "period": "day",
+      "values": [
+        { "value": 8200, "end_time": "2025-02-10T07:00:00+0000" },
+        { "value": 7900, "end_time": "2025-02-09T07:00:00+0000" },
+        { "value": 9000, "end_time": "2025-02-08T07:00:00+0000" }
+      ],
+      "title": "Reach",
+      "description": "Total number of unique accounts that saw your content"
+    },
+    {
+      "name": "profile_views",
+      "period": "day",
+      "values": [
+        { "value": 240, "end_time": "2025-02-10T07:00:00+0000" },
+        { "value": 200, "end_time": "2025-02-09T07:00:00+0000" },
+        { "value": 320, "end_time": "2025-02-08T07:00:00+0000" }
+      ],
+      "title": "Profile Views",
+      "description": "Total number of profile views"
+    },
+    {
+      "name": "website_clicks",
+      "period": "day",
+      "values": [
+        { "value": 35, "end_time": "2025-02-10T07:00:00+0000" },
+        { "value": 28, "end_time": "2025-02-09T07:00:00+0000" },
+        { "value": 40, "end_time": "2025-02-08T07:00:00+0000" }
+      ],
+      "title": "Website Clicks",
+      "description": "Clicks to your website"
+    },
+    {
+      "name": "email_contacts",
+      "period": "day",
+      "values": [
+        { "value": 5, "end_time": "2025-02-10T07:00:00+0000" },
+        { "value": 3, "end_time": "2025-02-09T07:00:00+0000" },
+        { "value": 6, "end_time": "2025-02-08T07:00:00+0000" }
+      ],
+      "title": "Email Contacts",
+      "description": "Number of taps on the email button"
+    }
+  ],
+  "paging": {
+    "cursors": {
+      "before": "QVFIUmZA...",
+      "after": "QVFIUkZA..."
+    }
+  }
+}

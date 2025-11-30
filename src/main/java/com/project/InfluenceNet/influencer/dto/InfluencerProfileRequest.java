@@ -2,10 +2,13 @@ package com.project.InfluenceNet.influencer.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +22,9 @@ public class InfluencerProfileRequest {
     @NotBlank(message = "Username is required")
     @Size(min = 3, max = 100, message = "Username must be between 3 and 100 characters")
     private String username;
+
+    @NotNull(message = "User ID is required")
+    private UUID userId;
 
 
 

@@ -10,11 +10,15 @@ import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
-public class PostFetchedEventPublisher {
+public class PostAndInsightFetchedEventPublisher {
 
     public static final String TOPIC_POST_FETCHED = "post.fetched";
 
     private final KafkaTemplate<String, PostFetchedEvent> kafkaTemplate;
+
+    public static final String TOPIC_INSIGHT_FETCHED = "insight.fetched";
+
+    private final KafkaTemplate<String, InsightsfetchedEvent> kafkaTemplate2;
 
     public void publishPostFetchedEvent(RawPosts rawPosts){
 
@@ -27,14 +31,13 @@ public class PostFetchedEventPublisher {
         kafkaTemplate.send(TOPIC_POST_FETCHED, event);
     }
 
-//    public void publishInsightsFetchedEvent(RawInsights rawInsights){
-//
-//        PostFetchedEvent event = PostFetchedEvent.builder()
-//                .influencerId(rawInsights.getInfluencer_id())
-//                .postId(rawPosts.getId())
-//                .platform(rawPosts.getPlatform())
-//                .timestamp(Instant.now())
-//                .build();
-//        kafkaTemplate.send(TOPIC_POST_FETCHED, event);
-//    }
+    public void publishInsightsFetchedEvent(RawInsights rawInsights){
+
+        InsightsfetchedEvent event = InsightsfetchedEvent.builder()
+                .postId(rawInsights.getId())
+                .platform(rawInsights.getPlatform())
+                .timestamp(Instant.now())
+                .build();
+        kafkaTemplate2.send(TOPIC_INSIGHT_FETCHED, event);
+    }
 }

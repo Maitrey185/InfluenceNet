@@ -1,17 +1,14 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.socialConnector.documents.Platforms;
-import com.project.InfluenceNet.socialConnector.documents.PostType;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
-import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
-import com.project.InfluenceNet.socialConnector.events.PostFetchedEventPublisher;
+import com.project.InfluenceNet.socialConnector.events.PostAndInsightFetchedEventPublisher;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,7 +22,7 @@ public class RawIngestionService {
 
     private final RawPostsRepository rawPostsRepository;
     private final RawInsightsRepository rawInsightsRepository;
-    private final PostFetchedEventPublisher postFetchedEventPublisher;
+    private final PostAndInsightFetchedEventPublisher postAndInsightFetchedEventPublisher;
 
 
     public void ingestRawPosts(List<InstagramRecentPostsDTO> posts, UUID influencerId){
@@ -43,7 +40,7 @@ public class RawIngestionService {
                         .raw_payload(post)
                         .build();
                 rawPostsRepository.save(rawPosts);
-                postFetchedEventPublisher.publishPostFetchedEvent(rawPosts);
+                postAndInsightFetchedEventPublisher.publishPostFetchedEvent(rawPosts);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -67,6 +64,7 @@ public class RawIngestionService {
                     .fetched_at(LocalDate.now())
                     .build();
             rawInsightsRepository.save(rawInsights);
+            postAndInsightFetchedEventPublisher.publishInsightsFetchedEvent(rawInsights);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

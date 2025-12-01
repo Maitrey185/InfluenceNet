@@ -28,7 +28,7 @@ public class RawPosts {
     private Platforms platform;
     private Object raw_payload;
     private LocalDate fetched_at;
-    private Enum<PostType> post_type;
+    private PostType post_type;
     private String caption;
     private String media_url;
     private String permalink;

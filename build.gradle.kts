@@ -37,6 +37,12 @@ dependencies {
     // Kafka
 	implementation("org.springframework.kafka:spring-kafka")
 
+
+    // Apache Tika for language detection and content analysis
+    implementation("org.apache.tika:tika-core:2.9.0")
+    implementation("org.apache.tika:tika-langdetect:2.9.0")
+    implementation("org.apache.tika:tika-langdetect-optimaize:2.9.0")
+
     // PostgreSQL Driver
     runtimeOnly("org.postgresql:postgresql")
 

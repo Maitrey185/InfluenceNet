@@ -1,12 +1,19 @@
 package com.project.InfluenceNet.enrichmentService.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tika.langdetect.optimaize.OptimaizeLangDetector;
+import org.apache.tika.language.detect.LanguageDetector;
+import org.apache.tika.language.detect.LanguageResult;
+
+import java.io.IOException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
 
 @Slf4j
 @Service
@@ -34,6 +41,42 @@ public class PostEnrichmentHelper {
         }
         return tags;
     }
+
+    private final LanguageDetector languageDetector;
+
+    public PostEnrichmentHelper() {
+        // Initialize the language detector with Optimaize
+        this.languageDetector = new OptimaizeLangDetector();
+        // Load the language profiles
+        ((OptimaizeLangDetector)this.languageDetector).loadModels();
+    }
+
+    public String detectLanguage(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return "unknown";
+        }
+        try {
+            LanguageResult result = languageDetector.detect(text);
+            return result.isReasonablyCertain() ? result.getLanguage() : "unknown";
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
+
+    public String detectSentiment(String text) {
+        if (text == null || text.trim().isEmpty()) {
+            return "unknown";
+        }
+        try {
+            LanguageResult result = languageDetector.detect(text);
+            return result.isReasonablyCertain() ? result.getLanguage() : "unknown";
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
+
+
+
 
 
 

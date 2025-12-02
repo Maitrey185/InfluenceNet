@@ -3,6 +3,7 @@ package com.project.InfluenceNet.enrichmentService.document;
 
 import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import com.project.InfluenceNet.socialConnector.documents.PostType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,14 +20,17 @@ import java.util.UUID;
 public class EnrichedPost {
 
     @Id
-    private String id;
+    @Column(name = "post_id")
+    private String postId;
 
+    @Column(name = "influencer_id")
     private UUID influencerId;
 
     private Platforms platforms;
 
     private Enrichments enrichments;
 
+    @Column(name = "enriched_at")
     private Instant enrichedAt;
 
     @Data
@@ -40,16 +44,16 @@ public class EnrichedPost {
         private String sentiment; // "positive" | "neutral" | "negative"
         private PostType postType; // "image" | "video" | "carousel"
 
-        private MediaMetadata mediaMetadata;
+//        private MediaMetadata mediaMetadata;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class MediaMetadata {
-        private Integer durationSeconds;
-        private Integer width;
-        private Integer height;
-    }
+//    @Data
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    @Builder
+//    public static class MediaMetadata {
+//        private Integer durationSeconds;
+//        private Integer width;
+//        private Integer height;
+//    }
 }

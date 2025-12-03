@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.enrichmentService.document;
 
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.PostType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Id;
@@ -26,7 +26,7 @@ public class EnrichedPost {
     @Column(name = "influencer_id")
     private UUID influencerId;
 
-    private Platforms platforms;
+    private Platform platform;
 
     private Enrichments enrichments;
 

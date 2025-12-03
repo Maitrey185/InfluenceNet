@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.socialConnector.service;
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
@@ -30,7 +30,7 @@ public class RawIngestionService {
             try {
                 RawPosts rawPosts = RawPosts.builder()
                         .id(post.getId())
-                        .platform(Platforms.INSTAGRAM)
+                        .platform(Platform.INSTAGRAM)
 //                        .post_type(post.getMedia_type())
                         .media_url(post.getMedia_url())
                         .fetched_at(LocalDate.now())
@@ -52,7 +52,7 @@ public class RawIngestionService {
         try {
             RawInsights rawInsights = RawInsights.builder()
                     .id(postId)
-                    .platform(Platforms.INSTAGRAM)
+                    .platform(Platform.INSTAGRAM)
                     .likes(mediaInsightsDTO.getLikes())
                     .shares(mediaInsightsDTO.getShares())
                     .comments(mediaInsightsDTO.getComments())

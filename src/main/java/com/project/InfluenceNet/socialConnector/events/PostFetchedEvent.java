@@ -1,10 +1,9 @@
 package com.project.InfluenceNet.socialConnector.events;
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.*;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,6 +15,6 @@ import java.util.UUID;
 public class PostFetchedEvent {
     private UUID influencerId;
     private String postId;
-    private Platforms platform;
+    private Platform platform;
     private Instant timestamp;
 }

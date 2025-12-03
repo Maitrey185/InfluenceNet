@@ -1,18 +1,14 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
-import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
-import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

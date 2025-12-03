@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.socialConnector.documents;
 
-public enum Platforms {
+public enum Platform {
     INSTAGRAM,
     TWITTER,
     YOUTUBE

@@ -33,7 +33,7 @@ public class PostEnricherService {
         EnrichedPost enrichedPost = EnrichedPost.builder()
                 .postId(rawPosts.getId())
                 .influencerId(rawPosts.getInfluencer_id())
-                .platforms(rawPosts.getPlatform())
+                .platform(rawPosts.getPlatform())
                 .enrichments(enrichments)
                 .enrichedAt(Instant.now())
                 .build();

@@ -1,10 +1,9 @@
 package com.project.InfluenceNet.influencer.dto;
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +17,7 @@ public class SocialAccountRequest {
 
     @NotBlank(message = "Platform is required")
     @Enumerated(EnumType.STRING)
-    private Platforms platform;
+    private Platform platform;
 
     @NotBlank(message = "UserId is required")
     private String platformUserId;

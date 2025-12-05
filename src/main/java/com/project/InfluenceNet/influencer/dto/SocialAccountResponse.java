@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.influencer.dto;
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ public class SocialAccountResponse {
     private UUID id;
     @Enumerated(EnumType.STRING)
     private UUID influencerId;
-    private Platforms platform;
+    private Platform platform;
     private String platformUserId;
     private Integer followerCount;
     private Boolean isActive;

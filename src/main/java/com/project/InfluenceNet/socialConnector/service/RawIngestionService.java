@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.socialConnector.service;
 
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.socialConnector.documents.PostType;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
@@ -30,8 +31,8 @@ public class RawIngestionService {
             try {
                 RawPosts rawPosts = RawPosts.builder()
                         .id(post.getId())
-                        .platform(Platforms.INSTAGRAM)
-//                        .post_type(post.getMedia_type())
+                        .platform(Platform.INSTAGRAM)
+                        .post_type(PostType.valueOf(post.getMedia_type()))
                         .media_url(post.getMedia_url())
                         .fetched_at(LocalDate.now())
                         .timestamp(LocalDateTime.now())
@@ -52,14 +53,15 @@ public class RawIngestionService {
         try {
             RawInsights rawInsights = RawInsights.builder()
                     .id(postId)
-                    .platform(Platforms.INSTAGRAM)
+                    .platform(Platform.INSTAGRAM)
                     .likes(mediaInsightsDTO.getLikes())
                     .shares(mediaInsightsDTO.getShares())
                     .comments(mediaInsightsDTO.getComments())
                     .saves(mediaInsightsDTO.getSaved())
+                    .reach(mediaInsightsDTO.getReach())
                     .ig_reels_video_view_total_time(mediaInsightsDTO.getIg_reels_video_view_total_time())
                     .ig_reels_avg_watch_time(mediaInsightsDTO.getIg_reels_avg_watch_time())
-                    .total_interactions(mediaInsightsDTO.getTotal_interactions())
+                    .total_interactions(mediaInsightsDTO.getEngagement())
                     .views(mediaInsightsDTO.getViews())
                     .fetched_at(LocalDate.now())
                     .build();

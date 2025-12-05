@@ -1,0 +1,293 @@
+package com.project.InfluenceNet.mock.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+
+@CrossOrigin
+@RestController
+@RequestMapping("/v24.0")
+public class MockInstagramController {
+
+    private static final int USERS_COUNT = 5;
+    private static final int MEDIA_PER_USER = 15;
+    private static final List<String> USER_IDS = new ArrayList<>();
+    private static final Map<String, Map<String, Object>> USERS = new HashMap<>();
+    private static final Map<String, List<Map<String, Object>>> USER_MEDIA = new HashMap<>();
+
+    // Initialize test data
+    static {
+        initializeTestData();
+    }
+
+    private static void initializeTestData() {
+        // Initialize test users
+        for (int i = 1; i <= USERS_COUNT; i++) {
+            String userId = "17841405793187" + String.format("%03d", i);
+            USER_IDS.add(userId);
+
+            int followers = 1000 * (int)Math.pow(2, i-1); // Exponential growth in followers
+            int following = 100 + (i * 50);
+            int mediaCount = 50 + (i * 20);
+
+            USERS.put(userId, createUser(
+                userId,
+                "test_user_" + i,
+                "Test User " + i,
+                "Digital Creator | Content Creator | Photographer | User #" + i,
+                followers,
+                following,
+                mediaCount,
+                "https://randomuser.me/api/portraits/" + (i % 2 == 0 ? "men" : "women") + "/" + i + ".jpg",
+                "https://example.com/user" + i
+            ));
+
+            // Initialize media for each user
+            List<Map<String, Object>> mediaList = new ArrayList<>();
+            for (int j = 0; j < MEDIA_PER_USER; j++) {
+                String mediaId = "1785395131612" + String.format("%04d", (i * 1000 + j));
+                String mediaType = j % 3 == 0 ? "IMAGE" : (j % 3 == 1 ? "VIDEO" : "CAROUSEL_ALBUM");
+                LocalDateTime timestamp = LocalDateTime.now().minusDays(j * 2);
+
+                mediaList.add(createMedia(
+                    mediaId,
+                    mediaType,
+                    "https://picsum.photos/800/800?random=" + (i * 1000 + j),
+                    "Check out my new post! #test #user" + i + " #post" + j,
+                    "https://www.instagram.com/p/ABC" + (i * 1000 + j) + "/",
+                    "test_user_" + i,
+                    timestamp,
+                    (int)(Math.random() * 1000) + 100,
+                    (int)(Math.random() * 50) + 5
+                ));
+            }
+            USER_MEDIA.put(userId, mediaList);
+        }
+    }
+
+    private static Map<String, Object> createUser(String id, String username, String name, String bio,
+                                                int followers, int following, int mediaCount,
+                                                String profilePic, String website) {
+        return Map.of(
+            "id", id,
+            "username", username,
+            "name", name,
+            "biography", bio,
+            "followers_count", followers,
+            "follows_count", following,
+            "media_count", mediaCount,
+            "profile_picture_url", profilePic,
+            "website", website
+        );
+    }
+
+    private static Map<String, Object> createMedia(String id, String mediaType, String mediaUrl,
+                                                 String caption, String permalink, String username,
+                                                 LocalDateTime timestamp, int likes, int comments) {
+        Map<String, Object> media = new HashMap<>();
+        media.put("id", id);
+        media.put("media_type", mediaType);
+        media.put("media_url", mediaUrl);
+        media.put("caption", caption);
+        media.put("permalink", permalink);
+        media.put("username", username);
+        media.put("timestamp", timestamp.format(DateTimeFormatter.ISO_DATE_TIME));
+        media.put("like_count", likes);
+        media.put("comments_count", comments);
+
+        if (mediaType.equals("VIDEO")) {
+            media.put("thumbnail_url", mediaUrl.replace("800/800", "300/300"));
+        }
+
+        return media;
+    }
+
+    @GetMapping("/{userId}")
+    @ResponseBody
+    public Map<String, Object> getUserData(
+            @PathVariable String userId,
+            @RequestParam String fields,
+            @RequestParam String access_token) {
+
+        // Return user data if exists, otherwise return 404
+        if (USERS.containsKey(userId)) {
+            return USERS.get(userId);
+        } else if (userId.equals("me")) {
+            // Return the first user as the "me" user for testing
+            return USERS.get(USER_IDS.get(0));
+        }
+
+        // Return 404 if user not found
+        throw new RuntimeException("User not found");
+    }
+
+    @GetMapping("/me")
+    @ResponseBody
+    public Map<String, Object> getCurrentUser(
+            @RequestParam String fields,
+            @RequestParam String access_token) {
+        // Return the first user as the "me" user for testing
+        return getUserData("me", fields, access_token);
+    }
+
+    @GetMapping("/{userId}/media")
+    @ResponseBody
+    public Map<String, Object> getUserMedia(
+            @PathVariable String userId,
+            @RequestParam String fields,
+            @RequestParam(required = false) String after,
+            @RequestParam(required = false, defaultValue = "25") int limit,
+            @RequestParam(required = false) String before,
+            @RequestParam String access_token) {
+
+        // Handle "me" user ID
+        String actualUserId = userId.equals("me") ? USER_IDS.get(0) : userId;
+
+        if (!USER_MEDIA.containsKey(actualUserId)) {
+            throw new RuntimeException("User not found");
+        }
+
+        List<Map<String, Object>> allMedia = USER_MEDIA.get(actualUserId);
+
+        // Sort by most recent first
+        allMedia.sort((m1, m2) -> {
+            LocalDateTime t1 = LocalDateTime.parse((String)m1.get("timestamp"));
+            LocalDateTime t2 = LocalDateTime.parse((String)m2.get("timestamp"));
+            return t2.compareTo(t1);
+        });
+
+        // Simple pagination (in a real implementation, you'd use the after/before cursors)
+        int start = 0;
+        if (after != null) {
+            // Find the index of the after cursor
+            for (int i = 0; i < allMedia.size(); i++) {
+                if (allMedia.get(i).get("id").equals(after)) {
+                    start = i + 1;
+                    break;
+                }
+            }
+        }
+
+        int end = Math.min(start + limit, allMedia.size());
+        boolean hasNext = end < allMedia.size();
+
+        List<Map<String, Object>> page = allMedia.subList(start, end);
+
+        // Build response with pagination
+        Map<String, Object> response = new HashMap<>();
+        response.put("data", page);
+
+        // Add pagination info
+        if (hasNext) {
+            String nextCursor = page.get(page.size() - 1).get("id").toString();
+            response.put("paging", Map.of(
+                "cursors", Map.of(
+                    "after", nextCursor
+                ),
+                "next", String.format("https://graph.instagram.com/v24.0/%s/media?after=%s&limit=%d",
+                    userId, nextCursor, limit)
+            ));
+        }
+
+        return response;
+    }
+
+    @GetMapping("/{mediaId}/insights")
+    @ResponseBody
+    public Map<String, List<Map<String, Object>>> getInsights(
+            @PathVariable String mediaId,
+            @RequestParam String metric,
+            @RequestParam(required = false) String period,
+            @RequestParam(required = false) String since,
+            @RequestParam(required = false) String until,
+            @RequestParam String access_token) {
+
+        // For simplicity, we'll generate random but realistic data
+        // In a real implementation, you'd look up the actual media and return its insights
+
+        List<Map<String, Object>> insightsData = new ArrayList<>();
+
+        // Generate metrics based on the requested metric parameter
+        if (metric.contains("engagement")) {
+            insightsData.add(createInsightMetric("engagement", "Engagement",
+                "Total number of interactions with the post",
+                ThreadLocalRandom.current().nextInt(100, 5000)));
+        }
+
+        if (metric.contains("impressions")) {
+            insightsData.add(createInsightMetric("impressions", "Impressions",
+                "Total number of times the post was seen",
+                ThreadLocalRandom.current().nextInt(1000, 50000)));
+        }
+
+        if (metric.contains("reach")) {
+            insightsData.add(createInsightMetric("reach", "Reach",
+                "Number of unique accounts that saw the post",
+                ThreadLocalRandom.current().nextInt(500, 25000)));
+        }
+
+        if (metric.contains("saved")) {
+            insightsData.add(createInsightMetric("saved", "Saves",
+                "Number of times the post was saved",
+                ThreadLocalRandom.current().nextInt(10, 500)));
+        }
+
+        if (metric.contains("video_views")) {
+            insightsData.add(createInsightMetric("video_views", "Video Views",
+                "Number of times the video was viewed",
+                ThreadLocalRandom.current().nextInt(1000, 50000)));
+
+            // Add video-specific metrics
+            insightsData.add(createInsightMetric("video_view_total_time", "Total View Time",
+                "Total time the video was viewed",
+                ThreadLocalRandom.current().nextInt(10000, 500000)));
+
+            insightsData.add(createInsightMetric("avg_watch_time", "Average Watch Time",
+                "Average time spent viewing the video",
+                ThreadLocalRandom.current().nextInt(5, 45)));
+        }
+
+        // If period is specified, generate time series data
+        if (period != null && (since != null || until != null)) {
+            LocalDate startDate = since != null ? LocalDate.parse(since) : LocalDate.now().minusDays(30);
+            LocalDate endDate = until != null ? LocalDate.parse(until) : LocalDate.now();
+
+            List<Map<String, Object>> values = new ArrayList<>();
+            LocalDate current = startDate;
+
+            while (!current.isAfter(endDate)) {
+                values.add(Map.of(
+                    "value", ThreadLocalRandom.current().nextInt(50, 500),
+                    "end_time", current.atStartOfDay().format(DateTimeFormatter.ISO_DATE_TIME)
+                ));
+                current = current.plusDays(1);
+            }
+
+            insightsData.add(Map.of(
+                "name", "metric_timeseries",
+                "period", period,
+                "title", "Engagement Over Time",
+                "description", "Daily engagement metrics",
+                "values", values
+            ));
+        }
+
+        return Map.of("data", insightsData);
+    }
+
+    private Map<String, Object> createInsightMetric(String name, String title, String description, int value) {
+        return Map.of(
+            "name", name,
+            "title", title,
+            "description", description,
+            "period", "lifetime",
+            "values", List.of(Map.of("value", value))
+        );
+    }
+}

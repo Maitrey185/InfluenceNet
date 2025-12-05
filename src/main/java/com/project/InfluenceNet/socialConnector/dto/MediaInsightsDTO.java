@@ -14,8 +14,9 @@ public class MediaInsightsDTO {
     private int saved;
     private int ig_reels_video_view_total_time;
     private double ig_reels_avg_watch_time;
-    private int total_interactions;
+    private int engagement;
     private int reach;
+    private int impressions;
     private int views;
 
 }

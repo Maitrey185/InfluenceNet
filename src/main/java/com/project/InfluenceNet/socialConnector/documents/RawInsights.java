@@ -4,12 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @RequiredArgsConstructor
@@ -21,7 +19,7 @@ public class RawInsights {
     @Id
     private String id;
 
-    private Platforms platform;
+    private Platform platform;
 
     private int likes;
     private int comments;

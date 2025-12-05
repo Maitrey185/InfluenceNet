@@ -1,9 +1,8 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
-import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
-import com.project.InfluenceNet.socialConnector.documents.Platforms;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class SocialPollingSchedulerService {
     private final InstagramConnectorOrchestrator instagramConnectorOrchestrator;
 
     public List<SocialAccountResponse> getAllInstagramAccounts(){
-        return socialAccountService.getActiveSocialAccountsForPlatform(Platforms.INSTAGRAM);
+        return socialAccountService.getActiveSocialAccountsForPlatform(Platform.INSTAGRAM);
     }
 
     @Scheduled(fixedRate = 240000)  // 4 minutes

@@ -26,7 +26,7 @@ public class MockInstagramController {
                 "username", "test_user",
                 "name", "Test User",
                 "biography", "Digital Creator | Content Creator | Photographer",
-                "followers_count", 12500,
+                "followers_count", 12599,
                 "follows_count", 342,
                 "media_count", 156,
                 "profile_picture_url", "https://example.com/profile.jpg",

@@ -3,9 +3,7 @@ package com.project.InfluenceNet.analyticsService.entity;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.PostType;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,6 +11,8 @@ import java.util.UUID;
 @Entity(name = "post_analytics")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class PostAnalytics {
 
@@ -39,7 +39,7 @@ public class PostAnalytics {
 
     private int saves;
 
-    private int engagementRate;
+    private double engagementRate;
 
     private int reach;
 

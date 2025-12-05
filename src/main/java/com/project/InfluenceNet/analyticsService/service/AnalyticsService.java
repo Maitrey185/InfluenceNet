@@ -10,6 +10,7 @@ import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -56,17 +57,24 @@ public class AnalyticsService {
             newPost=1;
         }
 
+        pa.setLikes(newLikes);
+        pa.setComments(newComments);
+        pa.setShares(newShares);
+        pa.setSaves(newSaves);
+        pa.setReach(newReach);
+        pa.setViews(newViews);
+        pa.setEngagementRate((double)(newLikes+newComments+newShares+newSaves)/(double)newReach);
+        pa.setUpdatedAt(LocalDateTime.now());
+        postAnalyticsRepository.save(pa);
+
         influencerKPIService.calculateAndStoreKPIs(newPost, rawPost.getInfluencer_id(), rawInsight.getPlatform(), rawInsight.getFetched_at(), likesDiff, commentsDiff, sharesDiff, savesDiff, reachDiff, viewsDiff);
 
     }
 
     public PostAnalytics fetchOldPostAnalytics(RawInsights rawInsights, RawPosts rawPosts){
 
-
-
             PostAnalytics postAnalytics = postAnalyticsRepository.findById(rawInsights.getId())
                     .orElseGet(()->PostAnalytics.newForPost(rawInsights.getId(), rawPosts.getInfluencer_id(), rawInsights.getPlatform(), rawPosts.getPost_type(), rawPosts.getTimestamp()));
-
 
             return postAnalytics;
     }

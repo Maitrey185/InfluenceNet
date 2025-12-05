@@ -2,9 +2,7 @@ package com.project.InfluenceNet.analyticsService.entity;
 
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.PostType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +22,7 @@ public class PostAnalytics {
     @Column(name = "influencer_id")
     private UUID influencerId;
 
+    @Enumerated(EnumType.STRING)
     private Platform platform;
 
     @Column(name = "post_type")
@@ -48,5 +47,16 @@ public class PostAnalytics {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
+    public static PostAnalytics newForPost(String postId, UUID influencerId, Platform platform, PostType postType, LocalDateTime postedAt){
+        return PostAnalytics.builder()
+                .postId(postId)
+                .influencerId(influencerId)
+                .platform(platform)
+                .postType(postType)
+                .postedAt(postedAt)
+                .build();
+    }
 
 }

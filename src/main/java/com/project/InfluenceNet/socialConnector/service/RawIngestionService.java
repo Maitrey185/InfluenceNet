@@ -57,9 +57,10 @@ public class RawIngestionService {
                     .shares(mediaInsightsDTO.getShares())
                     .comments(mediaInsightsDTO.getComments())
                     .saves(mediaInsightsDTO.getSaved())
+                    .reach(mediaInsightsDTO.getReach())
                     .ig_reels_video_view_total_time(mediaInsightsDTO.getIg_reels_video_view_total_time())
                     .ig_reels_avg_watch_time(mediaInsightsDTO.getIg_reels_avg_watch_time())
-                    .total_interactions(mediaInsightsDTO.getTotal_interactions())
+                    .total_interactions(mediaInsightsDTO.getEngagement())
                     .views(mediaInsightsDTO.getViews())
                     .fetched_at(LocalDate.now())
                     .build();

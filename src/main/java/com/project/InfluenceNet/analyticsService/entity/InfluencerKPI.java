@@ -2,8 +2,10 @@ package com.project.InfluenceNet.analyticsService.entity;
 
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -19,6 +21,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class InfluencerKPI {
 
     @Id
@@ -26,6 +30,8 @@ public class InfluencerKPI {
 
     @Column(name = "influencer_id")
     private UUID influencerId;
+
+    @Enumerated(EnumType.STRING)
     private Platform platform;
 
     @Column(name = "kpi_date")
@@ -54,6 +60,9 @@ public class InfluencerKPI {
 
     @Column(name = "total_reach")
     private int totalReach;
+
+    @Column(name = "total_views")
+    private int totalViews;
 
     public static InfluencerKPI newForDay(UUID influencerId, Platform platform, LocalDate kpiDate){
         return InfluencerKPI.builder()

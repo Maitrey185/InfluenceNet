@@ -108,6 +108,14 @@ public class InfluencerProfileService {
     }
 
     @Transactional
+    public InfluencerProfile updateFollowerCount(UUID id, int followerCount){
+        InfluencerProfile profile = influencerProfileRepository.findById(id)
+                .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + id));
+        profile.setTotalFollowerCount(followerCount);
+        return influencerProfileRepository.save(profile);
+    }
+
+    @Transactional
     public void deleteProfile(UUID id) {
         log.info("Deleting influencer profile with id: {}", id);
         if (!influencerProfileRepository.existsById(id)) {
@@ -131,6 +139,7 @@ public class InfluencerProfileService {
                 .email(profile.getEmail())
                 .username(profile.getUsername())
                 .avgEngagementRate(profile.getAvgEngagementRate())
+                .totalFollowerCount(profile.getTotalFollowerCount())
                 .isActive(profile.getIsActive())
                 .socialAccounts(socialAccountResponses)
                 .createdAt(profile.getCreatedAt())

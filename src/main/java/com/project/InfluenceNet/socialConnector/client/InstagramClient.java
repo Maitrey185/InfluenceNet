@@ -179,9 +179,10 @@ public class InstagramClient {
                 .saved((Integer) ((List<Map<String, Object>>) insightsData.get(3).get("values")).get(0).get("value"))
                 .ig_reels_video_view_total_time((Integer) ((List<Map<String, Object>>) insightsData.get(4).get("values")).get(0).get("value"))
                 .ig_reels_avg_watch_time((Double) ((List<Map<String, Object>>) insightsData.get(5).get("values")).get(0).get("value"))
-                .total_interactions((Integer) ((List<Map<String, Object>>) insightsData.get(6).get("values")).get(0).get("value"))
-                .reach((Integer) ((List<Map<String, Object>>) insightsData.get(7).get("values")).get(0).get("value"))
-                .views((Integer) ((List<Map<String, Object>>) insightsData.get(8).get("values")).get(0).get("value"))
+                .reach((Integer) ((List<Map<String, Object>>) insightsData.get(6).get("values")).get(0).get("value"))
+                .impressions((Integer) ((List<Map<String, Object>>) insightsData.get(7).get("values")).get(0).get("value"))
+                .engagement((Integer) ((List<Map<String, Object>>) insightsData.get(8).get("values")).get(0).get("value"))
+                .views((Integer) ((List<Map<String, Object>>) insightsData.get(9).get("values")).get(0).get("value"))
                 .build();
     }
 

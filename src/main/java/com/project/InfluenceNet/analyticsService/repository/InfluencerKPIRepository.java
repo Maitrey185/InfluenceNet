@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.repository;
 
+import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
@@ -17,6 +18,43 @@ import java.util.UUID;
 public interface InfluencerKPIRepository extends JpaRepository<InfluencerKPI, UUID> {
 
     Optional<InfluencerKPI> findByInfluencerIdAndPlatformAndKpiDate(UUID influencerId, Platform platform, LocalDate kpiDate);
+
+    @Query("""
+       SELECT
+           COALESCE(SUM(k.postCount), 0)      AS totalPosts,
+           COALESCE(SUM(k.totalLikes), 0)     AS totalLikes,
+           COALESCE(SUM(k.totalComments), 0)  AS totalComments,
+           COALESCE(SUM(k.totalShares), 0)    AS totalShares,
+           COALESCE(SUM(k.totalSaves), 0)     AS totalSaves,
+           COALESCE(SUM(k.totalReach), 0)     AS totalReach,
+           COALESCE(SUM(k.totalViews), 0)     AS totalViews
+       FROM InfluencerKPI k
+       WHERE k.influencerId = :influencerId
+         AND k.platform     = :platform
+         AND k.kpiDate BETWEEN :startDate AND :endDate
+       """)
+    OverviewAggProjection aggregateWindow(
+            @Param("influencerId") UUID influencerId,
+            @Param("platform") Platform platform, // enum stored as string
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
+
+
+    @Query(value = """
+            SELECT followers_count
+            FROM influencer_kpi
+            WHERE influencer_id = :influencerId
+              AND platform      = :platform
+              AND kpi_date         <= :date
+            ORDER BY kpi_date DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    Long findLatestFollowersBeforeOrOnDate(
+            @Param("influencerId") UUID influencerId,
+            @Param("platform") String platform, // enum stored as string
+            @Param("date") LocalDate date
+    );
 
     @Query(
             "SELECT" +

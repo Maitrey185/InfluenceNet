@@ -20,6 +20,6 @@ public class OverviewDTO {
     private Long totalSaves;
     private Long totalReach;
     private Long totalViews;
-    private BigDecimal totalEngagements;
-    private Long avgFollowerCount;
+    private Double avgEngagementRate;
+    private Long followersGained;
 }

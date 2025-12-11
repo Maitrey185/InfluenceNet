@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.repository.InfluencerKPIRepository;
@@ -73,46 +74,30 @@ public class InfluencerKPIService {
                                          LocalDate startDate,
                                          LocalDate endDate) {
 
-        List<Object[]> rows = influencerKPIRepository.calculateOverview(
-                influencerId, platform, startDate, endDate
-        );
+        OverviewAggProjection agg = influencerKPIRepository.aggregateWindow(influencerId, platform, startDate, endDate);
 
-        if (rows == null || rows.isEmpty()) {
-            // no data, return zeros
-            return OverviewDTO.builder()
-                    .totalPosts(0L)
-                    .totalLikes(0L)
-                    .totalComments(0L)
-                    .totalShares(0L)
-                    .totalSaves(0L)
-                    .totalReach(0L)
-                    .totalViews(0L)
-                    .totalEngagements(BigDecimal.ZERO)
-                    .avgFollowerCount(0L)
-                    .build();
+        Long followersBefore = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), startDate);
+        Long followersAfter = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), endDate);
+        if(followersBefore == null) {
+            followersBefore = 0L;
         }
-
-        Object[] row = rows.get(0); // this is the actual one row of aggregates
-
-        Long totalPosts       = (long)(row[0]);
-        Long totalLikes       = (long)(row[1]);
-        Long totalComments    = (long)(row[2]);
-        Long totalShares      = (long)(row[3]);
-        Long totalSaves       = (long)(row[4]);
-        Long totalReach       = (long)(row[5]);
-        Long totalViews       = (long)(row[6]);
-        BigDecimal engagements= getBigDecimal(row[7]);
-
-        return OverviewDTO.builder()
-                .totalPosts(totalPosts)
-                .totalLikes(totalLikes)
-                .totalComments(totalComments)
-                .totalShares(totalShares)
-                .totalSaves(totalSaves)
-                .totalReach(totalReach)
-                .totalViews(totalViews)
-                .totalEngagements(engagements)
+        if(followersAfter == null) {
+            followersAfter = 0L;
+        }
+        Long followersGained = followersAfter - followersBefore;
+        double avgEngagementRate = calculateEngagementRate(agg.getTotalLikes().intValue(),agg.getTotalComments().intValue(),agg.getTotalSaves().intValue(),agg.getTotalSaves().intValue(),followersGained.intValue());
+        OverviewDTO dto = OverviewDTO.builder()
+                .totalPosts(agg.getTotalPosts())
+                .totalLikes(agg.getTotalLikes())
+                .totalComments(agg.getTotalComments())
+                .totalShares(agg.getTotalShares())
+                .totalSaves(agg.getTotalSaves())
+                .totalReach(agg.getTotalReach())
+                .totalViews(agg.getTotalViews())
+                .followersGained(followersGained)
+                .avgEngagementRate(avgEngagementRate)
                 .build();
+        return dto;
     }
 
     private BigDecimal getBigDecimal(Object o) {

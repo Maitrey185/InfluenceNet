@@ -1,8 +1,10 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
@@ -10,7 +12,9 @@ import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -77,6 +81,14 @@ public class AnalyticsService {
                     .orElseGet(()->PostAnalytics.newForPost(rawInsights.getId(), rawPosts.getInfluencer_id(), rawInsights.getPlatform(), rawPosts.getPost_type(), rawPosts.getTimestamp()));
 
             return postAnalytics;
+    }
+
+    public List<TopPostProjection> fetchTopPost(UUID influencerId,
+                                                Platform platform,
+                                                LocalDate startDate,
+                                                LocalDate endDate,
+                                                int limit){
+        return postAnalyticsRepository.fetchTopPostsInAPeriod(influencerId, platform.name(), startDate, endDate, limit);
     }
 
 

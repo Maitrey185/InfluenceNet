@@ -72,4 +72,6 @@ public interface InfluencerKPIRepository extends JpaRepository<InfluencerKPI, UU
                     "  AND kpiDate BETWEEN :startDate AND :endDate "
     )
     List<Object[]> calculateOverview(@Param("id") UUID id, @Param("platform") Platform platform, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+    List<InfluencerKPI> findByInfluencerIdAndPlatformAndKpiDateBetween(UUID id, Platform platform, LocalDate startDate, LocalDate endDate);
 }

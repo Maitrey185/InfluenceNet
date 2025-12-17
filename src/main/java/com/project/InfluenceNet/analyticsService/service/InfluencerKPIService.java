@@ -107,4 +107,11 @@ public class InfluencerKPIService {
         throw new IllegalArgumentException("Expected numeric, got " + o.getClass());
     }
 
+    public List<InfluencerKPI> getTimeSeriesKPIData(UUID influencerId,
+                                                    Platform platform,
+                                                    LocalDate startDate,
+                                                    LocalDate endDate){
+        return influencerKPIRepository.findByInfluencerIdAndPlatformAndKpiDateBetween(influencerId, platform, startDate, endDate);
+    }
+
 }

@@ -1,5 +1,7 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthDTO;
 import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
@@ -12,13 +14,16 @@ import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.sql.ast.tree.expression.Over;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.lang.Long.getLong;
 
@@ -28,6 +33,12 @@ public class InfluencerKPIService {
 
     private final InfluencerKPIRepository influencerKPIRepository;
     private final InfluencerProfileService influencerProfileService;
+    private final ObjectMapper objectMapper;
+
+    private static final Duration CACHE_TTL = Duration.ofHours(24);
+
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
     public void calculateAndStoreKPIs(int newPost, UUID influencerId, Platform platform, LocalDate fetchedAt, int likesDiff, int commentsDiff, int sharesDiff, int savesDiff, int reachDiff, int viewsDiff) {
@@ -75,7 +86,16 @@ public class InfluencerKPIService {
                                          LocalDate startDate,
                                          LocalDate endDate) {
 
+        String cacheKey = buildCacheKey(influencerId, platform, startDate, endDate, "overview");
+
+        Object overviewDTO = redisTemplate.opsForValue().get(cacheKey);
+
+        if(overviewDTO!=null){ // cache hit
+            return objectMapper.convertValue(overviewDTO, OverviewDTO.class);
+        }
+
         OverviewAggProjection agg = influencerKPIRepository.aggregateWindow(influencerId, platform, startDate, endDate);
+
 
         FollowerGrowthProjection followersB = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), startDate);
         FollowerGrowthProjection followersA= influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), endDate);
@@ -101,6 +121,8 @@ public class InfluencerKPIService {
                 .followersGained(followersGained)
                 .avgEngagementRate(avgEngagementRate)
                 .build();
+
+        redisTemplate.opsForValue().set(cacheKey, dto, CACHE_TTL);
         return dto;
     }
 
@@ -118,11 +140,39 @@ public class InfluencerKPIService {
         return influencerKPIRepository.findByInfluencerIdAndPlatformAndKpiDateBetween(influencerId, platform, startDate, endDate);
     }
 
-    public List<FollowerGrowthProjection> getFollowersGrowth(UUID influencerId,
+    public List<FollowerGrowthDTO> getFollowersGrowth(UUID influencerId,
                                                              Platform platform,
                                                              LocalDate startDate,
                                                              LocalDate endDate){
-        return influencerKPIRepository.findFollowersGrowth(influencerId, platform.name(), startDate, endDate);
+
+        String cacheKey = buildCacheKey(influencerId, platform, startDate, endDate, "followersGrowth");
+
+        List<FollowerGrowthDTO> cachedData = (List<FollowerGrowthDTO>) redisTemplate.opsForValue().get(cacheKey);
+        if(cachedData!=null){
+            return cachedData;
+        }
+        List<FollowerGrowthProjection> fg = influencerKPIRepository.findFollowersGrowth(influencerId, platform.name(), startDate, endDate);
+
+        List<FollowerGrowthDTO> followerGrowthDTOS = fg.stream()
+                        .map(fge -> FollowerGrowthDTO.builder()
+                                .kpiDate(fge.getKpiDate())
+                                .followerCount(fge.getFollowerCount())
+                                .build())
+                        .toList();
+
+        redisTemplate.opsForValue().set(cacheKey, followerGrowthDTOS, CACHE_TTL);
+        return followerGrowthDTOS;
+    }
+
+    private String buildCacheKey(UUID influencerId, Platform platform, LocalDate startDate, LocalDate endDate, String analyze){
+        return String.format(
+                "analytics:%s:%s:%s:%s:%s",
+                analyze,
+                influencerId,
+                platform.name(),
+                startDate,
+                endDate
+        );
     }
 
 }

@@ -33,7 +33,7 @@ public class AnalyticsService {
 
     private final RawPostsRepository rawPostsRepository;
     private final InfluencerKPIService influencerKPIService;
-    private final EngagementHeatmapService engagementHeatmapService;
+//    private final EngagementHeatmapService engagementHeatmapService;
 
     public void processRawInsight(RawInsights rawInsight) {
 
@@ -41,7 +41,7 @@ public class AnalyticsService {
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + rawInsight.getId()));
 
 
-        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());
+//        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());
 
         int newLikes      = rawInsight.getLikes();
         int newComments   = rawInsight.getComments();

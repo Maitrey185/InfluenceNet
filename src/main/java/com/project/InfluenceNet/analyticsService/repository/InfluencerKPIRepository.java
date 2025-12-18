@@ -43,7 +43,8 @@ public interface InfluencerKPIRepository extends JpaRepository<InfluencerKPI, UU
 
 
     @Query(value = """
-            SELECT followers_count
+            SELECT 
+            COALESCE(followers_count, 0) AS followerCount
             FROM influencer_kpi
             WHERE influencer_id = :influencerId
               AND platform      = :platform

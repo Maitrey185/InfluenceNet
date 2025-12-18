@@ -55,7 +55,7 @@ public class AnalyticsDashboardController {
     }
 
     @GetMapping("/analytics/followersGrowth")
-    public ResponseEntity<List<FollowerGrowthProjection>> getFollowersGrowth(
+    public ResponseEntity<List<FollowerGrowthDTO>> getFollowersGrowth(
             @RequestParam UUID influencerId,
             @RequestParam Platform platform,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

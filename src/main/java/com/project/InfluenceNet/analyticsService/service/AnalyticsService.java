@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjection;
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
@@ -10,6 +11,7 @@ import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -89,6 +91,15 @@ public class AnalyticsService {
                                                 LocalDate endDate,
                                                 int limit){
         return postAnalyticsRepository.fetchTopPostsInAPeriod(influencerId, platform.name(), startDate, endDate, limit);
+    }
+
+    public List<EngagementHeatmapCellProjection> fetchEngagementHeatmap(
+            UUID influencerId,
+            Platform platform,   // enum → string
+            LocalDate startDate,
+            LocalDate endDate
+    ){
+        return postAnalyticsRepository.fetchEngagementHeatmap(influencerId, platform.name(), startDate, endDate);
     }
 
 

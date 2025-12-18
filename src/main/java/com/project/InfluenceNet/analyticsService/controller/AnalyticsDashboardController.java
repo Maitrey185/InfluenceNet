@@ -1,9 +1,6 @@
 package com.project.InfluenceNet.analyticsService.controller;
 
-import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
-import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
-import com.project.InfluenceNet.analyticsService.dto.OverviewRequestDTO;
-import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
+import com.project.InfluenceNet.analyticsService.dto.*;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
@@ -61,5 +58,14 @@ public class AnalyticsDashboardController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return ResponseEntity.ok(influencerKPIService.getFollowersGrowth(influencerId, platform, startDate, endDate));
+    }
+
+    @GetMapping("/analytics/engagementHeatmapBestTimeToPost")
+    public ResponseEntity<List<EngagementHeatmapCellProjection>> getEngagementHeatmapBestTimeToPost(
+            @RequestParam UUID influencerId,
+            @RequestParam Platform platform,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(analyticsService.fetchEngagementHeatmap(influencerId, platform, startDate, endDate));
     }
 }

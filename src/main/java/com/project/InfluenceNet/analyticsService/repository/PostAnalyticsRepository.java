@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.repository;
 
+import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjection;
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
@@ -9,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,5 +44,24 @@ public interface PostAnalyticsRepository extends JpaRepository<PostAnalytics, St
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate,
             @Param("limit") int limit
+    );
+
+    @Query(value = """
+        SELECT
+          EXTRACT(DOW FROM posted_at)::int + 1 AS dayOfWeek,
+          EXTRACT(HOUR FROM posted_at)::int    AS hourOfDay,
+          SUM(likes + comments + shares + saves) AS engagement
+        FROM post_analytics
+        WHERE influencer_id = :influencerId
+          AND platform      = :platform
+          AND posted_at BETWEEN :startDate AND :endDate
+        GROUP BY dayOfWeek, hourOfDay
+        ORDER BY dayOfWeek, hourOfDay
+    """, nativeQuery = true)
+    List<EngagementHeatmapCellProjection> fetchEngagementHeatmap(
+            @Param("influencerId") UUID influencerId,
+            @Param("platform") String platform,   // enum → string
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
     );
 }

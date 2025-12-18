@@ -61,7 +61,7 @@ public class AnalyticsDashboardController {
     }
 
     @GetMapping("/analytics/engagementHeatmapBestTimeToPost")
-    public ResponseEntity<List<EngagementHeatmapCellProjection>> getEngagementHeatmapBestTimeToPost(
+    public ResponseEntity<BestPostingTimeHeatmapResponse> getEngagementHeatmapBestTimeToPost(
             @RequestParam UUID influencerId,
             @RequestParam Platform platform,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,

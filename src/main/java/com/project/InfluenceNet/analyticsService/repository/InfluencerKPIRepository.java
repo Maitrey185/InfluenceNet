@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.repository;
 
+import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
@@ -50,7 +51,7 @@ public interface InfluencerKPIRepository extends JpaRepository<InfluencerKPI, UU
             ORDER BY kpi_date DESC
             LIMIT 1
             """, nativeQuery = true)
-    Long findLatestFollowersBeforeOrOnDate(
+    FollowerGrowthProjection findLatestFollowersBeforeOrOnDate(
             @Param("influencerId") UUID influencerId,
             @Param("platform") String platform, // enum stored as string
             @Param("date") LocalDate date
@@ -74,4 +75,21 @@ public interface InfluencerKPIRepository extends JpaRepository<InfluencerKPI, UU
     List<Object[]> calculateOverview(@Param("id") UUID id, @Param("platform") Platform platform, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
     List<InfluencerKPI> findByInfluencerIdAndPlatformAndKpiDateBetween(UUID id, Platform platform, LocalDate startDate, LocalDate endDate);
+
+    @Query(value = """
+            SELECT 
+            followers_count AS followerCount,
+            kpi_date        AS kpiDate
+            FROM influencer_kpi
+            WHERE influencer_id = :influencerId
+              AND platform      = :platform
+              AND kpi_date BETWEEN :startDate AND :endDate
+            ORDER BY kpi_date DESC
+            """, nativeQuery = true)
+    List<FollowerGrowthProjection> findFollowersGrowth(
+            @Param("influencerId") UUID influencerId,
+            @Param("platform") String platform, // enum stored as string
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate
+    );
 }

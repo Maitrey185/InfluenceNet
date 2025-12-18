@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
@@ -76,12 +77,15 @@ public class InfluencerKPIService {
 
         OverviewAggProjection agg = influencerKPIRepository.aggregateWindow(influencerId, platform, startDate, endDate);
 
-        Long followersBefore = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), startDate);
-        Long followersAfter = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), endDate);
-        if(followersBefore == null) {
+        FollowerGrowthProjection followersB = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), startDate);
+        FollowerGrowthProjection followersA= influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), endDate);
+
+        long followersBefore = followersB.getFollowerCount();
+        long followersAfter = followersA.getFollowerCount();
+        if(followersBefore == 0) {
             followersBefore = 0L;
         }
-        if(followersAfter == null) {
+        if(followersAfter == 0) {
             followersAfter = 0L;
         }
         Long followersGained = followersAfter - followersBefore;
@@ -112,6 +116,13 @@ public class InfluencerKPIService {
                                                     LocalDate startDate,
                                                     LocalDate endDate){
         return influencerKPIRepository.findByInfluencerIdAndPlatformAndKpiDateBetween(influencerId, platform, startDate, endDate);
+    }
+
+    public List<FollowerGrowthProjection> getFollowersGrowth(UUID influencerId,
+                                                             Platform platform,
+                                                             LocalDate startDate,
+                                                             LocalDate endDate){
+        return influencerKPIRepository.findFollowersGrowth(influencerId, platform.name(), startDate, endDate);
     }
 
 }

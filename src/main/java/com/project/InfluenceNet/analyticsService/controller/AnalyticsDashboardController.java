@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.controller;
 
+import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.dto.OverviewRequestDTO;
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
@@ -51,5 +52,14 @@ public class AnalyticsDashboardController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             @RequestParam int limit) {
         return ResponseEntity.ok(analyticsService.fetchTopPost(influencerId, platform, startDate, endDate, limit));
+    }
+
+    @GetMapping("/analytics/followersGrowth")
+    public ResponseEntity<List<FollowerGrowthProjection>> getFollowersGrowth(
+            @RequestParam UUID influencerId,
+            @RequestParam Platform platform,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(influencerKPIService.getFollowersGrowth(influencerId, platform, startDate, endDate));
     }
 }

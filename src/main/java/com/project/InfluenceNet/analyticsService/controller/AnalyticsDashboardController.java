@@ -4,6 +4,7 @@ import com.project.InfluenceNet.analyticsService.dto.*;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
+import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
 import com.project.InfluenceNet.analyticsService.service.InfluencerKPIService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class AnalyticsDashboardController {
 
     private final InfluencerKPIService influencerKPIService;
     private final AnalyticsService analyticsService;
+
+    private final EngagementHeatmapService engagementHeatmapService;
 
     @GetMapping("/analytics/dashboard")
     public ResponseEntity<OverviewDTO> getOverview(
@@ -66,6 +69,6 @@ public class AnalyticsDashboardController {
             @RequestParam Platform platform,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(analyticsService.fetchEngagementHeatmap(influencerId, platform, startDate, endDate));
+        return ResponseEntity.ok(engagementHeatmapService.getBestPostingTimeHeatmap(influencerId, platform, startDate, endDate));
     }
 }

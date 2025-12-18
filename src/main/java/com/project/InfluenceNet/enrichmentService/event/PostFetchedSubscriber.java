@@ -17,13 +17,13 @@ public class PostFetchedSubscriber {
     private final RawPostsRepository rawPostsRepository;
     private final PostEnricherService postEnricherService;
 
-    @KafkaListener(topics = "post.fetched", groupId = "post.fetched.group")
-    public void handlePostFetchedEvent(PostFetchedEvent event) {
-        log.info("Post fetched event received: {}", event);
-
-        RawPosts rawPosts = rawPostsRepository.findById(event.getPostId())
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + event.getPostId()));
-
-        postEnricherService.enrichPostAndStore(rawPosts);
-    }
+//    @KafkaListener(topics = "post.fetched", groupId = "post.fetched.group")
+//    public void handlePostFetchedEvent(PostFetchedEvent event) {
+//        log.info("Post fetched event received: {}", event);
+//
+//        RawPosts rawPosts = rawPostsRepository.findById(event.getPostId())
+//                .orElseThrow(() -> new RuntimeException("Post not found with id: " + event.getPostId()));
+//
+//        postEnricherService.enrichPostAndStore(rawPosts);
+//    }
 }

@@ -1,18 +1,29 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.project.InfluenceNet.analyticsService.dto.BestPostingTimeHeatmapResponse;
+import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjection;
+import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
+import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +33,15 @@ public class AnalyticsService {
 
     private final RawPostsRepository rawPostsRepository;
     private final InfluencerKPIService influencerKPIService;
+//    private final EngagementHeatmapService engagementHeatmapService;
 
     public void processRawInsight(RawInsights rawInsight) {
 
         RawPosts rawPost = rawPostsRepository.findById(rawInsight.getId())
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + rawInsight.getId()));
 
+
+//        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());
 
         int newLikes      = rawInsight.getLikes();
         int newComments   = rawInsight.getComments();
@@ -77,6 +91,54 @@ public class AnalyticsService {
                     .orElseGet(()->PostAnalytics.newForPost(rawInsights.getId(), rawPosts.getInfluencer_id(), rawInsights.getPlatform(), rawPosts.getPost_type(), rawPosts.getTimestamp()));
 
             return postAnalytics;
+    }
+
+    public List<TopPostProjection> fetchTopPost(UUID influencerId,
+                                                Platform platform,
+                                                LocalDate startDate,
+                                                LocalDate endDate,
+                                                int limit){
+        return postAnalyticsRepository.fetchTopPostsInAPeriod(influencerId, platform.name(), startDate, endDate, limit);
+    }
+
+    public BestPostingTimeHeatmapResponse fetchEngagementHeatmap(
+            UUID influencerId,
+            Platform platform,   // enum → string
+            LocalDate startDate,
+            LocalDate endDate
+    ){
+
+        List<EngagementHeatmapCellProjection> rows = postAnalyticsRepository.fetchEngagementHeatmap(influencerId, platform.name(), startDate, endDate);
+
+        long[][] matrix = new long[7][24];
+        for (EngagementHeatmapCellProjection row : rows) {
+
+            int dayIndex  = row.getDayOfWeek() - 1; // 1–7 → 0–6
+            int hourIndex = row.getHourOfDay();     // 0–23
+
+            matrix[dayIndex][hourIndex] = row.getEngagement();
+        }
+
+        BestPostingTimeHeatmapResponse bestPostingTimeHeatmapResponse = BestPostingTimeHeatmapResponse.builder()
+                .days(days())
+                .hours(hours())
+                .matrix(matrix)
+                .build();
+
+        return bestPostingTimeHeatmapResponse;
+
+    }
+
+    public static List<String> days() {
+        return Arrays.stream(DayOfWeek.values())
+                .map(d -> d.name().substring(0, 3)) // MON, TUE...
+                .collect(Collectors.toList());
+    }
+
+    public static List<Integer> hours() {
+        return IntStream.range(0, 24)
+                .boxed()
+                .collect(Collectors.toList());
     }
 
 

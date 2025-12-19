@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.analyticsService.event;
 
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
+import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.events.InsightsfetchedEvent;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
@@ -18,6 +19,7 @@ public class InsightsEventSubscriber {
     public static final String TOPIC_INSIGHT_FETCHED = "insight.fetched";
     private final RawInsightsRepository rawInsightsRepository;
     private final AnalyticsService analyticsService;
+    private final EngagementHeatmapService engagementHeatmapService;
 
     @KafkaListener(topics = TOPIC_INSIGHT_FETCHED)
     public void handleInsightsEvent(InsightsfetchedEvent event){
@@ -25,8 +27,6 @@ public class InsightsEventSubscriber {
 
         RawInsights rawInsights = rawInsightsRepository.findById(event.getPostId())
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + event.getPostId()));
-
-        analyticsService.processRawInsight(rawInsights);
 
     }
 

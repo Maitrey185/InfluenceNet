@@ -3,11 +3,14 @@ package com.project.InfluenceNet.schedulerReminderService.dto;
 import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
 import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Data;
 
 
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -18,8 +21,10 @@ public class PostingScheduleDTO {
 
     private UUID id;
     private UUID influencer_id;
-    private String platform;
-    private Set<Timestamp> schedules;
+
+    @Enumerated(EnumType.STRING)
+    private Platform platform;
+    private Set<LocalTime> schedules;
     private String content;
     private String reminderStatus;
     private Timestamp created_at;

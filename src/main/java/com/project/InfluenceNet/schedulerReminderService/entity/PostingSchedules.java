@@ -1,14 +1,14 @@
 package com.project.InfluenceNet.schedulerReminderService.entity;
 
 import com.project.InfluenceNet.socialConnector.documents.Platform;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -16,20 +16,25 @@ import java.util.UUID;
 @Entity
 @Builder
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="posting_schedules")
 public class PostingSchedules {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name="influencer_id")
+
     private UUID influencerId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name="platform")
-    private String platform;
+    private Platform platform;
 
     @Column(name="schedules")
-    private Set<Timestamp> schedules;
+    private Set<LocalTime> schedules;
 
     @Column(name="content")
     private String content;

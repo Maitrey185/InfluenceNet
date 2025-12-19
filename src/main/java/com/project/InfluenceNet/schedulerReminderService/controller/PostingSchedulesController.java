@@ -7,9 +7,14 @@ import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,27 +27,27 @@ public class PostingSchedulesController {
     public PostingScheduleDTO createReminder(
             @PathVariable UUID influencerId,
             @PathVariable Platform platform,
-            @RequestParam Set<Timestamp> schedules
+            @RequestParam Set<String> schedules
     ){
-        return reminderService.createReminder(influencerId, platform, schedules);
+        return reminderService.createReminder(influencerId, platform, parseSchedules(schedules));
     }
 
-    @PatchMapping
+    @PatchMapping("/add/{influencerId}/{platform}")
     public PostingScheduleDTO addSchedule(
             @PathVariable UUID influencerId,
             @PathVariable Platform platform,
-            @RequestParam Timestamp schedule
+            @RequestParam String schedule
     ){
-        return reminderService.addSchedule(influencerId, platform, schedule);
+        return reminderService.addSchedule(influencerId, platform, parseSchedule(schedule));
     }
 
     @PatchMapping("/delete/{influencerId}/{platform}")
     public PostingScheduleDTO deleteSchedule(
             @PathVariable UUID influencerId,
             @PathVariable Platform platform,
-            @RequestParam Timestamp schedule
+            @RequestParam String schedule
     ){
-        return reminderService.removeSchedule(influencerId, platform, schedule);
+        return reminderService.removeSchedule(influencerId, platform, parseSchedule(schedule));
     }
 
     @PatchMapping("/update/{influencerId}/{platform}")
@@ -61,5 +66,17 @@ public class PostingSchedulesController {
     ){
         reminderService.deletePostingSchedule(influencerId, platform);
     }
+
+    private Set<LocalTime> parseSchedules(Set<String> schedules) {
+
+        return schedules.stream()
+                .map(LocalTime::parse)
+                .collect(Collectors.toSet());
+    }
+
+    private LocalTime parseSchedule(String schedule) {
+        return LocalTime.parse(schedule);
+    }
+
 
 }

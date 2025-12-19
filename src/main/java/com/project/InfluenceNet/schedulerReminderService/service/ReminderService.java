@@ -8,7 +8,10 @@ import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+
 import java.sql.Timestamp;
+import java.time.LocalTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -19,11 +22,11 @@ public class ReminderService {
 
     private final PostingSchedulesRepository postingSchedulesRepository;
 
-    public PostingScheduleDTO createReminder(UUID influencerId, Platform platform, Set<Timestamp> schedules){
+    public PostingScheduleDTO createReminder(UUID influencerId, Platform platform, Set<LocalTime> schedules){
 
         PostingSchedules postingSchedules = PostingSchedules.builder()
                 .influencerId(influencerId)
-                .platform(platform.name())
+                .platform(platform)
                 .schedules(schedules)
                 .reminderStatus(ReminderStatus.PENDING.name())
                 .content("Time to Post!!")
@@ -37,7 +40,7 @@ public class ReminderService {
 
     }
 
-    public PostingScheduleDTO addSchedule(UUID influencerId, Platform platform, Timestamp schedule){
+    public PostingScheduleDTO addSchedule(UUID influencerId, Platform platform, LocalTime schedule){
 
         PostingSchedules postingSchedules = postingSchedulesRepository.findByInfluencerIdAndPlatform(influencerId, platform);
 
@@ -45,7 +48,7 @@ public class ReminderService {
             throw new RuntimeException("No Schedules Found");
         }
 
-        Set<Timestamp> schedules = postingSchedules.getSchedules();
+        Set<LocalTime> schedules = postingSchedules.getSchedules();
         schedules.add(schedule);
         postingSchedules.setSchedules(schedules);
 
@@ -55,7 +58,7 @@ public class ReminderService {
 
     }
 
-    public PostingScheduleDTO removeSchedule(UUID influencerId, Platform platform, Timestamp schedule){
+    public PostingScheduleDTO removeSchedule(UUID influencerId, Platform platform, LocalTime schedule){
 
         PostingSchedules postingSchedules = postingSchedulesRepository.findByInfluencerIdAndPlatform(influencerId, platform);
 
@@ -63,7 +66,7 @@ public class ReminderService {
             throw new RuntimeException("No Schedules Found");
         }
 
-        Set<Timestamp> schedules = postingSchedules.getSchedules();
+        Set<LocalTime> schedules = postingSchedules.getSchedules();
         schedules.remove(schedule);
         postingSchedules.setSchedules(schedules);
 

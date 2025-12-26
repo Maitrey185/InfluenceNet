@@ -2,16 +2,12 @@ package com.project.InfluenceNet.schedulerReminderService.controller;
 
 import com.project.InfluenceNet.schedulerReminderService.dto.PostingScheduleDTO;
 import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
-import com.project.InfluenceNet.schedulerReminderService.service.ReminderService;
+import com.project.InfluenceNet.schedulerReminderService.service.PostingSchedulesService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -21,7 +17,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/posting-schedules")
 public class PostingSchedulesController {
 
-    private final ReminderService reminderService;
+    private final PostingSchedulesService postingSchedulesService;
 
     @PostMapping("/create/{influencerId}/{platform}")
     public PostingScheduleDTO createReminder(
@@ -29,7 +25,7 @@ public class PostingSchedulesController {
             @PathVariable Platform platform,
             @RequestParam Set<String> schedules
     ){
-        return reminderService.createReminder(influencerId, platform, parseSchedules(schedules));
+        return postingSchedulesService.createReminder(influencerId, platform, parseSchedules(schedules));
     }
 
     @PatchMapping("/add/{influencerId}/{platform}")
@@ -38,7 +34,7 @@ public class PostingSchedulesController {
             @PathVariable Platform platform,
             @RequestParam String schedule
     ){
-        return reminderService.addSchedule(influencerId, platform, parseSchedule(schedule));
+        return postingSchedulesService.addSchedule(influencerId, platform, parseSchedule(schedule));
     }
 
     @PatchMapping("/delete/{influencerId}/{platform}")
@@ -47,7 +43,7 @@ public class PostingSchedulesController {
             @PathVariable Platform platform,
             @RequestParam String schedule
     ){
-        return reminderService.removeSchedule(influencerId, platform, parseSchedule(schedule));
+        return postingSchedulesService.removeSchedule(influencerId, platform, parseSchedule(schedule));
     }
 
     @PatchMapping("/update/{influencerId}/{platform}")
@@ -56,7 +52,7 @@ public class PostingSchedulesController {
             @PathVariable Platform platform,
             @RequestParam ReminderStatus reminderStatus
     ){
-        return reminderService.unpdateReminderStatus(influencerId, platform, reminderStatus);
+        return postingSchedulesService.unpdateReminderStatus(influencerId, platform, reminderStatus);
     }
 
     @DeleteMapping("/delete/{influencerId}/{platform}")
@@ -64,7 +60,7 @@ public class PostingSchedulesController {
             @PathVariable UUID influencerId,
             @PathVariable Platform platform
     ){
-        reminderService.deletePostingSchedule(influencerId, platform);
+        postingSchedulesService.deletePostingSchedule(influencerId, platform);
     }
 
     private Set<LocalTime> parseSchedules(Set<String> schedules) {

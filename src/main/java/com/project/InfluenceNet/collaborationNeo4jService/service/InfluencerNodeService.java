@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class InfluencerNodeService {
@@ -13,8 +16,23 @@ public class InfluencerNodeService {
     private final InfluencerNodeRepository influencerNodeRepository;
 
     @Transactional(transactionManager = "neo4jTransactionManager")
-    public InfluencerNode createInfluencerNode(InfluencerNode node){
+    public InfluencerNode saveOrUpdate(InfluencerNode node){
         return influencerNodeRepository.save(node);
+    }
+
+    public InfluencerNode getById(UUID id) {
+        return influencerNodeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Influencer not found: " + id));
+    }
+
+    public List<InfluencerNode> getByNiche(String niche) {
+        return influencerNodeRepository.findByPrimaryNiche(niche);
+    }
+
+    /* DELETE */
+    @Transactional
+    public void delete(UUID id) {
+        influencerNodeRepository.deleteById(id);
     }
 
 

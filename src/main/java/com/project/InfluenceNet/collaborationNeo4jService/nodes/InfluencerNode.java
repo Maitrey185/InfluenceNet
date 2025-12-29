@@ -6,8 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.Date;
+import java.util.Set;
 import java.util.UUID;
 
 @Node("Influencer")
@@ -35,5 +37,8 @@ public class InfluencerNode {
     private Date joinedAt;
 
     private Double consistencyScore;
+
+    @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.OUTGOING)
+    private Set<InfluencerNicheRelation> niches;
 
 }

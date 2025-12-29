@@ -16,8 +16,6 @@ import java.util.UUID;
 public class NicheNode {
 
     @Id
-    private String id;
-
     private String name;
 
 }

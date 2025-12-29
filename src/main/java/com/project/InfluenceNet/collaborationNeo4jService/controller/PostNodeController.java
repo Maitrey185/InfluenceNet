@@ -1,12 +1,13 @@
 package com.project.InfluenceNet.collaborationNeo4jService.controller;
 
-import com.project.InfluenceNet.collaborationNeo4jService.nodes.NicheNode;
+import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.PostNode;
 import com.project.InfluenceNet.collaborationNeo4jService.service.PostNodeService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,10 +16,10 @@ public class PostNodeController {
 
     private final PostNodeService postNodeService;
 
-    @PostMapping("/create")
-    public ResponseEntity<PostNode> createPostNode(@RequestBody PostNode node){
-        PostNode postNode = postNodeService.saveOrUpdate(node);
-        return ResponseEntity.ok(postNode);
+    @PostMapping("/create/{influencerId}")
+    public ResponseEntity<InfluencerNode> createPostNode(@PathVariable UUID influencerId, @RequestBody PostNode node){
+        InfluencerNode influencerNode = postNodeService.saveOrUpdate(influencerId, node);
+        return ResponseEntity.ok(influencerNode);
     }
 
     @GetMapping("/getById/{id}")

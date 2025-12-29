@@ -1,8 +1,7 @@
 package com.project.InfluenceNet.collaborationNeo4jService.controller;
 
-import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNicheRelation;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
-import com.project.InfluenceNet.collaborationNeo4jService.service.InfluencerNicheService;
+import com.project.InfluenceNet.collaborationNeo4jService.service.InfluencerNicheRelationService;
 import com.project.InfluenceNet.collaborationNeo4jService.service.InfluencerNodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import java.util.UUID;
 public class InfluencerNodeController {
 
     private final InfluencerNodeService influencerNodeService;
-    private final InfluencerNicheService influencerNicheService;
+    private final InfluencerNicheRelationService influencerNicheRelationService;
 
     @PostMapping("/create")
     public ResponseEntity<InfluencerNode> createInfluencerNode(@RequestBody InfluencerNode node){
@@ -32,13 +31,13 @@ public class InfluencerNodeController {
     @GetMapping("/addNiche/{influencerId}")
     public ResponseEntity<InfluencerNode> addNiche(@PathVariable UUID influencerId,
                                                             @RequestParam List<String> nicheNames){
-        return ResponseEntity.ok(influencerNicheService.addNiches(influencerId, nicheNames));
+        return ResponseEntity.ok(influencerNicheRelationService.addNiches(influencerId, nicheNames));
     }
 
     @GetMapping("/removeNiche/{influencerId}")
     public ResponseEntity<InfluencerNode> removeNiche(@PathVariable UUID influencerId,
                                                    @RequestParam List<String> nicheNames){
-        return ResponseEntity.ok(influencerNicheService.removeNiches(influencerId, nicheNames));
+        return ResponseEntity.ok(influencerNicheRelationService.removeNiches(influencerId, nicheNames));
     }
 
 

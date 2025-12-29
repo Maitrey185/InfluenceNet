@@ -1,6 +1,8 @@
 package com.project.InfluenceNet.collaborationNeo4jService.service;
 
+import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNicheRelation;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
+import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerPostRelation;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.PostNode;
 import com.project.InfluenceNet.collaborationNeo4jService.repository.InfluencerNodeRepository;
 import com.project.InfluenceNet.collaborationNeo4jService.repository.PostNodeRepository;
@@ -16,10 +18,22 @@ import java.util.UUID;
 public class PostNodeService {
 
     private final PostNodeRepository postNodeRepository;
+    private  final InfluencerNodeRepository influencerNodeRepository;
 
     @Transactional(transactionManager = "neo4jTransactionManager")
-    public PostNode saveOrUpdate(PostNode node){
-        return postNodeRepository.save(node);
+    public InfluencerNode saveOrUpdate(UUID influencerId, PostNode node){
+        postNodeRepository.save(node);
+        InfluencerNode influencer = influencerNodeRepository.findById(influencerId)
+                .orElseThrow(() -> new RuntimeException("Influencer not found"));
+
+        InfluencerPostRelation relation = InfluencerPostRelation.builder()
+                .postNode(node)
+                .build();
+
+        influencer.getPosts().add(relation);
+
+        return influencerNodeRepository.save(influencer);
+
     }
 
     public PostNode getById(String id) {

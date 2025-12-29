@@ -41,4 +41,7 @@ public class InfluencerNode {
     @Relationship(type = "BELONGS_TO", direction = Relationship.Direction.OUTGOING)
     private Set<InfluencerNicheRelation> niches;
 
+    @Relationship(type = "POSTED", direction = Relationship.Direction.OUTGOING)
+    private Set<InfluencerPostRelation> posts;
+
 }

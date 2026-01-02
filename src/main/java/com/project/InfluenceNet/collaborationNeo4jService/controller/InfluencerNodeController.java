@@ -40,9 +40,6 @@ public class InfluencerNodeController {
         return ResponseEntity.ok(influencerNicheRelationService.removeNiches(influencerId, nicheNames));
     }
 
-
-
-
     @DeleteMapping("/{id}")
     public void delete(@PathVariable UUID id) {
         influencerNodeService.delete(id);

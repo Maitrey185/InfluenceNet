@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,5 +32,8 @@ public class PostNode {
     private int reach;
 
     private Double engagementRate;
+
+    @Relationship(type = "ENGAGED_WITH", direction = Relationship.Direction.INCOMING)
+    private Set<EngagedWithRelationship> engagements = new HashSet<>();
 
 }

@@ -35,5 +35,18 @@ public class InfluencerNodeService {
         influencerNodeRepository.deleteById(id);
     }
 
+    public void recordMention(UUID from, UUID to) {
+        influencerNodeRepository.addMention(from, to);
+    }
+
+    public void recordCoPost(UUID a, UUID b) {
+        influencerNodeRepository.addCoPost(a, b);
+        influencerNodeRepository.addCoPost(b, a); // bidirectional
+    }
+
+    public void recordEngagement(UUID influencerId, String postId, int likes, int comments) {
+        influencerNodeRepository.addEngagement(influencerId, postId, likes, comments);
+    }
+
 
 }

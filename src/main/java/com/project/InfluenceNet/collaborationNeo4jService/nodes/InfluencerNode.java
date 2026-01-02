@@ -9,6 +9,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,5 +44,11 @@ public class InfluencerNode {
 
     @Relationship(type = "POSTED", direction = Relationship.Direction.OUTGOING)
     private Set<InfluencerPostRelation> posts;
+
+    @Relationship(type = "MENTIONED")
+    private Set<MentionedRelationship> mentioned = new HashSet<>();
+
+    @Relationship(type = "CO_POSTED_WITH")
+    private Set<CoPostedWithRelationship> coPostedWith = new HashSet<>();
 
 }

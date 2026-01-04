@@ -79,49 +79,6 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
     """)
     List<CoPostProjection> findStrongCollaborations(int minTimes);
 
-    @Query("""
-    MATCH (a:Influencer)-[e:ENGAGED_WITH]->(p:Post)<-[:POSTED]-(b:Influencer)
-    WHERE a <> b
-    WITH a, b, sum(e.likes + e.comments) AS engagementScore
-    WHERE engagementScore >= $minScore
-    MERGE (a)-[r:INTERESTED_IN]->(b)
-    SET r.score = engagementScore,
-        r.updatedAt = datetime()
-    """)
-    void deriveInterestEdges(int minScore);
-
-    @Query("""
-        MATCH (a:Influencer), (b:Influencer) 
-        WHERE a <> b 
-        AND a.growthTrend = b.growthTrend 
-        AND abs(a.growthRate30d - b.growthRate30d) <= 3
-        MERGE (a)-[r:SIMILAR_GROWTH]->(b)
-        SET r.diff = abs(a.growthRate30d - b.growthRate30d),
-        r.updatedAt = datetime()
-        """)
-    void deriveSimilarGrowthEdges();
-
-    @Query("""
-            MATCH (a:Influencer)-[:ENGAGED_WITH]->(p:Post)<-[:ENGAGED_WITH]-(b:Influencer)
-            WHERE a <> b
-            WITH a, b, count(DISTINCT p) AS sharedPosts
-            WHERE sharedPosts >= 3
-            MERGE (a)-[r:AUDIENCE_OVERLAP]->(b)
-            SET r.sharedPosts = sharedPosts,
-            r.updatedAt = datetime()        
-            """)
-    void deriveAudienceOverlap();
-
-    @Query("""
-    MATCH (a:Influencer)-[i:INTERESTED_IN]->(b)
-    MATCH (a)-[:SIMILAR_GROWTH]->(b)
-    MERGE (a)-[r:POTENTIAL_COLLAB]->(b)
-    SET r.score = i.score,
-        r.reason = 'similar growth + mutual engagement',
-        r.updatedAt = datetime(),
-        r.expiresAt = datetime() + duration('P7D')
-    """)
-    void derivePotentialCollaborations();
 
 
 

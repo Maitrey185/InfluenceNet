@@ -4,9 +4,12 @@ import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 
 public interface MutualEngagementProjection {
 
-    InfluencerNode getA();
-    InfluencerNode getB();
+    Engagement getEngagement();
 
-    Long getSharedPosts();
+    interface Engagement {
+        InfluencerNode getSource();
+        InfluencerNode getTarget();
+        Long getSharedPosts();
+    }
 }
 

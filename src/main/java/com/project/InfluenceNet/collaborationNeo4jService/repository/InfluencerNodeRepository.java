@@ -4,7 +4,7 @@ import com.project.InfluenceNet.collaborationNeo4jService.dto.CoPostProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MentionIntentProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MutualEngagementProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.stereotype.Repository;
 
@@ -44,7 +44,7 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
     MATCH (p:Post {id: $postId})
     MERGE (i)-[r:ENGAGED_WITH]->(p)
     ON CREATE SET r.likes = $likes, r.comments = $comments
-    ON MATCH SET 
+    ON MATCH SET
       r.likes = r.likes + $likes,
       r.comments = r.comments + $comments
     """)
@@ -56,10 +56,14 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
     );
 
     @Query("""
-    MATCH (a:Influencer)-[:ENGAGED_WITH]->(:Post)<-[:ENGAGED_WITH]-(b:Influencer)
-    WHERE a.id <> b.id
-    RETURN a AS a, b AS b, count(*) AS sharedPosts
-    ORDER BY sharedPosts DESC
+            MATCH (a:Influencer)-[:ENGAGED_WITH]->(:Post)<-[:ENGAGED_WITH]-(b:Influencer)
+            WHERE a.id <> b.id
+            RETURN {
+              source: a,
+              target: b,
+              sharedPosts: count(*)
+            } AS engagement
+            ORDER BY sharedPosts DESC
     """)
     List<MutualEngagementProjection> findMutualEngagements();
 
@@ -79,6 +83,85 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
     """)
     List<CoPostProjection> findStrongCollaborations(int minTimes);
 
+
+
+    @Query("""
+    MATCH (a:Influencer)-[e:ENGAGED_WITH]->(p:Post)<-[:POSTED]-(b:Influencer)
+    WHERE a <> b
+    WITH a, b, sum(e.likes + e.comments) AS engagementScore
+    WHERE engagementScore >= $minScore
+    MERGE (a)-[r:INTERESTED_IN]->(b)
+    SET r.score = engagementScore,
+        r.updatedAt = datetime()
+    """)
+    void deriveInterestEdges(int minScore);
+
+    @Query("""
+        MATCH (a:Influencer), (b:Influencer) 
+        WHERE a <> b 
+        AND a.growthTrend = b.growthTrend 
+        AND abs(a.growthRate30d - b.growthRate30d) <= 3
+        MERGE (a)-[r:SIMILAR_GROWTH]->(b)
+        SET r.diff = abs(a.growthRate30d - b.growthRate30d),
+        r.updatedAt = datetime()
+        """)
+    void deriveSimilarGrowthEdges();
+
+    @Query("""
+            MATCH (a:Influencer)-[:ENGAGED_WITH]->(p:Post)<-[:ENGAGED_WITH]-(b:Influencer)
+            WHERE a <> b
+            WITH a, b, count(DISTINCT p) AS sharedPosts
+            WHERE sharedPosts >= 3
+            MERGE (a)-[r:AUDIENCE_OVERLAP]->(b)
+            SET r.sharedPosts = sharedPosts,
+            r.updatedAt = datetime()        
+            """)
+    void deriveAudienceOverlap();
+
+    @Query("""
+    MATCH (a:Influencer)-[i:INTERESTED_IN]->(b)
+    MATCH (a)-[:SIMILAR_GROWTH]->(b)
+    MERGE (a)-[r:POTENTIAL_COLLAB]->(b)
+    SET r.score = i.score,
+        r.reason = 'similar growth + mutual engagement',
+        r.updatedAt = datetime(),
+        r.expiresAt = datetime() + duration('P7D')
+    """)
+    void derivePotentialCollaborations();
+
+    @Query("""
+        MATCH (a:Influencer {id: $id})
+        MATCH (b:Influencer)
+        WHERE a <> b
+        MATCH (a:Influencer)-[:BELONGS_TO]->(n:Niche)<-[:BELONGS_TO]-(b:Influencer)
+        OPTIONAL MATCH (a)-[c:CO_POSTED_WITH]->(b)
+        OPTIONAL MATCH (a)-[m:MENTIONED]->(b)
+        OPTIONAL MATCH (a)-[t:TRUSTS]->(b)
+        OPTIONAL MATCH (a)-[i:INTERESTED_IN]->(b)
+        WITH a, b,
+          coalesce(c.times, 0) * 2 +
+          coalesce(m.count, 0) +
+          coalesce(t.sharedCollaborators, 0) * 3 +
+          coalesce(i.score, 0) AS relationshipStrength,
+          (1 - abs(a.engagementRate - b.engagementRate) / 10)        AS engagementSim,
+          (1 - abs(a.growthRate30d - b.growthRate30d) / 20)          AS growthSim,
+          (1 - abs(a.platformAgeDays - b.platformAgeDays) / 1000)   AS ageSim,
+          (1 - abs(a.postsPerWeek - b.postsPerWeek) / 10)            AS frequencySim
+        RETURN b {
+                     .*,
+                     joinedAt:
+                       CASE
+                         WHEN b.joinedAt IS NULL THEN NULL
+                         WHEN b.joinedAt CONTAINS "T" THEN date(datetime(b.joinedAt))
+                         ELSE b.joinedAt
+                       END
+                   } AS b,
+          relationshipStrength * 0.40 +
+          ((engagementSim + growthSim + ageSim + frequencySim)/4 * 0.30) AS score
+        ORDER BY score DESC
+        LIMIT 10
+        """)
+    List<InfluencerNode> recommendCollaborators(UUID id);
 
 
 

@@ -8,6 +8,7 @@ import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Relationship;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +36,7 @@ public class InfluencerNode {
     private String growthTrend;
 
     private Double postsPerWeek;
-    private Date joinedAt;
+    private LocalDate joinedAt;
 
     private Double consistencyScore;
 

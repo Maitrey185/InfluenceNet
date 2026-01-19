@@ -21,7 +21,7 @@ public class InsightsEventSubscriber {
     private final AnalyticsService analyticsService;
     private final EngagementHeatmapService engagementHeatmapService;
 
-    @KafkaListener(topics = TOPIC_INSIGHT_FETCHED)
+//    @KafkaListener(topics = TOPIC_INSIGHT_FETCHED)
     public void handleInsightsEvent(InsightsfetchedEvent event){
         log.info("Received insights event: {}", event);
 

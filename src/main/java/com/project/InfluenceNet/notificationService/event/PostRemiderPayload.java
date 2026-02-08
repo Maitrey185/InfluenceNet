@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostRemiderPayload implements Payload{
 
+    private String email;
 
 }

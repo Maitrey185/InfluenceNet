@@ -20,6 +20,7 @@ public class PostReminderNotificationTemplate extends NotificationTemplate{
                 .userId(notificationEvent.getUserId())
                 .title("Time to Post !")
                 .body("It's time to post according to your posting schedule, lets keep growing !")
+                .email(p.getEmail())
                 .build();
     }
 }

@@ -12,6 +12,7 @@ public class NotificationRequest {
     private UUID userId;
     private String title;
     private String body;
+    private String email;
     private ChannelType channelType;
 
 }

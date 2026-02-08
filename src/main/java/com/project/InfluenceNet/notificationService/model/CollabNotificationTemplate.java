@@ -20,6 +20,7 @@ public class CollabNotificationTemplate extends NotificationTemplate{
                 .userId(notificationEvent.getUserId())
                 .title("New Collaboration Opportunity")
                 .body("Your recommended collaborator : "+ p.getCollaboratorName())
+                .email(p.getEmail())
                 .build();
     }
 }

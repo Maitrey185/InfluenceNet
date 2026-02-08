@@ -14,4 +14,6 @@ public class CollabPayload implements Payload{
     private String collaboratorName;
 
     private double score;
+
+    private String email;
 }

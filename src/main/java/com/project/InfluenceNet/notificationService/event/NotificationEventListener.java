@@ -2,9 +2,8 @@ package com.project.InfluenceNet.notificationService.event;
 
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
 import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
-import com.project.InfluenceNet.notificationService.model.NotificationRequest;
-import com.project.InfluenceNet.notificationService.model.NotificationTemplate;
-import com.project.InfluenceNet.notificationService.model.NotificationTemplateFactory;
+import com.project.InfluenceNet.notificationService.NotificationPreferenceRepository;
+import com.project.InfluenceNet.notificationService.model.*;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.events.InsightsfetchedEvent;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
@@ -19,7 +18,8 @@ import org.springframework.stereotype.Service;
 public class NotificationEventListener {
 
     private final NotificationTemplateFactory notificationTemplateFactory;
-
+    private final NotificationPreferenceRepository notificationPreferenceRepository;
+    private final ChannelFactory channelFactory;
     public static final String TOPIC_SEND_NOTIFICATION = "send.notification";
 
     //    @KafkaListener(topics = TOPIC_SEND_NOTIFICATION)
@@ -29,6 +29,11 @@ public class NotificationEventListener {
         NotificationTemplate notificationTemplate = notificationTemplateFactory.get(event.getNotificationType());
 
         NotificationRequest notificationRequest = notificationTemplate.build(event);
+
+        for(NotificationPreference preference: notificationPreferenceRepository.findByIdUserIdAndIdEventType(event.getUserId(), event.getNotificationType().toString())){
+                System.out.println(preference);
+                channelFactory.get(preference.getChannel()).send(notificationRequest);
+        }
 
     }
 }

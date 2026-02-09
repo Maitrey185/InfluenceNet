@@ -125,6 +125,13 @@ public class InfluencerProfileService {
         log.info("Successfully deleted influencer profile with id: {}", id);
     }
 
+    public String getEmailById(UUID id){
+        String email = influencerProfileRepository.findById(id)
+                .map(InfluencerProfile::getEmail)
+                .orElse(null);
+        return email;
+    }
+
 
 
 

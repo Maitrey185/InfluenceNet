@@ -2,6 +2,8 @@ package com.project.InfluenceNet.influencer.repository;
 
 import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,6 +17,7 @@ public interface InfluencerProfileRepository extends JpaRepository<InfluencerPro
     Optional<InfluencerProfile> findByUsername(String username);
 
     Optional<InfluencerProfile> findByEmail(String email);
+
 
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);

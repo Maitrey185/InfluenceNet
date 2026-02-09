@@ -33,5 +33,11 @@ public class InfluencerController {
         return ResponseEntity.ok(influencerProfileService.getAllProfiles());
     }
 
+    @GetMapping("/email/{id}")
+    public ResponseEntity<String> getEmailById(@PathVariable UUID id) throws Throwable {
+
+        return ResponseEntity.ok(influencerProfileService.getEmailById(id));
+    }
+
 
 }

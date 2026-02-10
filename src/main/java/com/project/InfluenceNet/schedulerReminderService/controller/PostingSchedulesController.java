@@ -1,10 +1,16 @@
 package com.project.InfluenceNet.schedulerReminderService.controller;
 
 import com.project.InfluenceNet.schedulerReminderService.dto.PostingScheduleDTO;
+import com.project.InfluenceNet.schedulerReminderService.entity.FrequencyType;
 import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
 import com.project.InfluenceNet.schedulerReminderService.service.PostingSchedulesService;
+import com.project.InfluenceNet.schedulerReminderService.service.ReminderScheduler;
+import com.project.InfluenceNet.schedulerReminderService.service.ReminderService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
@@ -18,32 +24,25 @@ import java.util.stream.Collectors;
 public class PostingSchedulesController {
 
     private final PostingSchedulesService postingSchedulesService;
+    private final ReminderScheduler reminderScheduler;
 
     @PostMapping("/create/{influencerId}/{platform}")
     public PostingScheduleDTO createReminder(
             @PathVariable UUID influencerId,
             @PathVariable Platform platform,
-            @RequestParam Set<String> schedules
-    ){
-        return postingSchedulesService.createReminder(influencerId, platform, parseSchedules(schedules));
-    }
-
-    @PatchMapping("/add/{influencerId}/{platform}")
-    public PostingScheduleDTO addSchedule(
-            @PathVariable UUID influencerId,
-            @PathVariable Platform platform,
-            @RequestParam String schedule
-    ){
-        return postingSchedulesService.addSchedule(influencerId, platform, parseSchedule(schedule));
-    }
-
-    @PatchMapping("/delete/{influencerId}/{platform}")
-    public PostingScheduleDTO deleteSchedule(
-            @PathVariable UUID influencerId,
-            @PathVariable Platform platform,
-            @RequestParam String schedule
-    ){
-        return postingSchedulesService.removeSchedule(influencerId, platform, parseSchedule(schedule));
+            @RequestParam FrequencyType frequencyType,
+            @RequestParam Integer frequencyValue,
+            @Parameter(
+                    description = "Start time",
+                    example = "09:00",
+                    schema = @Schema(
+                            type = "string",
+                            pattern = "^([01]\\d|2[0-3]):([0-5]\\d)$"
+                    )
+            )
+            @DateTimeFormat(pattern = "HH:mm") @RequestParam LocalTime startTime
+    ) {
+        return postingSchedulesService.createReminder(influencerId, platform, frequencyType, frequencyValue, startTime);
     }
 
     @PatchMapping("/update/{influencerId}/{platform}")
@@ -55,13 +54,6 @@ public class PostingSchedulesController {
         return postingSchedulesService.unpdateReminderStatus(influencerId, platform, reminderStatus);
     }
 
-    @DeleteMapping("/delete/{influencerId}/{platform}")
-    public void deletePostingSchedule(
-            @PathVariable UUID influencerId,
-            @PathVariable Platform platform
-    ){
-        postingSchedulesService.deletePostingSchedule(influencerId, platform);
-    }
 
     private Set<LocalTime> parseSchedules(Set<String> schedules) {
 
@@ -74,5 +66,9 @@ public class PostingSchedulesController {
         return LocalTime.parse(schedule);
     }
 
+    @PostMapping("/send-reminder")
+    private void sendReminder() {
+        reminderScheduler.checkPostingReminders();
+    }
 
 }

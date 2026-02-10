@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.schedulerReminderService.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
 import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
@@ -24,22 +25,28 @@ public class PostingScheduleDTO {
 
     @Enumerated(EnumType.STRING)
     private Platform platform;
-    private Set<LocalTime> schedules;
     private String content;
     private String reminderStatus;
     private Timestamp created_at;
     private Timestamp updated_at;
+    private String frequencyType;
+    private Integer frequencyValue;
+
+    @JsonFormat(pattern = "HH:mm")
+    private LocalTime startTime;
 
     public static PostingScheduleDTO mapToPostingScheduleDTO(PostingSchedules postingSchedules){
         return PostingScheduleDTO.builder()
                 .id(postingSchedules.getId())
                 .influencer_id(postingSchedules.getInfluencerId())
-                .schedules(postingSchedules.getSchedules())
                 .content(postingSchedules.getContent())
                 .platform(postingSchedules.getPlatform())
-                .reminderStatus(postingSchedules.getReminderStatus())
+                .reminderStatus(postingSchedules.getReminderStatus().name())
                 .created_at(postingSchedules.getCreated_at())
                 .updated_at(postingSchedules.getUpdated_at())
+                .frequencyType(postingSchedules.getFrequencyType().name())
+                .frequencyValue(postingSchedules.getFrequencyValue())
+                .startTime(postingSchedules.getStartTime())
                 .build();
     }
 }

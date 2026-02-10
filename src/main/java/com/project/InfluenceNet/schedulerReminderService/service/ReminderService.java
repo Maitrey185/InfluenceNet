@@ -2,8 +2,10 @@ package com.project.InfluenceNet.schedulerReminderService.service;
 
 import com.project.InfluenceNet.influencer.controller.InfluencerController;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
+import com.project.InfluenceNet.notificationService.event.NotificationEvent;
+import com.project.InfluenceNet.notificationService.event.Payload;
+import com.project.InfluenceNet.notificationService.event.PostRemiderPayload;
 import com.project.InfluenceNet.notificationService.model.NotificationType;
-import com.project.InfluenceNet.schedulerReminderService.entity.Payload;
 import com.project.InfluenceNet.schedulerReminderService.entity.PostReminderPayload;
 import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
 import lombok.RequiredArgsConstructor;
@@ -133,7 +135,7 @@ public class ReminderService {
 
         String email = influencerProfileService.getEmailById(ps.getInfluencerId());
 
-        Payload payload = PostReminderPayload.builder()
+         Payload payload = PostRemiderPayload.builder()
                 .email(email)
                 .build();
 

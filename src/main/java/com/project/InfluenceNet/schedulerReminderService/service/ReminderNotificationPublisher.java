@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.schedulerReminderService.service;
 
+import com.project.InfluenceNet.notificationService.event.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

@@ -2,12 +2,18 @@ package com.project.InfluenceNet.notificationService.event;
 
 import com.project.InfluenceNet.notificationService.model.NotificationType;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.util.UUID;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class NotificationEvent {
 
     private UUID userId;

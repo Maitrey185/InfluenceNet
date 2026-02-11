@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -13,7 +14,7 @@ import java.util.UUID;
 @Builder
 public class CollabPayload implements Payload{
 
-    private String collaboratorName;
+    private List<String> collaboratorName;
 
     private double score;
 

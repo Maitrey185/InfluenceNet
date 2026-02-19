@@ -4,6 +4,7 @@ import com.project.InfluenceNet.collaborationNeo4jService.dto.CoPostProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MentionIntentProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MutualEngagementProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
+import com.project.InfluenceNet.collaborationNeo4jService.service.CollabCalculateScheduler;
 import com.project.InfluenceNet.collaborationNeo4jService.service.CollaborationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class CollaborationController {
 
     private final CollaborationService service;
+    private final CollabCalculateScheduler collabCalculateScheduler;
 
     @PostMapping("/add-mention")
     public void addMention(UUID fromId, UUID toId){
@@ -78,5 +80,10 @@ public class CollaborationController {
     @GetMapping("/derive-recommendedCollaborators/{id}")
     public List<InfluencerNode> deriveRecommendedCollaborators(@PathVariable UUID id){
         return service.recommendedCollaborators(id);
+    }
+
+    @PostMapping("/call-scheduler")
+    public void generateDailyRecommendations(){
+        collabCalculateScheduler.generateDailyRecommendations();
     }
 }

@@ -25,6 +25,7 @@ public class InfluencerNode {
     private UUID id;
 
     private String name;
+    private String email;
     private String primaryPlatform;
     private String primaryNiche;
 

@@ -22,7 +22,7 @@ public class NotificationEventListener {
     private final ChannelFactory channelFactory;
     public static final String TOPIC_SEND_NOTIFICATION = "send.notification";
 
-    //    @KafkaListener(topics = TOPIC_SEND_NOTIFICATION)
+    @KafkaListener(topics = TOPIC_SEND_NOTIFICATION)
     public void handleSendNotification(NotificationEvent event){
         log.info("Received send notification event: {}", event);
 

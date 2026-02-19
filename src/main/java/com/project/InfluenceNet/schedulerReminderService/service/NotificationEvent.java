@@ -1,6 +1,7 @@
-package com.project.InfluenceNet.notificationService.event;
+package com.project.InfluenceNet.schedulerReminderService.service;
 
 import com.project.InfluenceNet.notificationService.model.NotificationType;
+import com.project.InfluenceNet.schedulerReminderService.entity.Payload;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

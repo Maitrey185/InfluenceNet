@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.event;
+package com.project.InfluenceNet.schedulerReminderService.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PostRemiderPayload implements Payload{
+public class PostReminderPayload implements Payload {
 
     private String email;
 

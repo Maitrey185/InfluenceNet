@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.project.InfluenceNet.influencer")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(InfluencerNotFoundException.class)

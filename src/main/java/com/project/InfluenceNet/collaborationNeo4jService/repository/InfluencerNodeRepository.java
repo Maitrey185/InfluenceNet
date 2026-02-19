@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.collaborationNeo4jService.repository;
 
 import com.project.InfluenceNet.collaborationNeo4jService.dto.CoPostProjection;
+import com.project.InfluenceNet.collaborationNeo4jService.dto.InfluencerNodeProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MentionIntentProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.MutualEngagementProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
@@ -136,12 +137,10 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
         MATCH (a:Influencer)-[:BELONGS_TO]->(n:Niche)<-[:BELONGS_TO]-(b:Influencer)
         OPTIONAL MATCH (a)-[c:CO_POSTED_WITH]->(b)
         OPTIONAL MATCH (a)-[m:MENTIONED]->(b)
-        OPTIONAL MATCH (a)-[t:TRUSTS]->(b)
         OPTIONAL MATCH (a)-[i:INTERESTED_IN]->(b)
         WITH a, b,
           coalesce(c.times, 0) * 2 +
           coalesce(m.count, 0) +
-          coalesce(t.sharedCollaborators, 0) * 3 +
           coalesce(i.score, 0) AS relationshipStrength,
           (1 - abs(a.engagementRate - b.engagementRate) / 10)        AS engagementSim,
           (1 - abs(a.growthRate30d - b.growthRate30d) / 20)          AS growthSim,
@@ -163,6 +162,7 @@ public interface InfluencerNodeRepository extends Neo4jRepository<InfluencerNode
         """)
     List<InfluencerNode> recommendCollaborators(UUID id);
 
+    List<InfluencerNodeProjection> findAllProjectedBy();
 
 
 }

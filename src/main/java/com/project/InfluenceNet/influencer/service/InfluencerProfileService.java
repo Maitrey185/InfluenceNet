@@ -33,6 +33,7 @@ public class InfluencerProfileService {
     private final InfluencerProfileRepository influencerProfileRepository;
     private final SocialAccountsRepository socialAccountRepository;
     private final UserRepository userRepository;
+    private final InfluencerNeo4jPublisher neo4jPublisher;
 
     @Transactional
     public InfluencerProfileResponse createProfile(InfluencerProfileRequest request) {
@@ -57,6 +58,10 @@ public class InfluencerProfileService {
 
         InfluencerProfile savedProfile = influencerProfileRepository.save(profile);
         log.info("Successfully created influencer profile with id: {}", savedProfile.getId());
+
+        InfluencerNeo4jEvent influencerNeo4jEvent = neo4jPublisher.createInfluencerNeo4jEvent(savedProfile);
+
+        neo4jPublisher.createInfluencerNeo4jPublish(influencerNeo4jEvent);
 
         return mapToResponse(savedProfile);
     }

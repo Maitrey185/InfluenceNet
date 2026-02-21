@@ -9,7 +9,11 @@ import com.project.InfluenceNet.socialConnector.events.InsightsfetchedEvent;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.DltHandler;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.RetryableTopic;
+import org.springframework.mail.MailAuthenticationException;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,6 +26,14 @@ public class NotificationEventListener {
     private final ChannelFactory channelFactory;
     public static final String TOPIC_SEND_NOTIFICATION = "send.notification";
 
+    @RetryableTopic(
+            attempts = "2",
+            backoff = @Backoff(delay = 2000),
+            autoCreateTopics = "true",
+            exclude = {
+        MailAuthenticationException.class}
+
+    )
     @KafkaListener(topics = TOPIC_SEND_NOTIFICATION)
     public void handleSendNotification(NotificationEvent event){
         log.info("Received send notification event: {}", event);
@@ -31,9 +43,15 @@ public class NotificationEventListener {
         NotificationRequest notificationRequest = notificationTemplate.build(event);
 
         for(NotificationPreference preference: notificationPreferenceRepository.findByIdUserIdAndIdEventType(event.getUserId(), event.getNotificationType().toString())){
-                System.out.println(preference);
                 channelFactory.get(preference.getChannel()).send(notificationRequest);
         }
 
+        log.info("Notification sent successfully");
+
+    }
+
+    @DltHandler
+    public void handleDlt(NotificationEvent event) {
+        log.info("Final failure. Sending to DLT: {}", event);
     }
 }

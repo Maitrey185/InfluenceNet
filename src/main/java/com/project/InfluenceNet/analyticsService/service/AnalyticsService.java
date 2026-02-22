@@ -5,6 +5,7 @@ import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjec
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
+import com.project.InfluenceNet.analyticsService.exception.PostNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
@@ -38,7 +39,7 @@ public class AnalyticsService {
     public void processRawInsight(RawInsights rawInsight) {
 
         RawPosts rawPost = rawPostsRepository.findById(rawInsight.getId())
-                .orElseThrow(() -> new RuntimeException("Post not found with id: " + rawInsight.getId()));
+                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + rawInsight.getId()));
 
 
 //        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());
@@ -77,7 +78,10 @@ public class AnalyticsService {
         pa.setSaves(newSaves);
         pa.setReach(newReach);
         pa.setViews(newViews);
-        pa.setEngagementRate((double)(newLikes+newComments+newShares+newSaves)/(double)newReach);
+        double engagementRate =
+                newReach == 0 ? 0.0 :
+                        (double)(newLikes+newComments+newShares+newSaves)/(double)newReach;
+        pa.setEngagementRate(engagementRate);
         pa.setUpdatedAt(LocalDateTime.now());
         postAnalyticsRepository.save(pa);
 
@@ -98,6 +102,9 @@ public class AnalyticsService {
                                                 LocalDate startDate,
                                                 LocalDate endDate,
                                                 int limit){
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
         return postAnalyticsRepository.fetchTopPostsInAPeriod(influencerId, platform.name(), startDate, endDate, limit);
     }
 

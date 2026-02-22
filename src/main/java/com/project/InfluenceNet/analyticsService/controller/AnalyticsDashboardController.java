@@ -7,6 +7,8 @@ import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
 import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
 import com.project.InfluenceNet.analyticsService.service.InfluencerKPIService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -28,47 +30,30 @@ public class AnalyticsDashboardController {
 
     @GetMapping("/analytics/dashboard")
     public ResponseEntity<OverviewDTO> getOverview(
-            @RequestParam UUID influencerId,
-            @RequestParam Platform platform,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(influencerKPIService.calculateOverview(influencerId, platform, startDate, endDate));
+            @Valid AnalyticsDateRangeRequest request) {
+        return ResponseEntity.ok(influencerKPIService.calculateOverview(request.influencerId(), request.platform(), request.startDate(), request.endDate()));
     }
 
     @GetMapping("/analytics/timeSeriesKpi")
     public ResponseEntity<List<InfluencerKPI>> getTimeSeriesKpis(
-            @RequestParam UUID influencerId,
-            @RequestParam Platform platform,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(influencerKPIService.getTimeSeriesKPIData(influencerId, platform, startDate, endDate));
+            @Valid AnalyticsDateRangeRequest request) {
+        return ResponseEntity.ok(influencerKPIService.getTimeSeriesKPIData(request.influencerId(), request.platform(), request.startDate(), request.endDate()));
     }
 
     @GetMapping("/analytics/topPosts")
     public ResponseEntity<List<TopPostProjection>> getTopPosts(
-            @RequestParam UUID influencerId,
-            @RequestParam Platform platform,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @Valid AnalyticsDateRangeRequest request,
             @RequestParam int limit) {
-        return ResponseEntity.ok(analyticsService.fetchTopPost(influencerId, platform, startDate, endDate, limit));
+        return ResponseEntity.ok(analyticsService.fetchTopPost(request.influencerId(), request.platform(), request.startDate(), request.endDate(), limit));
     }
 
     @GetMapping("/analytics/followersGrowth")
-    public ResponseEntity<List<FollowerGrowthDTO>> getFollowersGrowth(
-            @RequestParam UUID influencerId,
-            @RequestParam Platform platform,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(influencerKPIService.getFollowersGrowth(influencerId, platform, startDate, endDate));
+    public ResponseEntity<List<FollowerGrowthDTO>> getFollowersGrowth(@Valid AnalyticsDateRangeRequest request) {
+        return ResponseEntity.ok(influencerKPIService.getFollowersGrowth(request.influencerId(), request.platform(), request.startDate(), request.endDate()));
     }
 
     @GetMapping("/analytics/engagementHeatmapBestTimeToPost")
-    public ResponseEntity<BestPostingTimeHeatmapResponse> getEngagementHeatmapBestTimeToPost(
-            @RequestParam UUID influencerId,
-            @RequestParam Platform platform,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return ResponseEntity.ok(engagementHeatmapService.getBestPostingTimeHeatmap(influencerId, platform, startDate, endDate));
+    public ResponseEntity<BestPostingTimeHeatmapResponse> getEngagementHeatmapBestTimeToPost(@Valid AnalyticsDateRangeRequest request) {
+        return ResponseEntity.ok(engagementHeatmapService.getBestPostingTimeHeatmap(request.influencerId(), request.platform(), request.startDate(), request.endDate()));
     }
 }

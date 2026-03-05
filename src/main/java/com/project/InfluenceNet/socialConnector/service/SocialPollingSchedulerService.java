@@ -3,7 +3,9 @@ package com.project.InfluenceNet.socialConnector.service;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.socialConnector.exception.InstagramConnectorException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SocialPollingSchedulerService {
 
     private final SocialAccountService socialAccountService;
@@ -26,8 +29,41 @@ public class SocialPollingSchedulerService {
         List<SocialAccountResponse> accounts = getAllInstagramAccounts();
 
         for (SocialAccountResponse account : accounts) {
-            instagramConnectorOrchestrator.syncInstagramProfile(account);
-            instagramConnectorOrchestrator.syncInstagramMedia(account);
+            try {
+                instagramConnectorOrchestrator.syncInstagramProfile(account);
+            } catch (InstagramConnectorException ex) {
+                log.error("Scheduled Instagram profile sync failed. influencerId={}, platformUserId={}, errorCode={}, status={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getErrorCode(),
+                        ex.getStatus(),
+                        ex.getMessage(),
+                        ex);
+            } catch (Exception ex) {
+                log.error("Scheduled Instagram profile sync failed (unexpected). influencerId={}, platformUserId={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getMessage(),
+                        ex);
+            }
+
+            try {
+                instagramConnectorOrchestrator.syncInstagramMedia(account);
+            } catch (InstagramConnectorException ex) {
+                log.error("Scheduled Instagram media sync failed. influencerId={}, platformUserId={}, errorCode={}, status={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getErrorCode(),
+                        ex.getStatus(),
+                        ex.getMessage(),
+                        ex);
+            } catch (Exception ex) {
+                log.error("Scheduled Instagram media sync failed (unexpected). influencerId={}, platformUserId={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getMessage(),
+                        ex);
+            }
         }
     }
 
@@ -38,7 +74,23 @@ public class SocialPollingSchedulerService {
         List<SocialAccountResponse> accounts = getAllInstagramAccounts();
 
         for (SocialAccountResponse account : accounts) {
-            instagramConnectorOrchestrator.syncInstagramInsights(account);
+            try {
+                instagramConnectorOrchestrator.syncInstagramInsights(account);
+            } catch (InstagramConnectorException ex) {
+                log.error("Scheduled Instagram insights sync failed. influencerId={}, platformUserId={}, errorCode={}, status={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getErrorCode(),
+                        ex.getStatus(),
+                        ex.getMessage(),
+                        ex);
+            } catch (Exception ex) {
+                log.error("Scheduled Instagram insights sync failed (unexpected). influencerId={}, platformUserId={} message={}",
+                        account.getInfluencerId(),
+                        account.getPlatformUserId(),
+                        ex.getMessage(),
+                        ex);
+            }
         }
     }
 

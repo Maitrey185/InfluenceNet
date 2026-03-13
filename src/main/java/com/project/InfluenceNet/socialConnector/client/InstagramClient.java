@@ -1,13 +1,18 @@
 package com.project.InfluenceNet.socialConnector.client;
 
+import com.project.InfluenceNet.socialConnector.exception.InstagramApiException;
+import com.project.InfluenceNet.socialConnector.exception.InstagramResponseMappingException;
 import com.project.InfluenceNet.socialConnector.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -41,16 +46,48 @@ public class InstagramClient {
                 "website"
         );
 
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v24.0/{userId}")
-                        .queryParam("fields", fields)
-                        .queryParam("access_token", "dummy")
-                        .build("dummy")
-                )
-                .retrieve()
-                .bodyToMono(InstagramProfileDTO.class)
-                .block();
+        try {
+            return webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v24.0/{userId}")
+                            .queryParam("fields", fields)
+                            .queryParam("access_token", "dummy")
+                            .build("dummy")
+                    )
+                    .retrieve()
+                    .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(String.class)
+                                    .defaultIfEmpty("")
+                                    .flatMap(errorBody -> {
+                                        log.error("Error fetching Instagram profile: {}", errorBody);
+                                        return Mono.error(new InstagramApiException(
+                                                HttpStatus.valueOf(clientResponse.statusCode().value()),
+                                                "INSTAGRAM_PROFILE_API_ERROR",
+                                                "Failed to fetch Instagram profile",
+                                                errorBody
+                                        ));
+                                    }))
+                    .bodyToMono(InstagramProfileDTO.class)
+                    .block();
+        } catch (WebClientResponseException e) {
+            throw new InstagramApiException(
+                    HttpStatus.valueOf(e.getStatusCode().value()),
+                    "INSTAGRAM_PROFILE_API_ERROR",
+                    "Failed to fetch Instagram profile",
+                    e.getResponseBodyAsString(),
+                    e
+            );
+        } catch (WebClientRequestException e) {
+            throw new InstagramApiException(
+                    HttpStatus.BAD_GATEWAY,
+                    "INSTAGRAM_PROFILE_NETWORK_ERROR",
+                    "Instagram profile request failed",
+                    null,
+                    e
+            );
+        } catch (Exception e) {
+            throw new InstagramResponseMappingException("Failed to decode Instagram profile response", e);
+        }
 
     }
 
@@ -69,19 +106,62 @@ public class InstagramClient {
                 "comments_count"
         );
 
-        Map<String, Object> response =  webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/v24.0/{userId}/media")
-                        .queryParam("fields", fields)
-                        .queryParam("access_token", "dummy")
-                        .build("dummy")
-                )
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
-                .block();
+        try {
+            Map<String, Object> response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/v24.0/{userId}/media")
+                            .queryParam("fields", fields)
+                            .queryParam("access_token", "dummy")
+                            .build("dummy")
+                    )
+                    .retrieve()
+                    .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                            clientResponse -> clientResponse.bodyToMono(String.class)
+                                    .defaultIfEmpty("")
+                                    .flatMap(errorBody -> {
+                                        log.error("Error fetching Instagram media: {}", errorBody);
+                                        return Mono.error(new InstagramApiException(
+                                                HttpStatus.valueOf(clientResponse.statusCode().value()),
+                                                "INSTAGRAM_MEDIA_API_ERROR",
+                                                "Failed to fetch Instagram media",
+                                                errorBody
+                                        ));
+                                    }))
+                    .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {
+                    })
+                    .block();
 
+            if (response == null || !response.containsKey("data") || response.get("data") == null) {
+                throw new InstagramResponseMappingException("Instagram media response missing 'data'");
+            }
 
-        return mapToInstagramRecentPostsDTO((List<Map<String, Object>>)response.get("data"));
+            Object data = response.get("data");
+            if (!(data instanceof List<?>)) {
+                throw new InstagramResponseMappingException("Instagram media response 'data' is not a list");
+            }
+
+            return mapToInstagramRecentPostsDTO((List<Map<String, Object>>) data);
+        } catch (InstagramApiException | InstagramResponseMappingException e) {
+            throw e;
+        } catch (WebClientResponseException e) {
+            throw new InstagramApiException(
+                    HttpStatus.valueOf(e.getStatusCode().value()),
+                    "INSTAGRAM_MEDIA_API_ERROR",
+                    "Failed to fetch Instagram media",
+                    e.getResponseBodyAsString(),
+                    e
+            );
+        } catch (WebClientRequestException e) {
+            throw new InstagramApiException(
+                    HttpStatus.BAD_GATEWAY,
+                    "INSTAGRAM_MEDIA_NETWORK_ERROR",
+                    "Instagram media request failed",
+                    null,
+                    e
+            );
+        } catch (Exception e) {
+            throw new InstagramResponseMappingException("Failed to decode Instagram media response", e);
+        }
     }
 
     public List<InstagramRecentPostsDTO> mapToInstagramRecentPostsDTO(List<Map<String, Object>> response) {
@@ -124,7 +204,12 @@ public class InstagramClient {
                             clientResponse -> clientResponse.bodyToMono(String.class)
                                     .flatMap(errorBody -> {
                                         log.error("Error fetching Instagram insights: {}", errorBody);
-                                        return Mono.error(new RuntimeException("Failed to fetch Instagram insights: " + errorBody));
+                                        return Mono.error(new InstagramApiException(
+                                                HttpStatus.valueOf(clientResponse.statusCode().value()),
+                                                "INSTAGRAM_INSIGHTS_API_ERROR",
+                                                "Failed to fetch Instagram insights",
+                                                errorBody
+                                        ));
                                     }))
                     .bodyToMono(new ParameterizedTypeReference<Map<String, Object>>() {})
                     .block();
@@ -132,9 +217,27 @@ public class InstagramClient {
             log.info("Instagram insights API response: {}", response);
             return mapToMediaInsightsDTO(mediaId, response);
 //            return mapToMediaInsightsResponse(response);
+        } catch (InstagramApiException e) {
+            throw e;
+        } catch (WebClientResponseException e) {
+            throw new InstagramApiException(
+                    HttpStatus.valueOf(e.getStatusCode().value()),
+                    "INSTAGRAM_INSIGHTS_API_ERROR",
+                    "Failed to fetch Instagram insights",
+                    e.getResponseBodyAsString(),
+                    e
+            );
+        } catch (WebClientRequestException e) {
+            throw new InstagramApiException(
+                    HttpStatus.BAD_GATEWAY,
+                    "INSTAGRAM_INSIGHTS_NETWORK_ERROR",
+                    "Instagram insights request failed",
+                    null,
+                    e
+            );
         } catch (Exception e) {
             log.error("Exception while fetching Instagram insights", e);
-            throw new RuntimeException("Failed to fetch Instagram insights", e);
+            throw new InstagramResponseMappingException("Failed to decode Instagram insights response", e);
         }
     }
 

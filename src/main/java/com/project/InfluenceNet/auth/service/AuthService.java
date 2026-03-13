@@ -40,13 +40,19 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        log.debug("Loading user by username={}", username);
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> {
+                    log.warn("User not found for username={}", username);
+                    return new UsernameNotFoundException("User not found");
+                });
     }
 
     public User registerUser(RegisterRequest registerRequest) {
+        log.info("Registering new user username={} email={} role={}", registerRequest.getUsername(), registerRequest.getEmail(), registerRequest.getRole());
         userRepository.findByUsername(registerRequest.getUsername())
                 .ifPresent(user -> {
+                    log.warn("Registration rejected: user already exists username={}", registerRequest.getUsername());
                     throw new IllegalArgumentException("User already exists");
                 });
 
@@ -60,6 +66,7 @@ public class AuthService implements UserDetailsService {
                 .updatedAt(LocalDateTime.now())
                 .build();
         userRepository.save(user);
+        log.info("User registration persisted username={} userId={}", user.getUsername(), user.getId());
         return user;
     }
 

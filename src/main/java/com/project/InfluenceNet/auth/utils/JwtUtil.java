@@ -27,6 +27,7 @@ public class JwtUtil {
     }
     
     public String generateToken(String username, long validityInMilliseconds) {
+        log.debug("Generating JWT for username={} validityMs={}", username, validityInMilliseconds);
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + validityInMilliseconds);
         
@@ -58,6 +59,7 @@ public class JwtUtil {
     private io.jsonwebtoken.Claims getClaimsFromToken(String token) {
         try {
             if (token == null || token.isEmpty()) {
+                log.debug("JWT parsing failed: token was null/empty");
                 throw new RuntimeException("Token is null or empty");
             }
             
@@ -68,14 +70,19 @@ public class JwtUtil {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (io.jsonwebtoken.ExpiredJwtException ex) {
+            log.debug("JWT parsing failed: token expired");
             throw new RuntimeException("JWT token has expired", ex);
         } catch (io.jsonwebtoken.MalformedJwtException ex) {
+            log.debug("JWT parsing failed: malformed token");
             throw new RuntimeException("Invalid JWT token", ex);
         } catch (io.jsonwebtoken.UnsupportedJwtException ex) {
+            log.debug("JWT parsing failed: unsupported token");
             throw new RuntimeException("Unsupported JWT token", ex);
         } catch (io.jsonwebtoken.security.SignatureException ex) {
+            log.debug("JWT parsing failed: signature mismatch");
             throw new RuntimeException("JWT signature does not match", ex);
         } catch (Exception ex) {
+            log.debug("JWT parsing failed: {}", ex.getClass().getSimpleName());
             throw new RuntimeException("Error processing JWT token: " + ex.getMessage(), ex);
         }
     }

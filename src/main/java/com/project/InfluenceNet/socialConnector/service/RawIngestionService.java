@@ -7,6 +7,7 @@ import com.project.InfluenceNet.socialConnector.documents.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
 import com.project.InfluenceNet.socialConnector.events.PostAndInsightFetchedEventPublisher;
+import com.project.InfluenceNet.socialConnector.exception.SocialIngestionException;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +43,10 @@ public class RawIngestionService {
                         .build();
                 rawPostsRepository.save(rawPosts);
                 postAndInsightFetchedEventPublisher.publishPostFetchedEvent(rawPosts);
+            } catch (IllegalArgumentException e) {
+                throw new SocialIngestionException("Unsupported/invalid post type from Instagram: " + post.getMedia_type(), e);
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new SocialIngestionException("Failed to ingest raw Instagram post with id: " + post.getId(), e);
             }
 
         });
@@ -68,7 +71,7 @@ public class RawIngestionService {
             rawInsightsRepository.save(rawInsights);
             postAndInsightFetchedEventPublisher.publishInsightsFetchedEvent(rawInsights);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new SocialIngestionException("Failed to ingest raw Instagram insights for post id: " + postId, e);
         }
     }
 }

@@ -6,13 +6,15 @@ import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
+import com.project.InfluenceNet.analyticsService.exception.AnalyticsDataNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.InfluencerKPIRepository;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
 import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
-import com.project.InfluenceNet.influencer.exception.InfluencerNotFoundException;
+import com.project.InfluenceNet.analyticsService.exception.InfluencerNotFoundException;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.ast.tree.expression.Over;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ import static java.lang.Long.getLong;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InfluencerKPIService {
 
     private final InfluencerKPIRepository influencerKPIRepository;
@@ -41,17 +44,12 @@ public class InfluencerKPIService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Transactional
-    public void calculateAndStoreKPIs(int newPost, UUID influencerId, Platform platform, LocalDate fetchedAt, int likesDiff, int commentsDiff, int sharesDiff, int savesDiff, int reachDiff, int viewsDiff) {
+    public void calculateAndStoreKPIs(int newPost, UUID influencerId, Platform platform, LocalDate fetchedAt, int likesDiff, int commentsDiff, int sharesDiff, int savesDiff, int reachDiff, int viewsDiff) throws InfluencerNotFoundException {
         // Use the provided fetchedAt date instead of LocalDate.now()
         LocalDate kpiDate = fetchedAt != null ? fetchedAt : LocalDate.now();
         InfluencerProfileResponse influencerProfile;
 
-        try{
-            influencerProfile = influencerProfileService.getProfile(influencerId);
-        }
-        catch(Throwable e) {
-            throw new RuntimeException(e);
-        }
+        influencerProfile = influencerProfileService.getProfile(influencerId);
         // Get the influencer profile to update follower count
 
         // Find existing KPI or create a new one
@@ -78,6 +76,9 @@ public class InfluencerKPIService {
     }
 
     private double calculateEngagementRate(int likes, int comments, int shares, int saves, int followers) {
+        if(followers == 0) {
+            return 0;
+        }
         return (double) (likes + comments + shares + saves) / followers;
     }
 
@@ -86,19 +87,33 @@ public class InfluencerKPIService {
                                          LocalDate startDate,
                                          LocalDate endDate) {
 
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+
         String cacheKey = buildCacheKey(influencerId, platform, startDate, endDate, "overview");
 
-        Object overviewDTO = redisTemplate.opsForValue().get(cacheKey);
-
-        if(overviewDTO!=null){ // cache hit
-            return objectMapper.convertValue(overviewDTO, OverviewDTO.class);
+        try{
+            Object overviewDTO = redisTemplate.opsForValue().get(cacheKey);
+            if(overviewDTO!=null){ // cache hit
+                return objectMapper.convertValue(overviewDTO, OverviewDTO.class);
+            }
+        }catch (Exception e){
+            log.warn("Redis unavailable, fallback to DB");
         }
 
         OverviewAggProjection agg = influencerKPIRepository.aggregateWindow(influencerId, platform, startDate, endDate);
 
+        if (agg == null) {
+            throw new AnalyticsDataNotFoundException("No analytics data found for influencerId: " + influencerId + " and platform: " + platform.name());
+        }
 
         FollowerGrowthProjection followersB = influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), startDate);
         FollowerGrowthProjection followersA= influencerKPIRepository.findLatestFollowersBeforeOrOnDate(influencerId, platform.name(), endDate);
+
+        if (followersB == null||followersA==null) {
+            throw new AnalyticsDataNotFoundException("No. of followers data not found for influencerId: " + influencerId + " and platform: " + platform.name());
+        }
 
         long followersBefore = followersB.getFollowerCount();
         long followersAfter = followersA.getFollowerCount();
@@ -109,7 +124,7 @@ public class InfluencerKPIService {
             followersAfter = 0L;
         }
         Long followersGained = followersAfter - followersBefore;
-        double avgEngagementRate = calculateEngagementRate(agg.getTotalLikes().intValue(),agg.getTotalComments().intValue(),agg.getTotalSaves().intValue(),agg.getTotalSaves().intValue(),followersGained.intValue());
+        double avgEngagementRate = calculateEngagementRate(agg.getTotalLikes().intValue(),agg.getTotalComments().intValue(),agg.getTotalShares().intValue(),agg.getTotalSaves().intValue(),followersGained.intValue());
         OverviewDTO dto = OverviewDTO.builder()
                 .totalPosts(agg.getTotalPosts())
                 .totalLikes(agg.getTotalLikes())
@@ -137,6 +152,10 @@ public class InfluencerKPIService {
                                                     Platform platform,
                                                     LocalDate startDate,
                                                     LocalDate endDate){
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
+
         return influencerKPIRepository.findByInfluencerIdAndPlatformAndKpiDateBetween(influencerId, platform, startDate, endDate);
     }
 
@@ -144,6 +163,10 @@ public class InfluencerKPIService {
                                                              Platform platform,
                                                              LocalDate startDate,
                                                              LocalDate endDate){
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("Start date cannot be after end date");
+        }
 
         String cacheKey = buildCacheKey(influencerId, platform, startDate, endDate, "followersGrowth");
 

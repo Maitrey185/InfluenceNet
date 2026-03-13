@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.1"
+    id("org.springframework.boot") version "3.3.5"
     id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -27,11 +27,12 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	implementation("org.springframework.boot:spring-boot-starter-data-neo4j")
     implementation("org.springframework.boot:spring-boot-starter-mail")
-//	implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("org.springframework.boot:spring-boot-starter-security")
+
+    implementation("org.springframework:spring-webflux")
 
     implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
@@ -48,33 +49,16 @@ dependencies {
     // PostgreSQL Driver
     runtimeOnly("org.postgresql:postgresql")
 
-    // Flyway for database migrations
-//	implementation("org.flywaydb:flyway-core")
-//	implementation("org.flywaydb:flyway-database-postgresql")
-//
-//	// Redis Lettuce (default for Spring Data Redis)
-//	implementation("io.lettuce:lettuce-core")
-//
     // JSON Processing
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
-    // Lombok (optional but recommended)
+    // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
-    // Micrometer for metrics (Prometheus)
-//	implementation("io.micrometer:micrometer-registry-prometheus")
-//	implementation("io.micrometer:micrometer-tracing-bridge-brave")
-//
-//	// Zipkin for distributed tracing
-//	implementation("io.zipkin.reporter2:zipkin-reporter-brave")
-//
-//	// AWS SDK for S3 (MinIO compatible)
-//	implementation("software.amazon.awssdk:s3:2.20.26")
-
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    // Swagger
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 
     // Apache Commons
     implementation("org.apache.commons:commons-lang3")

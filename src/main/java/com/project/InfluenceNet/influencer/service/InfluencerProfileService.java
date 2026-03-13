@@ -67,7 +67,7 @@ public class InfluencerProfileService {
     }
 
     @Transactional(readOnly = true)
-    public InfluencerProfileResponse getProfile(UUID id) throws Throwable {
+    public InfluencerProfileResponse getProfile(UUID id) throws InfluencerNotFoundException {
         log.info("Fetching influencer profile with id: {}", id);
         InfluencerProfile profile = influencerProfileRepository.findById(id)
                 .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + id));

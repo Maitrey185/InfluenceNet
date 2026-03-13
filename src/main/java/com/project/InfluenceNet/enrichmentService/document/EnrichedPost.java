@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,17 +21,17 @@ import java.util.UUID;
 public class EnrichedPost {
 
     @Id
-    @Column(name = "post_id")
+    @Field(name = "post_id")
     private String postId;
 
-    @Column(name = "influencer_id")
+    @Field(name = "influencer_id")
     private UUID influencerId;
 
     private Platform platform;
 
     private Enrichments enrichments;
 
-    @Column(name = "enriched_at")
+    @Field(name = "enriched_at")
     private Instant enrichedAt;
 
     @Data

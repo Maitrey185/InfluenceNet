@@ -44,21 +44,34 @@ public class AuthController {
     @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
+        log.info("Auth register request received for username={}", registerRequest.getUsername());
         registerRequest.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        return ResponseEntity.ok(authService.registerUser(registerRequest));
+        User user = authService.registerUser(registerRequest);
+        log.info("Auth register succeeded for username={} userId={}", user.getUsername(), user.getId());
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> generateToken(@Valid @RequestBody LoginRequest loginRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
-        );
+        log.info("Auth login attempt for username={}", loginRequest.getUsername());
+
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
+        } catch (Exception ex) {
+            log.warn("Auth login failed for username={}: {}", loginRequest.getUsername(), ex.getClass().getSimpleName());
+            throw ex;
+        }
 
         if (authentication.isAuthenticated()) {
             // Generate token if authentication successful
+            log.info("Auth login succeeded for username={}", loginRequest.getUsername());
             return ResponseEntity.ok(jwtUtil.generateToken(loginRequest.getUsername(), 15));
         } else {
+            log.warn("Auth login rejected (not authenticated) for username={}", loginRequest.getUsername());
             throw new RuntimeException("Invalid credentials");
         }
 //        return ResponseEntity.ok(authService.login(loginRequest.getUsername(), loginRequest.getPassword()));

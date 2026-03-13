@@ -12,4 +12,6 @@ import java.util.UUID;
 public interface PostingSchedulesRepository extends JpaRepository<PostingSchedules, UUID> {
 
     PostingSchedules findByInfluencerIdAndPlatform(UUID influencerId, Platform platform);
+
+    Boolean existsByInfluencerIdAndPlatform(UUID influencerId, Platform platform);
 }

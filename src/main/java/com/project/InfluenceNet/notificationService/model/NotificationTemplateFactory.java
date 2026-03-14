@@ -22,7 +22,7 @@ public class NotificationTemplateFactory {
     }
 
 
-    public NotificationTemplate get(NotificationType notificationType) throws InvalidParameterException{
+    public NotificationTemplate get(com.project.InfluenceNet.contracts.notification.NotificationType notificationType) throws InvalidParameterException{
         return templateMap.get(notificationType.toString());
     }
 }

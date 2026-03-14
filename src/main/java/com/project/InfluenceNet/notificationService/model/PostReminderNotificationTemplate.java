@@ -1,8 +1,7 @@
 package com.project.InfluenceNet.notificationService.model;
 
-import com.project.InfluenceNet.notificationService.event.CollabPayload;
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
-import com.project.InfluenceNet.notificationService.event.PostRemiderPayload;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.PostReminderPayload;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +13,7 @@ public class PostReminderNotificationTemplate extends NotificationTemplate{
 
     @Override
     public NotificationRequest render(NotificationEvent notificationEvent) {
-        PostRemiderPayload p = (PostRemiderPayload) notificationEvent.getPayload();
+        PostReminderPayload p = (PostReminderPayload) notificationEvent.getPayload();
 
         return NotificationRequest.builder()
                 .userId(notificationEvent.getUserId())

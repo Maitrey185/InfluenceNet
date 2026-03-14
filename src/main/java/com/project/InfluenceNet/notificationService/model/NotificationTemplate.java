@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.notificationService.model;
 
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import org.springframework.stereotype.Component;
 
 @Component

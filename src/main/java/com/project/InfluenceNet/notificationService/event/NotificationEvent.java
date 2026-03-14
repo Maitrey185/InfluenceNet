@@ -1,7 +1,6 @@
 package com.project.InfluenceNet.notificationService.event;
 
-import com.project.InfluenceNet.notificationService.model.NotificationType;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.notification.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +16,7 @@ import java.util.UUID;
 public class NotificationEvent {
 
     private UUID userId;
-    private Platform platform;
+    private String platform;
     private NotificationType notificationType;
     private Instant timestamp;
     private Payload payload;

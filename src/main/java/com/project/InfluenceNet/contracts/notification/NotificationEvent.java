@@ -1,7 +1,5 @@
-package com.project.InfluenceNet.schedulerReminderService.service;
+package com.project.InfluenceNet.contracts.notification;
 
-import com.project.InfluenceNet.contracts.notification.NotificationType;
-import com.project.InfluenceNet.contracts.notification.Payload;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +15,13 @@ import java.util.UUID;
 public class NotificationEvent {
 
     private UUID userId;
+
     private String platform;
+
     private NotificationType notificationType;
+
     private Instant timestamp;
+
     private Payload payload;
+
 }

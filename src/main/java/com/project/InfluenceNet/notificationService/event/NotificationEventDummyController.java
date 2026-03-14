@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.notificationService.event;
 
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

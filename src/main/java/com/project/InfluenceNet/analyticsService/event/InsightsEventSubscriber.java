@@ -3,7 +3,6 @@ package com.project.InfluenceNet.analyticsService.event;
 import com.project.InfluenceNet.analyticsService.exception.PostInsightNotFoundException;
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
 import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
 import com.project.InfluenceNet.socialConnector.documents.RawInsights;
 import com.project.InfluenceNet.socialConnector.events.InsightsfetchedEvent;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;

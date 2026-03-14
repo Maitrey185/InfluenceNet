@@ -4,11 +4,10 @@ import com.project.InfluenceNet.collaborationNeo4jService.dto.InfluencerNodeProj
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 import com.project.InfluenceNet.collaborationNeo4jService.repository.InfluencerNodeRepository;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
-import com.project.InfluenceNet.notificationService.event.CollabPayload;
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
-import com.project.InfluenceNet.notificationService.event.Payload;
-import com.project.InfluenceNet.notificationService.event.PostRemiderPayload;
-import com.project.InfluenceNet.notificationService.model.NotificationType;
+import com.project.InfluenceNet.contracts.notification.CollabPayload;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.Payload;
+import com.project.InfluenceNet.contracts.notification.NotificationType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;

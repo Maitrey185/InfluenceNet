@@ -1,12 +1,8 @@
 package com.project.InfluenceNet.notificationService.event;
 
-import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
-import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import com.project.InfluenceNet.notificationService.NotificationPreferenceRepository;
 import com.project.InfluenceNet.notificationService.model.*;
-import com.project.InfluenceNet.socialConnector.documents.RawInsights;
-import com.project.InfluenceNet.socialConnector.events.InsightsfetchedEvent;
-import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;

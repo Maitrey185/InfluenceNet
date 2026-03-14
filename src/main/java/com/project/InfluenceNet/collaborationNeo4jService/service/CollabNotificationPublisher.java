@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.collaborationNeo4jService.service;
 
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

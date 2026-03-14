@@ -2,11 +2,10 @@ package com.project.InfluenceNet.schedulerReminderService.service;
 
 import com.project.InfluenceNet.influencer.controller.InfluencerController;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
-import com.project.InfluenceNet.notificationService.event.NotificationEvent;
-import com.project.InfluenceNet.notificationService.event.Payload;
-import com.project.InfluenceNet.notificationService.event.PostRemiderPayload;
-import com.project.InfluenceNet.notificationService.model.NotificationType;
-import com.project.InfluenceNet.schedulerReminderService.entity.PostReminderPayload;
+import com.project.InfluenceNet.contracts.notification.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.Payload;
+import com.project.InfluenceNet.contracts.notification.PostReminderPayload;
+import com.project.InfluenceNet.contracts.notification.NotificationType;
 import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -135,14 +134,14 @@ public class ReminderService {
 
         String email = influencerProfileService.getEmailById(ps.getInfluencerId());
 
-         Payload payload = PostRemiderPayload.builder()
+         Payload payload = PostReminderPayload.builder()
                 .email(email)
                 .build();
 
 
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .userId(ps.getInfluencerId())
-                .platform(ps.getPlatform())
+                .platform(ps.getPlatform().name())
                 .notificationType(NotificationType.POST_REMINDER)
                 .timestamp(Instant.now())
                 .payload(payload)

@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.config;
+package com.project.InfluenceNet.notificationservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

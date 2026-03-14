@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
 import org.springframework.stereotype.Component;
 
@@ -28,4 +28,3 @@ public class ChannelFactory {
         return channel;
     }
 }
-

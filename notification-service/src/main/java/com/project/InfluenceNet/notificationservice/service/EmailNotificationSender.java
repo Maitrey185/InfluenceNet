@@ -1,7 +1,6 @@
-package com.project.InfluenceNet.notificationService.service;
+package com.project.InfluenceNet.notificationservice.service;
 
-import com.project.InfluenceNet.notificationService.model.NotificationRequest;
-import com.project.InfluenceNet.notificationService.model.NotificationTemplate;
+import com.project.InfluenceNet.notificationservice.model.NotificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

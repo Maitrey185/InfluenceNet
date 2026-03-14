@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
 import lombok.Builder;
 import lombok.Data;

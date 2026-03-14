@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.event;
+package com.project.InfluenceNet.notificationservice.event;
 
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import lombok.RequiredArgsConstructor;

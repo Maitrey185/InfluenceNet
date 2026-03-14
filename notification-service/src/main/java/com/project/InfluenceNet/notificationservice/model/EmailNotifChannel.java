@@ -1,6 +1,6 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
-import com.project.InfluenceNet.notificationService.service.EmailNotificationSender;
+import com.project.InfluenceNet.notificationservice.service.EmailNotificationSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;

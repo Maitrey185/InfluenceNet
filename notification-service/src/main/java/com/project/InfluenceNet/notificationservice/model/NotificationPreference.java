@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;

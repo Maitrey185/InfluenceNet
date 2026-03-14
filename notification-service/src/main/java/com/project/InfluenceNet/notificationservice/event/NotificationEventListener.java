@@ -1,8 +1,8 @@
-package com.project.InfluenceNet.notificationService.event;
+package com.project.InfluenceNet.notificationservice.event;
 
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;
-import com.project.InfluenceNet.notificationService.NotificationPreferenceRepository;
-import com.project.InfluenceNet.notificationService.model.*;
+import com.project.InfluenceNet.notificationservice.NotificationPreferenceRepository;
+import com.project.InfluenceNet.notificationservice.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;
@@ -27,7 +27,7 @@ public class NotificationEventListener {
             backoff = @Backoff(delay = 2000),
             autoCreateTopics = "true",
             exclude = {
-        MailAuthenticationException.class}
+                    MailAuthenticationException.class}
 
     )
     @KafkaListener(topics = TOPIC_SEND_NOTIFICATION)
@@ -39,7 +39,7 @@ public class NotificationEventListener {
         NotificationRequest notificationRequest = notificationTemplate.build(event);
 
         for(NotificationPreference preference: notificationPreferenceRepository.findByIdUserIdAndIdEventType(event.getUserId(), event.getNotificationType().toString())){
-                channelFactory.get(preference.getChannel()).send(notificationRequest);
+            channelFactory.get(preference.getChannel()).send(notificationRequest);
         }
 
         log.info("Notification sent successfully");

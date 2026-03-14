@@ -1,5 +1,6 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
+import com.project.InfluenceNet.contracts.notification.NotificationType;
 import org.springframework.stereotype.Component;
 
 import java.security.InvalidParameterException;
@@ -22,7 +23,7 @@ public class NotificationTemplateFactory {
     }
 
 
-    public NotificationTemplate get(com.project.InfluenceNet.contracts.notification.NotificationType notificationType) throws InvalidParameterException{
+    public NotificationTemplate get(NotificationType notificationType) throws InvalidParameterException{
         return templateMap.get(notificationType.toString());
     }
 }

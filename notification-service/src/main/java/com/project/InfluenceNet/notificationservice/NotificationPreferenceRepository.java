@@ -1,7 +1,7 @@
-package com.project.InfluenceNet.notificationService;
+package com.project.InfluenceNet.notificationservice;
 
-import com.project.InfluenceNet.notificationService.model.NotificationPreference;
-import com.project.InfluenceNet.notificationService.model.NotificationPreferenceId;
+import com.project.InfluenceNet.notificationservice.model.NotificationPreference;
+import com.project.InfluenceNet.notificationservice.model.NotificationPreferenceId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.notificationService.model;
+package com.project.InfluenceNet.notificationservice.model;
 
 import com.project.InfluenceNet.contracts.notification.CollabPayload;
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;

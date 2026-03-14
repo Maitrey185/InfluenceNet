@@ -40,6 +40,7 @@ dependencies {
     // Kafka
 	implementation("org.springframework.kafka:spring-kafka")
 
+    implementation(project(":notification-contract"))
 
     // Apache Tika for language detection and content analysis
     implementation("org.apache.tika:tika-core:2.9.0")
@@ -52,6 +53,7 @@ dependencies {
     // JSON Processing
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 
     // Lombok
     compileOnly("org.projectlombok:lombok")
@@ -75,4 +77,13 @@ dependencies {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        java {
+            exclude("com/project/InfluenceNet/contracts/notification/**")
+            exclude("com/project/InfluenceNet/notificationService/**")
+        }
+    }
 }

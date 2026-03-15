@@ -1,12 +1,12 @@
-package com.project.InfluenceNet.schedulerReminderService.controller;
+package com.project.InfluenceNet.schedulerreminderservice.controller;
 
-import com.project.InfluenceNet.schedulerReminderService.dto.PostingScheduleDTO;
-import com.project.InfluenceNet.schedulerReminderService.entity.FrequencyType;
-import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
-import com.project.InfluenceNet.schedulerReminderService.service.PostingSchedulesService;
-import com.project.InfluenceNet.schedulerReminderService.service.ReminderScheduler;
-import com.project.InfluenceNet.schedulerReminderService.service.ReminderService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+
+import com.project.InfluenceNet.schedulerreminderservice.dto.PostingScheduleDTO;
+import com.project.InfluenceNet.schedulerreminderservice.entity.FrequencyType;
+import com.project.InfluenceNet.schedulerreminderservice.entity.ReminderStatus;
+import com.project.InfluenceNet.schedulerreminderservice.service.PostingSchedulesService;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.service.ReminderScheduler;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +28,7 @@ public class PostingSchedulesController {
     public PostingScheduleDTO createReminder(
             @PathVariable UUID influencerId,
             @PathVariable Platform platform,
+            @RequestParam String email,
             @RequestParam FrequencyType frequencyType,
             @RequestParam Integer frequencyValue,
             @Parameter(
@@ -42,7 +41,7 @@ public class PostingSchedulesController {
             )
             @DateTimeFormat(pattern = "HH:mm") @RequestParam LocalTime startTime
     ) {
-        return postingSchedulesService.createReminder(influencerId, platform, frequencyType, frequencyValue, startTime);
+        return postingSchedulesService.createReminder(influencerId, email, platform, frequencyType, frequencyValue, startTime);
     }
 
     @PatchMapping("/update/{influencerId}/{platform}")
@@ -54,21 +53,8 @@ public class PostingSchedulesController {
         return postingSchedulesService.unpdateReminderStatus(influencerId, platform, reminderStatus);
     }
 
-
-    private Set<LocalTime> parseSchedules(Set<String> schedules) {
-
-        return schedules.stream()
-                .map(LocalTime::parse)
-                .collect(Collectors.toSet());
-    }
-
-    private LocalTime parseSchedule(String schedule) {
-        return LocalTime.parse(schedule);
-    }
-
     @PostMapping("/send-reminder")
-    private void sendReminder() {
+    public void sendReminder() {
         reminderScheduler.checkPostingReminders();
     }
-
 }

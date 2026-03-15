@@ -1,19 +1,15 @@
-package com.project.InfluenceNet.schedulerReminderService.dto;
+package com.project.InfluenceNet.schedulerreminderservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
-import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.entity.PostingSchedules;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;
 import lombok.Data;
 
-
 import java.sql.Timestamp;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -22,6 +18,7 @@ public class PostingScheduleDTO {
 
     private UUID id;
     private UUID influencer_id;
+    private String recipientEmail;
 
     @Enumerated(EnumType.STRING)
     private Platform platform;
@@ -39,6 +36,7 @@ public class PostingScheduleDTO {
         return PostingScheduleDTO.builder()
                 .id(postingSchedules.getId())
                 .influencer_id(postingSchedules.getInfluencerId())
+                .recipientEmail(postingSchedules.getRecipientEmail())
                 .content(postingSchedules.getContent())
                 .platform(postingSchedules.getPlatform())
                 .reminderStatus(postingSchedules.getReminderStatus().name())

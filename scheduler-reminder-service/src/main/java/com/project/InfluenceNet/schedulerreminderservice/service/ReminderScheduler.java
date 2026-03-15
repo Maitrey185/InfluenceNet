@@ -1,14 +1,12 @@
-package com.project.InfluenceNet.schedulerReminderService.service;
+package com.project.InfluenceNet.schedulerreminderservice.service;
 
-import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
-import com.project.InfluenceNet.schedulerReminderService.repository.PostingSchedulesRepository;
+import com.project.InfluenceNet.schedulerreminderservice.entity.PostingSchedules;
+import com.project.InfluenceNet.schedulerreminderservice.repository.PostingSchedulesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -25,16 +23,11 @@ public class ReminderScheduler {
 
         for (PostingSchedules ps : schedules) {
 
-            if (reminderService.shouldSendReminder(ps)) {
+//            if (reminderService.shouldSendReminder(ps)) {
                 reminderService.sendReminder(ps);
-                ps.setLastReminderSentAt(new Timestamp(System.currentTimeMillis()));
-                repo.save(ps);
-            }
+//                ps.setLastReminderSentAt(new Timestamp(System.currentTimeMillis()));
+//                repo.save(ps);
+//            }
         }
     }
-
-
-
-
-
 }

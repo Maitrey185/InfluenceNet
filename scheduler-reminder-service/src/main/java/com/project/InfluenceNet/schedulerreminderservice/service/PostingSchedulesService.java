@@ -1,23 +1,20 @@
-package com.project.InfluenceNet.schedulerReminderService.service;
+package com.project.InfluenceNet.schedulerreminderservice.service;
 
-import com.project.InfluenceNet.schedulerReminderService.dto.PostingScheduleDTO;
-import com.project.InfluenceNet.schedulerReminderService.entity.FrequencyType;
-import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
-import com.project.InfluenceNet.schedulerReminderService.entity.ReminderStatus;
-import com.project.InfluenceNet.schedulerReminderService.exception.DuplicatePostingScheduleException;
-import com.project.InfluenceNet.schedulerReminderService.exception.PostingScheduleNotFoundException;
-import com.project.InfluenceNet.schedulerReminderService.repository.PostingSchedulesRepository;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.dto.PostingScheduleDTO;
+import com.project.InfluenceNet.schedulerreminderservice.entity.FrequencyType;
+import com.project.InfluenceNet.schedulerreminderservice.entity.PostingSchedules;
+import com.project.InfluenceNet.schedulerreminderservice.entity.ReminderStatus;
+import com.project.InfluenceNet.schedulerreminderservice.exception.DuplicatePostingScheduleException;
+import com.project.InfluenceNet.schedulerreminderservice.exception.PostingScheduleNotFoundException;
+import com.project.InfluenceNet.schedulerreminderservice.repository.PostingSchedulesRepository;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -27,8 +24,7 @@ public class PostingSchedulesService {
     private final PostingSchedulesRepository postingSchedulesRepository;
 
     @Transactional
-    public PostingScheduleDTO createReminder(UUID influencerId, Platform platform, FrequencyType frequencyType, Integer frequencyValue, LocalTime startTime){
-
+    public PostingScheduleDTO createReminder(UUID influencerId, String recipientEmail, Platform platform, FrequencyType frequencyType, Integer frequencyValue, LocalTime startTime){
 
         if (postingSchedulesRepository
                 .existsByInfluencerIdAndPlatform(influencerId, platform)) {
@@ -40,6 +36,7 @@ public class PostingSchedulesService {
 
         PostingSchedules postingSchedules = PostingSchedules.builder()
                 .influencerId(influencerId)
+                .recipientEmail(recipientEmail)
                 .platform(platform)
                 .reminderStatus(ReminderStatus.PENDING)
                 .content("Time to Post!!")
@@ -51,8 +48,7 @@ public class PostingSchedulesService {
                 .build();
 
         PostingSchedules savedPostingSchedules = postingSchedulesRepository.saveAndFlush(postingSchedules);
-        PostingScheduleDTO postingScheduleDTO = PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
-        return postingScheduleDTO;
+        return PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
 
     }
 
@@ -71,11 +67,8 @@ public class PostingSchedulesService {
         postingSchedules.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
         PostingSchedules savedPostingSchedules = postingSchedulesRepository.save(postingSchedules);
-        PostingScheduleDTO postingScheduleDTO = PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
-        return postingScheduleDTO;
+        return PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
     }
-
-
 
     public PostingScheduleDTO unpdateReminderStatus(UUID influencerId, Platform platform, ReminderStatus reminderStatus){
 
@@ -89,13 +82,8 @@ public class PostingSchedulesService {
         postingSchedules.setReminderStatus(reminderStatus);
 
         PostingSchedules savedPostingSchedules = postingSchedulesRepository.save(postingSchedules);
-        PostingScheduleDTO postingScheduleDTO = PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
-        return postingScheduleDTO;
+        return PostingScheduleDTO.mapToPostingScheduleDTO(savedPostingSchedules);
 
     }
-
-
-
-
 
 }

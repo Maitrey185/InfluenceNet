@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.schedulerReminderService.service;
+package com.project.InfluenceNet.schedulerreminderservice.service;
 
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import lombok.RequiredArgsConstructor;

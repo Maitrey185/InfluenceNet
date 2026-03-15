@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.schedulerReminderService.exception;
+package com.project.InfluenceNet.schedulerreminderservice.exception;
 
 public class DuplicatePostingScheduleException extends RuntimeException {
     public DuplicatePostingScheduleException(String message) {

@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.schedulerReminderService.config;
+package com.project.InfluenceNet.schedulerreminderservice.config;
 
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class TransactionConfig {
 
-    // JPA / Postgres Transaction Manager
     @Bean(name = "transactionManager")
     @Primary
     public PlatformTransactionManager jpaTransactionManager(

@@ -1,6 +1,5 @@
-package com.project.InfluenceNet.schedulerReminderService.entity;
+package com.project.InfluenceNet.schedulerreminderservice.entity;
 
-import com.project.InfluenceNet.socialConnector.documents.Platform;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -28,6 +25,9 @@ public class PostingSchedules {
     @Column(name="influencer_id")
 
     private UUID influencerId;
+
+    @Column(name = "recipient_email")
+    private String recipientEmail;
 
     @Enumerated(EnumType.STRING)
     @Column(name="platform")

@@ -1,12 +1,10 @@
-package com.project.InfluenceNet.schedulerReminderService.service;
+package com.project.InfluenceNet.schedulerreminderservice.service;
 
-import com.project.InfluenceNet.influencer.controller.InfluencerController;
-import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;
+import com.project.InfluenceNet.contracts.notification.NotificationType;
 import com.project.InfluenceNet.contracts.notification.Payload;
 import com.project.InfluenceNet.contracts.notification.PostReminderPayload;
-import com.project.InfluenceNet.contracts.notification.NotificationType;
-import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
+import com.project.InfluenceNet.schedulerreminderservice.entity.PostingSchedules;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,29 +18,17 @@ import java.time.LocalTime;
 @RequiredArgsConstructor
 public class ReminderService {
 
-    private final PostingSchedulesService postingSchedulesService;
-    private final NotificationService notificationService;
     private final ReminderNotificationPublisher reminderNotificationPublisher;
-    private final InfluencerProfileService influencerProfileService;
 
     public boolean shouldSendReminder(PostingSchedules ps) {
 
         LocalTime now = LocalTime.now();
 
-        switch (ps.getFrequencyType()) {
-
-            case DAILY:
-                return checkDaily(ps, now);
-
-            case WEEKLY:
-                return checkWeekly(ps, now);
-
-            case INTERVAL:
-                return checkInterval(ps);
-
-            default:
-                return false;
-        }
+        return switch (ps.getFrequencyType()) {
+            case DAILY -> checkDaily(ps, now);
+            case WEEKLY -> checkWeekly(ps, now);
+            case INTERVAL -> checkInterval(ps);
+        };
     }
 
     private boolean checkDaily(PostingSchedules ps, LocalTime now) {
@@ -54,7 +40,7 @@ public class ReminderService {
 
         for (int i = 0; i < timesPerDay; i++) {
 
-            LocalTime reminderTime = start.plusHours(i * gapHours);
+            LocalTime reminderTime = start.plusHours((long) i * gapHours);
 
             if (isWithin5Min(now, reminderTime)
                     && notAlreadySent(ps, reminderTime)) {
@@ -129,15 +115,16 @@ public class ReminderService {
         return diff > 5;
     }
 
-
     public void sendReminder(PostingSchedules ps) {
 
-        String email = influencerProfileService.getEmailById(ps.getInfluencerId());
+        String email = ps.getRecipientEmail();
+        if (email == null || email.isBlank()) {
+            return;
+        }
 
-         Payload payload = PostReminderPayload.builder()
+        Payload payload = PostReminderPayload.builder()
                 .email(email)
                 .build();
-
 
         NotificationEvent notificationEvent = NotificationEvent.builder()
                 .userId(ps.getInfluencerId())
@@ -148,10 +135,5 @@ public class ReminderService {
                 .build();
 
         reminderNotificationPublisher.publishNotificationEvent(notificationEvent);
-
     }
-
-
-
-
 }

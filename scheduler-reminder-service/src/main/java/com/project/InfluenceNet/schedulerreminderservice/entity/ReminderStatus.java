@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.schedulerReminderService.entity;
+package com.project.InfluenceNet.schedulerreminderservice.entity;
 
 public enum ReminderStatus {
     PENDING,

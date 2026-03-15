@@ -1,11 +1,10 @@
-package com.project.InfluenceNet.schedulerReminderService.repository;
+package com.project.InfluenceNet.schedulerreminderservice.repository;
 
-import com.project.InfluenceNet.schedulerReminderService.entity.PostingSchedules;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.entity.PostingSchedules;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Repository

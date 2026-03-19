@@ -8,7 +8,7 @@ import com.project.InfluenceNet.influencer.exception.InfluencerNotFoundException
 import com.project.InfluenceNet.influencer.exception.SocialAccountNotFoundException;
 import com.project.InfluenceNet.influencer.repository.InfluencerProfileRepository;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.socialConnector.events;
 
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.*;
 
 import java.time.Instant;

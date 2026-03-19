@@ -9,13 +9,11 @@ import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.exception.AnalyticsDataNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.InfluencerKPIRepository;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
-import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
 import com.project.InfluenceNet.analyticsService.exception.InfluencerNotFoundException;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.ast.tree.expression.Over;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +23,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static java.lang.Long.getLong;
 
 @Service
 @RequiredArgsConstructor

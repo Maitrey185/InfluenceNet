@@ -2,22 +2,16 @@ package com.project.InfluenceNet.analyticsService.controller;
 
 import com.project.InfluenceNet.analyticsService.dto.*;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
-import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
 import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
 import com.project.InfluenceNet.analyticsService.service.InfluencerKPIService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor

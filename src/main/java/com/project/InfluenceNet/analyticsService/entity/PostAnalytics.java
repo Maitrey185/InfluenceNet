@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.analyticsService.entity;
 
-import com.project.InfluenceNet.socialConnector.documents.Platform;
-import com.project.InfluenceNet.socialConnector.documents.PostType;
+import com.project.InfluenceNet.contracts.posts.Platform;
+import com.project.InfluenceNet.contracts.posts.PostType;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.socialConnector.documents;
+package com.project.InfluenceNet.contracts.posts;
 
 
 public enum PostType {

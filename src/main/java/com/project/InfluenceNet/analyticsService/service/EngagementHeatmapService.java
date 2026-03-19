@@ -2,7 +2,7 @@ package com.project.InfluenceNet.analyticsService.service;
 
 import com.project.InfluenceNet.analyticsService.dto.BestPostingTimeHeatmapResponse;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

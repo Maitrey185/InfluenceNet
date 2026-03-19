@@ -307,7 +307,7 @@ package com.project.InfluenceNet.analyticsService.controller;
 
 import com.project.InfluenceNet.analyticsService.dto.*;
 import com.project.InfluenceNet.analyticsService.service.InfluencerAnalyticsService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -408,7 +408,7 @@ public class InfluencerAnalyticsController {
 package com.project.InfluenceNet.analyticsService.service;
 
 import com.project.InfluenceNet.analyticsService.dto.*;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -502,7 +502,7 @@ package com.project.InfluenceNet.analyticsService.service.impl;
 
 import com.project.InfluenceNet.analyticsService.dto.*;
 import com.project.InfluenceNet.analyticsService.service.InfluencerAnalyticsService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.schedulerreminderservice.entity.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

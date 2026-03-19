@@ -2,7 +2,7 @@ package com.project.InfluenceNet.enrichmentService.service;
 
 import com.project.InfluenceNet.enrichmentService.document.EnrichedPost;
 import com.project.InfluenceNet.enrichmentService.repository.EnrichedPostRepository;
-import com.project.InfluenceNet.socialConnector.documents.RawPosts;
+import com.project.InfluenceNet.contracts.posts.RawPosts;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.analyticsService.dto;
 
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 

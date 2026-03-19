@@ -4,7 +4,7 @@ import com.project.InfluenceNet.influencer.dto.SocialAccountRequest;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.influencer.repository;
 
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

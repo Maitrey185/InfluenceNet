@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.influencer.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import jakarta.persistence.*;
 import lombok.*;
 

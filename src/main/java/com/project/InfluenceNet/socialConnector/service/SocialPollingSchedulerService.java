@@ -2,7 +2,7 @@ package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
+import com.project.InfluenceNet.contracts.posts.Platform;
 import com.project.InfluenceNet.socialConnector.exception.InstagramConnectorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

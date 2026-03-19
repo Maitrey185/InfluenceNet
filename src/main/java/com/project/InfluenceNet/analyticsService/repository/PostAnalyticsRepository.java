@@ -3,7 +3,6 @@ package com.project.InfluenceNet.analyticsService.repository;
 import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjection;
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

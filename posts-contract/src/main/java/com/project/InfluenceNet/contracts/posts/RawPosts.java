@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.socialConnector.documents;
+package com.project.InfluenceNet.contracts.posts;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,29 +8,27 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Builder
-@Document(collection = "raw_insights")
-public class RawInsights {
+@Document(collection = "raw_posts")
+public class RawPosts {
 
     @Id
     private String id;
 
+    private UUID influencer_id;
     private Platform platform;
-
-    private int likes;
-    private int comments;
-    private int shares;
-    private int saves;
-    private int reach;
-
+    private Object raw_payload;
     private LocalDate fetched_at;
-    private int ig_reels_video_view_total_time;
-    private double ig_reels_avg_watch_time;
-    private int total_interactions;
-    private int views;
+    private PostType post_type;
+    private String caption;
+    private String media_url;
+    private String permalink;
+    private LocalDateTime timestamp;
 
 }

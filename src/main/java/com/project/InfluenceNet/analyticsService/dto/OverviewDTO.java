@@ -1,7 +1,5 @@
 package com.project.InfluenceNet.analyticsService.dto;
 
-import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
-import com.project.InfluenceNet.socialConnector.documents.Platform;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;

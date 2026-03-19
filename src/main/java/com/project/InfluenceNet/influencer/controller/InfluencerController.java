@@ -23,6 +23,11 @@ public class InfluencerController {
         return ResponseEntity.ok(influencerProfileService.getProfile(id));
     }
 
+    @GetMapping("/followerCount/{id}")
+    public ResponseEntity<Integer> getFollowerCount(@PathVariable UUID id){
+        return ResponseEntity.ok(influencerProfileService.getFollowerCount(id));
+    }
+
     @PostMapping("/profile")
     public ResponseEntity<InfluencerProfileResponse> createProfile(@RequestBody InfluencerProfileRequest request) throws Throwable {
         return ResponseEntity.ok(influencerProfileService.createProfile(request));

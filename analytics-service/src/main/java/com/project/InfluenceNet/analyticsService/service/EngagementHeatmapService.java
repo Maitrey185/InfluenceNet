@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.analyticsService.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.InfluenceNet.analyticsService.dto.BestPostingTimeHeatmapResponse;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
 import com.project.InfluenceNet.contracts.posts.Platform;
@@ -18,8 +19,8 @@ public class EngagementHeatmapService {
 
     private final PostAnalyticsRepository postAnalyticsRepository;
     private final AnalyticsService analyticsService;
-
     private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     private static final Duration HEATMAP_TTL = Duration.ofHours(24);
 
@@ -27,7 +28,17 @@ public class EngagementHeatmapService {
 
         String cacheKey =buildCacheKey(influencerId, platform, startDate, endDate);
 
-        BestPostingTimeHeatmapResponse cache = (BestPostingTimeHeatmapResponse) redisTemplate.opsForValue().get(cacheKey);
+        Object cachedObject = redisTemplate.opsForValue().get(cacheKey);
+        BestPostingTimeHeatmapResponse cache = null;
+        
+        if(cachedObject != null){
+            if(cachedObject instanceof BestPostingTimeHeatmapResponse){
+                cache = (BestPostingTimeHeatmapResponse) cachedObject;
+            } else {
+                // Handle case where Redis returns LinkedHashMap (common with JSON deserialization)
+                cache = objectMapper.convertValue(cachedObject, BestPostingTimeHeatmapResponse.class);
+            }
+        }
 
         if(cache==null){ // cache miss
             cache = analyticsService.fetchEngagementHeatmap(influencerId, platform, startDate, endDate);

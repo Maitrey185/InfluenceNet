@@ -4,13 +4,11 @@ import com.project.InfluenceNet.auth.entity.User;
 import com.project.InfluenceNet.auth.repository.UserRepository;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
-import com.project.InfluenceNet.influencer.dto.SocialAccountRequest;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.exception.DuplicateResourceException;
 import com.project.InfluenceNet.influencer.exception.InfluencerNotFoundException;
-import com.project.InfluenceNet.influencer.exception.SocialAccountNotFoundException;
 import com.project.InfluenceNet.influencer.repository.InfluencerProfileRepository;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,6 +116,12 @@ public class InfluencerProfileService {
                 .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + id));
         profile.setTotalFollowerCount(followerCount);
         return influencerProfileRepository.save(profile);
+    }
+
+    public Integer getFollowerCount(UUID id){
+        InfluencerProfile profile = influencerProfileRepository.findById(id)
+                .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + id));
+        return profile.getTotalFollowerCount();
     }
 
     @Transactional

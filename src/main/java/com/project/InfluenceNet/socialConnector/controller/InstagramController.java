@@ -1,29 +1,29 @@
 package com.project.InfluenceNet.socialConnector.controller;
 
+import com.project.InfluenceNet.contracts.posts.RawInsights;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
 import com.project.InfluenceNet.contracts.posts.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.events.PostAndInsightFetchedEventPublisher;
-import com.project.InfluenceNet.socialConnector.events.PostFetchedEvent;
-import com.project.InfluenceNet.socialConnector.service.InstagramConnectorOrchestrator;
+import com.project.InfluenceNet.socialConnector.service.InstagramService;
 import com.project.InfluenceNet.socialConnector.service.SocialPollingSchedulerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/instagram")
 @RequiredArgsConstructor
-public class InstragramController {
+public class InstagramController {
 
 
     private final InstagramClient instagramClient;
     private final SocialPollingSchedulerService socialPollingService;
     private final PostAndInsightFetchedEventPublisher postAndInsightFetchedEventPublisher;
+    private final InstagramService instagramService;
 
     @GetMapping("/userProfile")
     public InstagramProfileDTO getInstagramUserData() {
@@ -52,5 +52,15 @@ public class InstragramController {
     @GetMapping("/instaAccounts")
     public List<SocialAccountResponse> getInstaAccounts(){
         return socialPollingService.getAllInstagramAccounts();
+    }
+
+    @GetMapping("/rawPosts/{id}")
+    public RawPosts getRawPostsById(@PathVariable String id){
+        return instagramService.getRawPostsById(id);
+    }
+
+    @GetMapping("/rawInsights/{id}")
+    public RawInsights getRawInsightsById(@PathVariable String id){
+        return instagramService.getRawInsightsById(id);
     }
 }

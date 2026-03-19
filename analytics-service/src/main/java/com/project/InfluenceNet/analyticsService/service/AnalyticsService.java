@@ -4,15 +4,13 @@ import com.project.InfluenceNet.analyticsService.dto.BestPostingTimeHeatmapRespo
 import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjection;
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
-import com.project.InfluenceNet.analyticsService.exception.PostNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
 import com.project.InfluenceNet.contracts.posts.Platform;
 import com.project.InfluenceNet.contracts.posts.RawInsights;
 import com.project.InfluenceNet.contracts.posts.RawPosts;
-import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -20,7 +18,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -29,16 +26,14 @@ import java.util.stream.IntStream;
 public class AnalyticsService {
 
     private final PostAnalyticsRepository postAnalyticsRepository;
-
-    private final RawPostsRepository rawPostsRepository;
     private final InfluencerKPIService influencerKPIService;
+    private final RestTemplate restTemplate;
 //    private final EngagementHeatmapService engagementHeatmapService;
 
     public void processRawInsight(RawInsights rawInsight) {
 
-        RawPosts rawPost = rawPostsRepository.findById(rawInsight.getId())
-                .orElseThrow(() -> new PostNotFoundException("Post not found with id: " + rawInsight.getId()));
-
+        String socialConnectorUrl = "http://localhost:8080/instagram/rawPosts/" + rawInsight.getId();
+        RawPosts rawPost = restTemplate.getForObject(socialConnectorUrl, RawPosts.class);
 
 //        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());
 

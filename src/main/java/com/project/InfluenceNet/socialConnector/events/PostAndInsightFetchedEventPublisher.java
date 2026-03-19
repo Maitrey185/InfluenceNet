@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.socialConnector.events;
 
+import com.project.InfluenceNet.contracts.posts.InsightsfetchedEvent;
 import com.project.InfluenceNet.contracts.posts.RawInsights;
 import com.project.InfluenceNet.contracts.posts.RawPosts;
 import lombok.RequiredArgsConstructor;

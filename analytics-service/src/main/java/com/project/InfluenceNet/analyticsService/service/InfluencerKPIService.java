@@ -8,15 +8,15 @@ import com.project.InfluenceNet.analyticsService.dto.OverviewDTO;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.exception.AnalyticsDataNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.InfluencerKPIRepository;
-import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
 import com.project.InfluenceNet.analyticsService.exception.InfluencerNotFoundException;
-import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import com.project.InfluenceNet.contracts.posts.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -30,7 +30,7 @@ import java.util.UUID;
 public class InfluencerKPIService {
 
     private final InfluencerKPIRepository influencerKPIRepository;
-    private final InfluencerProfileService influencerProfileService;
+    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
     private static final Duration CACHE_TTL = Duration.ofHours(24);
@@ -42,16 +42,28 @@ public class InfluencerKPIService {
     public void calculateAndStoreKPIs(int newPost, UUID influencerId, Platform platform, LocalDate fetchedAt, int likesDiff, int commentsDiff, int sharesDiff, int savesDiff, int reachDiff, int viewsDiff) throws InfluencerNotFoundException {
         // Use the provided fetchedAt date instead of LocalDate.now()
         LocalDate kpiDate = fetchedAt != null ? fetchedAt : LocalDate.now();
-        InfluencerProfileResponse influencerProfile;
 
-        influencerProfile = influencerProfileService.getProfile(influencerId);
-        // Get the influencer profile to update follower count
+        String influencerServiceUrl = "http://localhost:8080/api/influencer/followerCount/" + influencerId;
+        ResponseEntity<Integer> followerCountResponse = null;
+        try {
+            followerCountResponse =
+                    restTemplate.getForEntity(influencerServiceUrl, Integer.class);
+
+            System.out.println("Response: " + followerCountResponse.getBody());
+
+        } catch (Exception e) {
+            e.printStackTrace(); // VERY IMPORTANT
+        }        // Get the influencer profile to update follower count
+        Integer followerCount = followerCountResponse.getBody();
+        if (followerCount == null) {
+            throw new InfluencerNotFoundException("Follower count not found for influencer: " + influencerId);
+        }
 
         // Find existing KPI or create a new one
         InfluencerKPI influencerKPI = influencerKPIRepository.findByInfluencerIdAndPlatformAndKpiDate(influencerId, platform, kpiDate)
                 .orElseGet(() -> InfluencerKPI.newForDay(influencerId, platform, kpiDate));
 
-        double avgEngagementRate = calculateEngagementRate(influencerKPI.getTotalLikes() + likesDiff, influencerKPI.getTotalComments()+commentsDiff , influencerKPI.getTotalShares()+sharesDiff, influencerKPI.getTotalSaves()+savesDiff, influencerProfile.getTotalFollowerCount());
+        double avgEngagementRate = calculateEngagementRate(influencerKPI.getTotalLikes() + likesDiff, influencerKPI.getTotalComments()+commentsDiff , influencerKPI.getTotalShares()+sharesDiff, influencerKPI.getTotalSaves()+savesDiff, followerCount);
         // Update KPI metrics
         influencerKPI.setPostCount(influencerKPI.getPostCount() + newPost);
         influencerKPI.setTotalLikes(influencerKPI.getTotalLikes() + likesDiff);
@@ -64,7 +76,7 @@ public class InfluencerKPIService {
         influencerKPI.setPlatform(platform);
         
         // Update follower count from the profile
-        influencerKPI.setFollowersCount(influencerProfile.getTotalFollowerCount());
+        influencerKPI.setFollowersCount(followerCount);
 
         // Save the updated KPI
         influencerKPIRepository.save(influencerKPI);

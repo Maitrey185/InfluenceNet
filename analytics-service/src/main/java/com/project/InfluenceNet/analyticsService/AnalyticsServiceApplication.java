@@ -7,7 +7,7 @@ import org.springframework.retry.annotation.EnableRetry;
 
 @SpringBootApplication(scanBasePackages = {
         "com.project.InfluenceNet.analyticsService",
-        "com.project.InfluenceNet.contracts.posts"
+        "com.project.InfluenceNet.contracts.InfluencerPostContract"
 })
 @EnableRetry
 public class AnalyticsServiceApplication {

@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.analyticsService.entity;
 
-import com.project.InfluenceNet.contracts.posts.Platform;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

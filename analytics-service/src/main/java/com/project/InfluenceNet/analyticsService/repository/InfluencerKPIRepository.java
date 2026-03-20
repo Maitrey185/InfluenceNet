@@ -3,7 +3,7 @@ package com.project.InfluenceNet.analyticsService.repository;
 import com.project.InfluenceNet.analyticsService.dto.FollowerGrowthProjection;
 import com.project.InfluenceNet.analyticsService.dto.OverviewAggProjection;
 import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
-import com.project.InfluenceNet.contracts.posts.Platform;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

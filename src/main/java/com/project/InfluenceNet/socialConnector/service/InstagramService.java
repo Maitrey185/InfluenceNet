@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.socialConnector.service;
 
-import com.project.InfluenceNet.contracts.posts.RawInsights;
-import com.project.InfluenceNet.contracts.posts.RawPosts;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import com.project.InfluenceNet.socialConnector.repository.RawInsightsRepository;
 import com.project.InfluenceNet.socialConnector.repository.RawPostsRepository;
 import lombok.RequiredArgsConstructor;

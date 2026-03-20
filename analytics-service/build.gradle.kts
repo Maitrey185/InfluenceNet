@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":posts-contract"))
+    implementation(project(":influencerPost-contract"))
 
 
     implementation("org.springframework.boot:spring-boot-starter-web")

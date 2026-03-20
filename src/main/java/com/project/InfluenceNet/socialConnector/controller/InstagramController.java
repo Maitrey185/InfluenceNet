@@ -1,7 +1,6 @@
 package com.project.InfluenceNet.socialConnector.controller;
 
 import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
-import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
@@ -47,11 +46,6 @@ public class InstagramController {
     @PostMapping("/publishPostFetchedEvent")
     public void publishPostFetchedEvent(@RequestBody RawPosts rawPost){
         postAndInsightFetchedEventPublisher.publishPostFetchedEvent(rawPost);
-    }
-
-    @GetMapping("/instaAccounts")
-    public List<SocialAccountResponse> getInstaAccounts(){
-        return socialPollingService.getAllInstagramAccounts();
     }
 
     @GetMapping("/rawPosts/{id}")

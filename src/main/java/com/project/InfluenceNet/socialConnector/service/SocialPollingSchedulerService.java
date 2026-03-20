@@ -1,6 +1,6 @@
 package com.project.InfluenceNet.socialConnector.service;
 
-import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
 import com.project.InfluenceNet.socialConnector.exception.InstagramConnectorException;

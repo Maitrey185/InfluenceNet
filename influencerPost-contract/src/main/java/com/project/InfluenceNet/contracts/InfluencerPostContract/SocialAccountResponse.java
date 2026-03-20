@@ -1,6 +1,5 @@
-package com.project.InfluenceNet.influencer.dto;
+package com.project.InfluenceNet.contracts.InfluencerPostContract;
 
-import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;

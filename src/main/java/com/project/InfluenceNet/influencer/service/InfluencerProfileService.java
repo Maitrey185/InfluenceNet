@@ -4,8 +4,8 @@ import com.project.InfluenceNet.auth.entity.User;
 import com.project.InfluenceNet.auth.repository.UserRepository;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerNeo4jEvent;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
-import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
-import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerProfileResponse;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.exception.DuplicateResourceException;
@@ -111,11 +111,11 @@ public class InfluencerProfileService {
     }
 
     @Transactional
-    public InfluencerProfile updateFollowerCount(UUID id, int followerCount){
+    public InfluencerProfileResponse updateFollowerCount(UUID id, int followerCount){
         InfluencerProfile profile = influencerProfileRepository.findById(id)
                 .orElseThrow(() -> new InfluencerNotFoundException("Influencer profile not found with id: " + id));
         profile.setTotalFollowerCount(followerCount);
-        return influencerProfileRepository.save(profile);
+        return mapToResponse(influencerProfileRepository.save(profile));
     }
 
     public Integer getFollowerCount(UUID id){

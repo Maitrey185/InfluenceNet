@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.influencer.controller;
 
 import com.project.InfluenceNet.influencer.dto.SocialAccountRequest;
-import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.SocialAccountResponse;
 import com.project.InfluenceNet.influencer.entity.SocialAccount;
 import com.project.InfluenceNet.influencer.service.SocialAccountService;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;

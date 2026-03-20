@@ -2,7 +2,7 @@ package com.project.InfluenceNet.influencer.controller;
 
 
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
-import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerProfileResponse;
 import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +42,11 @@ public class InfluencerController {
     public ResponseEntity<String> getEmailById(@PathVariable UUID id) throws Throwable {
 
         return ResponseEntity.ok(influencerProfileService.getEmailById(id));
+    }
+
+    @PutMapping("/updateFollowerCount/{id}")
+    public ResponseEntity<InfluencerProfileResponse> updateFollowerCount(@PathVariable UUID id, @RequestBody Integer count) throws Throwable {
+        return ResponseEntity.ok(influencerProfileService.updateFollowerCount(id, count));
     }
 
 

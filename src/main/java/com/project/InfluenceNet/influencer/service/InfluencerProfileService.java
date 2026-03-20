@@ -2,6 +2,7 @@ package com.project.InfluenceNet.influencer.service;
 
 import com.project.InfluenceNet.auth.entity.User;
 import com.project.InfluenceNet.auth.repository.UserRepository;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerNeo4jEvent;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileResponse;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
@@ -17,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;

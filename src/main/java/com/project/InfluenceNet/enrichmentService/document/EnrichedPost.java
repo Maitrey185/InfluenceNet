@@ -1,9 +1,8 @@
 package com.project.InfluenceNet.enrichmentService.document;
 
 
-import com.project.InfluenceNet.contracts.posts.Platform;
-import com.project.InfluenceNet.contracts.posts.PostType;
-import jakarta.persistence.Column;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.PostType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

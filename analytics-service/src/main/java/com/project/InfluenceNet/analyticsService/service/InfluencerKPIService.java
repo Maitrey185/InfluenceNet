@@ -9,7 +9,7 @@ import com.project.InfluenceNet.analyticsService.entity.InfluencerKPI;
 import com.project.InfluenceNet.analyticsService.exception.AnalyticsDataNotFoundException;
 import com.project.InfluenceNet.analyticsService.repository.InfluencerKPIRepository;
 import com.project.InfluenceNet.analyticsService.exception.InfluencerNotFoundException;
-import com.project.InfluenceNet.contracts.posts.Platform;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;

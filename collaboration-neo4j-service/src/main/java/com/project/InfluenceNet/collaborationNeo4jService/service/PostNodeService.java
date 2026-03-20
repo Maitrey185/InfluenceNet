@@ -1,6 +1,5 @@
 package com.project.InfluenceNet.collaborationNeo4jService.service;
 
-import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNicheRelation;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerPostRelation;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.PostNode;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -20,7 +18,7 @@ public class PostNodeService {
     private final PostNodeRepository postNodeRepository;
     private  final InfluencerNodeRepository influencerNodeRepository;
 
-    @Transactional(transactionManager = "neo4jTransactionManager")
+    @Transactional
     public InfluencerNode saveOrUpdate(UUID influencerId, PostNode node){
         postNodeRepository.save(node);
         InfluencerNode influencer = influencerNodeRepository.findById(influencerId)
@@ -42,7 +40,6 @@ public class PostNodeService {
     }
 
     /* DELETE */
-    @Transactional
     public void delete(String id) {
         postNodeRepository.deleteById(id);
     }

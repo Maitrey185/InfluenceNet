@@ -2,8 +2,8 @@ package com.project.InfluenceNet.analyticsService.event;
 
 import com.project.InfluenceNet.analyticsService.service.AnalyticsService;
 import com.project.InfluenceNet.analyticsService.service.EngagementHeatmapService;
-import com.project.InfluenceNet.contracts.posts.RawInsights;
-import com.project.InfluenceNet.contracts.posts.InsightsfetchedEvent;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InsightsfetchedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.DltHandler;

@@ -40,7 +40,7 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 
     implementation(project(":notification-contract"))
-    implementation(project(":posts-contract"))
+    implementation(project(":influencerPost-contract"))
 
     // Apache Tika for language detection and content analysis
     implementation("org.apache.tika:tika-core:2.9.0")

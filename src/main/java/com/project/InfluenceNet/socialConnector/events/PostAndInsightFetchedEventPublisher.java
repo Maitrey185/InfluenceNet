@@ -1,8 +1,8 @@
 package com.project.InfluenceNet.socialConnector.events;
 
-import com.project.InfluenceNet.contracts.posts.InsightsfetchedEvent;
-import com.project.InfluenceNet.contracts.posts.RawInsights;
-import com.project.InfluenceNet.contracts.posts.RawPosts;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InsightsfetchedEvent;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

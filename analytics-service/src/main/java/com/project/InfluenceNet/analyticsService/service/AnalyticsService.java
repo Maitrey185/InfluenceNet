@@ -5,9 +5,9 @@ import com.project.InfluenceNet.analyticsService.dto.EngagementHeatmapCellProjec
 import com.project.InfluenceNet.analyticsService.dto.TopPostProjection;
 import com.project.InfluenceNet.analyticsService.entity.PostAnalytics;
 import com.project.InfluenceNet.analyticsService.repository.PostAnalyticsRepository;
-import com.project.InfluenceNet.contracts.posts.Platform;
-import com.project.InfluenceNet.contracts.posts.RawInsights;
-import com.project.InfluenceNet.contracts.posts.RawPosts;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;

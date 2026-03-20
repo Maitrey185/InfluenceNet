@@ -1,9 +1,9 @@
 package com.project.InfluenceNet.socialConnector.controller;
 
-import com.project.InfluenceNet.contracts.posts.RawInsights;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
 import com.project.InfluenceNet.influencer.dto.SocialAccountResponse;
 import com.project.InfluenceNet.socialConnector.client.InstagramClient;
-import com.project.InfluenceNet.contracts.posts.RawPosts;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.events.PostAndInsightFetchedEventPublisher;
 import com.project.InfluenceNet.socialConnector.service.InstagramService;

@@ -1,5 +1,6 @@
 package com.project.InfluenceNet.influencer.service;
 
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerNeo4jEvent;
 import com.project.InfluenceNet.influencer.entity.InfluencerProfile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

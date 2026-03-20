@@ -21,7 +21,7 @@ public class InfluencerNicheRelationService {
     private final InfluencerNodeRepository influencerRepo;
     private final NicheNodeRepository nicheNodeRepository;
 
-    @Transactional(transactionManager = "neo4jTransactionManager")
+    @Transactional
     public InfluencerNode addNiches(
             UUID influencerId,
             List<String> nicheNames
@@ -66,7 +66,7 @@ public class InfluencerNicheRelationService {
         return influencerRepo.save(influencer);
     }
 
-    @Transactional(transactionManager = "neo4jTransactionManager")
+    @Transactional
     public InfluencerNode removeNiches(
             UUID influencerId,
             List<String> nicheNames

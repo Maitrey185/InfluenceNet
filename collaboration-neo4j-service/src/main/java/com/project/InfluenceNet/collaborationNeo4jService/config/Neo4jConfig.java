@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class Neo4jConfig {
 
-    @Bean(name = {"neo4jTransactionManager"})
+    @Bean(name = {"transactionManager", "neo4jTransactionManager"})
     public PlatformTransactionManager neo4jTransactionManager(Driver driver) {
         return new Neo4jTransactionManager(driver);
     }

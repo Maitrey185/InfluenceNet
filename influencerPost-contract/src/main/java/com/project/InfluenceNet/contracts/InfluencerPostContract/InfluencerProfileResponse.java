@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.influencer.dto;
+package com.project.InfluenceNet.contracts.InfluencerPostContract;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

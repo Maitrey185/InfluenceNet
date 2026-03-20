@@ -15,7 +15,7 @@ public class InfluencerNodeService {
 
     private final InfluencerNodeRepository influencerNodeRepository;
 
-    @Transactional(transactionManager = "neo4jTransactionManager")
+    @Transactional
     public InfluencerNode saveOrUpdate(InfluencerNode node){
         return influencerNodeRepository.save(node);
     }
@@ -30,7 +30,6 @@ public class InfluencerNodeService {
     }
 
     /* DELETE */
-    @Transactional
     public void delete(UUID id) {
         influencerNodeRepository.deleteById(id);
     }

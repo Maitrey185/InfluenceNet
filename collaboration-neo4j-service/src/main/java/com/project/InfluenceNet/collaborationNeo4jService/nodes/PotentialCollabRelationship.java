@@ -4,19 +4,24 @@ import lombok.*;
 import org.springframework.data.neo4j.core.schema.*;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @RelationshipProperties
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InfluencerNicheRelation {
+public class PotentialCollabRelationship {
 
     @RelationshipId
     private Long id;
 
     @TargetNode
-    private NicheNode niche;
+    private InfluencerNode target;
 
+    private Integer score;
+    private String reason;
+    
+    private ZonedDateTime updatedAt;
+    private ZonedDateTime expiresAt;
 }

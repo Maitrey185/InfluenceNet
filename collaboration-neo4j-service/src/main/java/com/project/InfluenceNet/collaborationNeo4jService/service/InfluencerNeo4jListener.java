@@ -2,7 +2,7 @@ package com.project.InfluenceNet.collaborationNeo4jService.service;
 
 
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
-import com.project.InfluenceNet.influencer.service.InfluencerNeo4jEvent;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerNeo4jEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

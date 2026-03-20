@@ -1,6 +1,5 @@
 package com.project.InfluenceNet.collaborationNeo4jService.controller;
 
-import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.NicheNode;
 import com.project.InfluenceNet.collaborationNeo4jService.service.NicheNodeService;
 import lombok.RequiredArgsConstructor;

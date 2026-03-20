@@ -3,7 +3,6 @@ package com.project.InfluenceNet.collaborationNeo4jService.service;
 import com.project.InfluenceNet.collaborationNeo4jService.dto.InfluencerNodeProjection;
 import com.project.InfluenceNet.collaborationNeo4jService.nodes.InfluencerNode;
 import com.project.InfluenceNet.collaborationNeo4jService.repository.InfluencerNodeRepository;
-import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
 import com.project.InfluenceNet.contracts.notification.CollabPayload;
 import com.project.InfluenceNet.contracts.notification.NotificationEvent;
 import com.project.InfluenceNet.contracts.notification.Payload;
@@ -21,7 +20,6 @@ public class CollabCalculateScheduler {
 
     private final InfluencerNodeRepository influencerNodeRepository;
     private final CollaborationService collaborationService;
-    private final InfluencerProfileService influencerProfileService;
     private final CollabNotificationPublisher collabNotificationPublisher;
 
     @Scheduled(cron = "0 0 2 * * *")   // runs daily at 2 AM
@@ -33,11 +31,10 @@ public class CollabCalculateScheduler {
                     collaborationService.recommendedCollaborators(influencer.getId());
 
             List<String> ls = recs.stream().map(rec-> rec.getName()).toList();
-            String email = influencerProfileService.getEmailById(influencer.getId());
 
             Payload payload = CollabPayload.builder()
                     .collaboratorName(ls)
-                    .email(email)
+                    .email(influencer.getEmail())
                     .build();
 
 

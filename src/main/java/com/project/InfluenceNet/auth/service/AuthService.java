@@ -2,9 +2,8 @@ package com.project.InfluenceNet.auth.service;
 
 import com.project.InfluenceNet.auth.dto.*;
 //import jakarta.ws.rs.core.Response;
-import com.project.InfluenceNet.auth.entity.User;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.User;
 import com.project.InfluenceNet.auth.repository.UserRepository;
-import com.project.InfluenceNet.auth.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 //import org.keycloak.admin.client.Keycloak;
@@ -16,13 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 //import org.keycloak.representations.idm.UserRepresentation;
 //import org.springframework.beans.factory.annotation.Value;
 //import org.springframework.http.*;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 //import org.springframework.util.LinkedMultiValueMap;
 //import org.springframework.util.MultiValueMap;
@@ -68,6 +62,11 @@ public class AuthService implements UserDetailsService {
         userRepository.save(user);
         log.info("User registration persisted username={} userId={}", user.getUsername(), user.getId());
         return user;
+    }
+
+    public User findById(UUID userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
     }
 
 

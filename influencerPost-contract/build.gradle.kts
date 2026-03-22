@@ -1,5 +1,7 @@
 plugins {
     `java-library`
+    id("org.springframework.boot") version "3.3.5"
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.project"
@@ -18,6 +20,7 @@ repositories {
 dependencies {
     // Jakarta Persistence API
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
+
 
     // JSON Processing
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")

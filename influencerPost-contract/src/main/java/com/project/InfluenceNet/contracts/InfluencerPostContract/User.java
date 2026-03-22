@@ -1,4 +1,4 @@
-package com.project.InfluenceNet.auth.entity;
+package com.project.InfluenceNet.contracts.InfluencerPostContract;
 
 import jakarta.persistence.*;
 import lombok.*;

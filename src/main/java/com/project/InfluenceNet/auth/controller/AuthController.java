@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.auth.controller;
 
 import com.project.InfluenceNet.auth.dto.*;
-import com.project.InfluenceNet.auth.entity.User;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.User;
 import com.project.InfluenceNet.auth.service.AuthService;
 import com.project.InfluenceNet.auth.utils.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 //import org.springframework.security.oauth2.jwt.Jwt;
 //import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 
 @Slf4j
 @RestController

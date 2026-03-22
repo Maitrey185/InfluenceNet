@@ -9,3 +9,4 @@ include("analytics-service")
 
 include("mock-instagram")
 include("collaboration-neo4j-service")
+include("social-connector-service")

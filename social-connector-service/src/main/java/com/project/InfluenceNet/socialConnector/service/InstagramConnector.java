@@ -4,7 +4,6 @@ import com.project.InfluenceNet.socialConnector.client.InstagramClient;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
-import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

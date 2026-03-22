@@ -32,7 +32,7 @@ public class AnalyticsService {
 
     public void processRawInsight(RawInsights rawInsight) {
 
-        String socialConnectorUrl = "http://localhost:8080/instagram/rawPosts/" + rawInsight.getId();
+        String socialConnectorUrl = "http://localhost:8094/instagram/rawPosts/" + rawInsight.getId();
         RawPosts rawPost = restTemplate.getForObject(socialConnectorUrl, RawPosts.class);
 
 //        engagementHeatmapService.invalidateHeatmapCache(rawPost.getInfluencer_id(), rawPost.getPlatform());

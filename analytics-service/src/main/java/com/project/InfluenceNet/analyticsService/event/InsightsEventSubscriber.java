@@ -32,7 +32,7 @@ public class InsightsEventSubscriber {
     public void handleInsightsEvent(InsightsfetchedEvent event){
         log.info("Received insights event: {}", event);
 
-        String socialConnectorUrl = "http://localhost:8080/instagram/rawInsights/" + event.getPostId();
+        String socialConnectorUrl = "http://localhost:8094/instagram/rawInsights/" + event.getPostId();
         RawInsights rawInsights = restTemplate.getForObject(socialConnectorUrl, RawInsights.class);
 
         analyticsService.processRawInsight(rawInsights);

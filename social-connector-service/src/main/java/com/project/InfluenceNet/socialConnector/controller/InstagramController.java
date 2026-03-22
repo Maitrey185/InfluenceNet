@@ -10,8 +10,6 @@ import com.project.InfluenceNet.socialConnector.service.SocialPollingSchedulerSe
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin
 @RestController
 @RequestMapping("/instagram")

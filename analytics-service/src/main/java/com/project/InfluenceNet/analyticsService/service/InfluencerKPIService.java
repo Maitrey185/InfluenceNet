@@ -43,7 +43,7 @@ public class InfluencerKPIService {
         // Use the provided fetchedAt date instead of LocalDate.now()
         LocalDate kpiDate = fetchedAt != null ? fetchedAt : LocalDate.now();
 
-        String influencerServiceUrl = "http://localhost:8080/api/influencer/followerCount/" + influencerId;
+        String influencerServiceUrl = "http://localhost:8080/influencer/followerCount/" + influencerId;
         ResponseEntity<Integer> followerCountResponse = null;
         try {
             followerCountResponse =

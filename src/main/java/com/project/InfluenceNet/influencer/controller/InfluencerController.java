@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/influencer")
+@RequestMapping("/influencer")
 @RequiredArgsConstructor
 public class InfluencerController {
 

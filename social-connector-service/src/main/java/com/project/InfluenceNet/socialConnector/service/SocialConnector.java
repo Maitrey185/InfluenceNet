@@ -3,9 +3,7 @@ package com.project.InfluenceNet.socialConnector.service;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
-import com.project.InfluenceNet.socialConnector.dto.MediaInsightsResponse;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.contracts.InfluencerPostContract.SocialAccountResponse;
-import com.project.InfluenceNet.influencer.service.InfluencerProfileService;
+import com.project.InfluenceNet.socialConnector.client.InfluencerServiceClient;
 import com.project.InfluenceNet.socialConnector.dto.InstagramProfileDTO;
 import com.project.InfluenceNet.socialConnector.dto.InstagramRecentPostsDTO;
 import com.project.InfluenceNet.socialConnector.dto.MediaInsightsDTO;
@@ -17,11 +17,11 @@ public class InstagramConnectorOrchestrator {
 
     private final InstagramConnector instagramConnector;
     private final RawIngestionService rawIngestionService;
-    private final InfluencerProfileService influencerProfileService;
+    private final InfluencerServiceClient influencerServiceClient;
 
     public void syncInstagramProfile(SocialAccountResponse account){
         InstagramProfileDTO instagramProfileDTO = instagramConnector.fetchProfile(account.getPlatformUserId());
-        influencerProfileService.updateFollowerCount(account.getInfluencerId(), instagramProfileDTO.getFollowersCount());
+        influencerServiceClient.updateFollowerCount(account.getInfluencerId(), instagramProfileDTO.getFollowersCount());
     }
 
     public void syncInstagramMedia(SocialAccountResponse account){

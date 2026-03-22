@@ -3,11 +3,11 @@ package com.project.InfluenceNet.socialConnector.exception;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandlerSocialConnector {
@@ -84,11 +84,13 @@ public class GlobalExceptionHandlerSocialConnector {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<com.project.InfluenceNet.influencer.exception.GlobalExceptionHandler.ErrorResponse> handleGlobalException(Exception ex) {
-        com.project.InfluenceNet.influencer.exception.GlobalExceptionHandler.ErrorResponse error = new com.project.InfluenceNet.influencer.exception.GlobalExceptionHandler.ErrorResponse(
+    public ResponseEntity<ApiError> handleGlobalException(Exception ex) {
+        ApiError error = new ApiError(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "BAD_REQUEST",
                 "An unexpected error occurred: " + ex.getMessage(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                null
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }

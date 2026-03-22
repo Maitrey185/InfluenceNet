@@ -30,7 +30,7 @@ public class SocialAccountController {
     }
 
     @DeleteMapping("/{influencerId}/{platform}")
-    public ResponseEntity<Void> removeSocialAccount(@PathVariable UUID influencerId, @PathVariable Enum<Platform> platform) {
+    public ResponseEntity<Void> removeSocialAccount(@PathVariable UUID influencerId, @PathVariable Platform platform) {
         socialAccountService.removeSocialAccount(influencerId, platform);
         return ResponseEntity.ok().build();
     }
@@ -41,10 +41,14 @@ public class SocialAccountController {
     }
 
     @GetMapping("/{influencerId}/{platform}")
-    public ResponseEntity<SocialAccountResponse> getSocialAccount(@PathVariable UUID influencerId, @PathVariable Enum<Platform> platform) {
+    public ResponseEntity<SocialAccountResponse> getSocialAccount(@PathVariable UUID influencerId, @PathVariable Platform platform) {
         return ResponseEntity.ok(socialAccountService.getSocialAccount(influencerId, platform));
     }
 
+    @GetMapping("/active/{platform}")
+    public ResponseEntity<List<SocialAccountResponse>> getActiveSocialAccountsForPlatform(@PathVariable Platform platform) {
+        return ResponseEntity.ok(socialAccountService.getActiveSocialAccountsForPlatform(platform));
+    }
 
 
 }

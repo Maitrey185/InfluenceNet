@@ -1,6 +1,7 @@
 package com.project.InfluenceNet.socialConnector.events;
 
 import com.project.InfluenceNet.contracts.InfluencerPostContract.InsightsfetchedEvent;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.PostFetchedEvent;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.RawInsights;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +16,11 @@ public class PostAndInsightFetchedEventPublisher {
 
     public static final String TOPIC_POST_FETCHED = "post.fetched";
 
-    private final KafkaTemplate<String, PostFetchedEvent> kafkaTemplate;
+    private final KafkaTemplate<String, PostFetchedEvent> postFetchedKafkaTemplate;
 
     public static final String TOPIC_INSIGHT_FETCHED = "insight.fetched";
 
-    private final KafkaTemplate<String, InsightsfetchedEvent> kafkaTemplate2;
+    private final KafkaTemplate<String, InsightsfetchedEvent> insightsFetchedKafkaTemplate;
 
     public void publishPostFetchedEvent(RawPosts rawPosts){
 
@@ -29,7 +30,7 @@ public class PostAndInsightFetchedEventPublisher {
                 .platform(rawPosts.getPlatform())
                 .timestamp(Instant.now())
                 .build();
-        kafkaTemplate.send(TOPIC_POST_FETCHED, event);
+        postFetchedKafkaTemplate.send(TOPIC_POST_FETCHED, event);
     }
 
     public void publishInsightsFetchedEvent(RawInsights rawInsights){
@@ -39,6 +40,6 @@ public class PostAndInsightFetchedEventPublisher {
                 .platform(rawInsights.getPlatform())
                 .timestamp(Instant.now())
                 .build();
-        kafkaTemplate2.send(TOPIC_INSIGHT_FETCHED, event);
+        insightsFetchedKafkaTemplate.send(TOPIC_INSIGHT_FETCHED, event);
     }
 }

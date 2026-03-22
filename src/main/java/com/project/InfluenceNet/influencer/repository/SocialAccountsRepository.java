@@ -12,11 +12,11 @@ import java.util.UUID;
 @Repository
 public interface SocialAccountsRepository extends JpaRepository<SocialAccount, UUID> {
 
-    Optional<SocialAccount> findByInfluencerIdAndPlatform(UUID influencerId, Enum<Platform> platform);
+    Optional<SocialAccount> findByInfluencerIdAndPlatform(UUID influencerId, Platform platform);
 
     List<SocialAccount> findByInfluencerId(UUID influencerId);
 
-    boolean existsByInfluencerIdAndPlatform(UUID influencerId, Enum<Platform> platform);
+    boolean existsByInfluencerIdAndPlatform(UUID influencerId, Platform platform);
 
-    List<SocialAccount> findByPlatformAndInfluencerIsActive(Enum<Platform> platform, boolean isActive);
+    List<SocialAccount> findByPlatformAndInfluencerIsActive(Platform platform, boolean isActive);
 }

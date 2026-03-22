@@ -1,8 +1,7 @@
 package com.project.InfluenceNet.socialConnector.service;
 
 import com.project.InfluenceNet.contracts.InfluencerPostContract.SocialAccountResponse;
-import com.project.InfluenceNet.influencer.service.SocialAccountService;
-import com.project.InfluenceNet.contracts.InfluencerPostContract.Platform;
+import com.project.InfluenceNet.socialConnector.client.InfluencerServiceClient;
 import com.project.InfluenceNet.socialConnector.exception.InstagramConnectorException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,14 +18,14 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class SocialPollingSchedulerService {
 
-    private final SocialAccountService socialAccountService;
+    private final InfluencerServiceClient influencerServiceClient;
     private final InstagramConnectorOrchestrator instagramConnectorOrchestrator;
 
     @Qualifier("instagramPollingExecutor")
     private final Executor instagramPollingExecutor;
 
     public List<SocialAccountResponse> getAllInstagramAccounts(){
-        return socialAccountService.getActiveSocialAccountsForPlatform(Platform.INSTAGRAM);
+        return influencerServiceClient.getActiveSocialAccounts();
     }
 
     @Scheduled(fixedRate = 240000)

@@ -1,11 +1,10 @@
 package com.project.InfluenceNet.socialConnector.client;
 
+import com.project.InfluenceNet.socialConnector.dto.*;
 import com.project.InfluenceNet.socialConnector.exception.InstagramApiException;
 import com.project.InfluenceNet.socialConnector.exception.InstagramResponseMappingException;
-import com.project.InfluenceNet.socialConnector.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
@@ -15,12 +14,10 @@ import org.springframework.web.reactive.function.client.WebClientRequestExceptio
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 public class InstagramClient {

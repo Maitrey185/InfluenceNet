@@ -1,7 +1,6 @@
 package com.project.InfluenceNet.enrichmentService.event;
 
 import com.project.InfluenceNet.contracts.InfluencerPostContract.PostFetchedEvent;
-import com.project.InfluenceNet.enrichmentService.exception.PostNotFoundException;
 import com.project.InfluenceNet.enrichmentService.service.PostEnricherService;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.RawPosts;
 

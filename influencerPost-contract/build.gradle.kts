@@ -20,7 +20,7 @@ repositories {
 dependencies {
     // Jakarta Persistence API
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
-
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
     // JSON Processing
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")

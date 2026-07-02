@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.influencer.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.project.InfluenceNet.auth.entity.User;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.User;
 import jakarta.persistence.*;
 import lombok.*;
 

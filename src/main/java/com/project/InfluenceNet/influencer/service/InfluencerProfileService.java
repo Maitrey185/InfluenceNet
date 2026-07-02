@@ -1,7 +1,7 @@
 package com.project.InfluenceNet.influencer.service;
 
-import com.project.InfluenceNet.auth.entity.User;
-import com.project.InfluenceNet.auth.repository.UserRepository;
+import com.project.InfluenceNet.auth.controller.UserController;
+import com.project.InfluenceNet.contracts.InfluencerPostContract.User;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerNeo4jEvent;
 import com.project.InfluenceNet.influencer.dto.InfluencerProfileRequest;
 import com.project.InfluenceNet.contracts.InfluencerPostContract.InfluencerProfileResponse;
@@ -12,6 +12,7 @@ import com.project.InfluenceNet.influencer.exception.DuplicateResourceException;
 import com.project.InfluenceNet.influencer.exception.InfluencerNotFoundException;
 import com.project.InfluenceNet.influencer.repository.InfluencerProfileRepository;
 import com.project.InfluenceNet.influencer.repository.SocialAccountsRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class InfluencerProfileService {
 
     private final InfluencerProfileRepository influencerProfileRepository;
     private final SocialAccountsRepository socialAccountRepository;
-    private final UserRepository userRepository;
+    private final UserController userController;
     private final InfluencerNeo4jPublisher neo4jPublisher;
 
     @Transactional
@@ -47,9 +48,14 @@ public class InfluencerProfileService {
 
         InfluencerProfile profile = new InfluencerProfile();
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new InfluencerNotFoundException("User not found with id: " + request.getUserId()));
-        profile.setUser(user);
+        try {
+            ResponseEntity<User> user = userController.getById(request.getUserId());
+            profile.setUser(user.getBody());
+        }
+        catch (Exception ex){
+            throw new InfluencerNotFoundException("User not found with id: " + request.getUserId());
+        }
+
         profile.setEmail(request.getEmail());
         profile.setUsername(request.getUsername());
         profile.setCreatedAt(LocalDateTime.now());

@@ -177,42 +177,6 @@ services:
     networks:
       - influencenet-network
 
-  # Elasticsearch (for search functionality)
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: influencenet-elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    networks:
-      - influencenet-network
-    healthcheck:
-      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"\\|\"status\":\"yellow\"' || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 10
-      start_period: 60s
-
-  # Kibana (for Elasticsearch visualization)
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.11.0
-    container_name: influencenet-kibana
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    ports:
-      - "5601:5601"
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-    networks:
-      - influencenet-network
-
   # Neo4j Graph Database
   neo4j:
     image: neo4j:5-community
@@ -237,115 +201,6 @@ services:
       retries: 10
       start_period: 60s
 
-  # MinIO (S3-compatible storage for local development)
-  minio:
-    image: minio/minio:latest
-    container_name: influencenet-minio
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    volumes:
-      - minio_data:/data
-    networks:
-      - influencenet-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Zipkin (Distributed Tracing)
-  zipkin:
-    image: openzipkin/zipkin:latest
-    container_name: influencenet-zipkin
-    ports:
-      - "9411:9411"
-    networks:
-      - influencenet-network
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:9411/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # Prometheus (Metrics Collection)
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: influencenet-prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-    networks:
-      - influencenet-network
-
-  # Grafana (Metrics Visualization)
-  grafana:
-    image: grafana/grafana:latest
-    container_name: influencenet-grafana
-    ports:
-      - "3000:3000"
-    environment:
-      GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./config/grafana/provisioning:/etc/grafana/provisioning
-    networks:
-      - influencenet-network
-    depends_on:
-      - prometheus
-
-  # Keycloak (Authentication & Authorization)
-  keycloak:
-    image: quay.io/keycloak/keycloak:23.0
-    container_name: influencenet-keycloak
-    command: start-dev --import-realm
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_DB: postgres
-      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
-      KC_DB_USERNAME: influencenet_user
-      KC_DB_PASSWORD: influencenet_pass
-      KC_HEALTH_ENABLED: 'true'
-      KC_METRICS_ENABLED: 'true'
-      KC_HOSTNAME_STRICT: 'false'
-      KC_HTTP_ENABLED: 'true'
-    ports:
-      - "8180:8080"
-    volumes:
-      - ./config/keycloak:/opt/keycloak/data/import
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - influencenet-network
-    healthcheck:
-      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 || exit 1"]
-      interval: 15s
-      timeout: 10s
-      retries: 15
-      start_period: 120s
-
-  # Mailhog (Email Testing)
-  mailhog:
-    image: mailhog/mailhog:latest
-    container_name: influencenet-mailhog
-    ports:
-      - "1025:1025"  # SMTP
-      - "8025:8025"  # Web UI
-    networks:
-      - influencenet-network
-
 networks:
   influencenet-network:
     driver: bridge
@@ -360,6 +215,4 @@ volumes:
   elasticsearch_data:
   neo4j_data:
   neo4j_logs:
-  minio_data:
-  prometheus_data:
-  grafana_data:
+
